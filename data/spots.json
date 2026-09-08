@@ -1,0 +1,86 @@
+[
+  {
+    "id": "yangyang-jukdo",
+    "name": "양양 죽도해변",
+    "region": "동해",
+    "subRegion": "강원 양양",
+    "lat": 37.9723,
+    "lng": 128.7612,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 270,
+    "difficulty": "All",
+    "description": "국내 서핑 문화의 중심지. 넓은 백사장과 초보 강습부터 숏보더까지 최적의 인프라."
+  },
+  {
+    "id": "yangyang-ingu",
+    "name": "양양 인구해변",
+    "region": "동해",
+    "subRegion": "강원 양양",
+    "lat": 37.9678,
+    "lng": 128.7645,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 270,
+    "difficulty": "Intermediate",
+    "description": "죽도 남쪽 위치. 북동 스웰에 질 좋은 레프트/라이트 브레이크 형성."
+  },
+  {
+    "id": "goseong-songjiho",
+    "name": "고성 송지호해변",
+    "region": "동해",
+    "subRegion": "강원 고성",
+    "lat": 38.3375,
+    "lng": 128.5138,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 270,
+    "difficulty": "Beginner",
+    "description": "수심이 완만하고 바다가 맑아 비기너 강습과 롱보드 크루징에 최고."
+  },
+  {
+    "id": "busan-songjeong",
+    "name": "부산 송정해수욕장",
+    "region": "남해",
+    "subRegion": "부산 해운대",
+    "lat": 35.1786,
+    "lng": 129.1997,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 315,
+    "difficulty": "All",
+    "description": "대한민국 남부 서핑의 성지. 사계절 내내 서핑이 가능."
+  },
+  {
+    "id": "busan-dadaepo",
+    "name": "부산 다대포해수욕장",
+    "region": "남해",
+    "subRegion": "부산 사하",
+    "lat": 35.0482,
+    "lng": 128.9664,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 0,
+    "difficulty": "Beginner",
+    "description": "수심이 완만해 입문자에게 안전하며 남스웰에 좋은 파도 형성."
+  },
+  {
+    "id": "jeju-jungmun",
+    "name": "제주 중문색달해변",
+    "region": "제주",
+    "subRegion": "제주 서귀포",
+    "lat": 33.2448,
+    "lng": 126.4122,
+    "bottomType": "모래/암초",
+    "optimalWindDir": 0,
+    "difficulty": "Advanced",
+    "description": "국내 최고 파워풀한 파도. 상급자 숏보더들의 배럴 명소."
+  },
+  {
+    "id": "taean-mallipo",
+    "name": "태안 만리포해수욕장",
+    "region": "서해",
+    "subRegion": "충남 태안",
+    "lat": 36.7947,
+    "lng": 126.1432,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 90,
+    "difficulty": "All",
+    "description": "'만리포니아'로 불리는 서해 대표 스팟."
+  }
+]
