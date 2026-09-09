@@ -1,8 +1,8 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 
-export default function Map({ spots, selectedSpot, onSelectSpot }: any) {
+export default function Map({ spots, selectedSpot, onSelectSpot, activeRegion }: any) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
@@ -24,7 +24,7 @@ export default function Map({ spots, selectedSpot, onSelectSpot }: any) {
 
       const map = L.map(mapRef.current, {
         zoomControl: false,
-      }).setView([36.3, 128.0], 7);
+      }).setView([36.3, 127.8], 7);
 
       L.control.zoom({ position: "bottomright" }).addTo(map);
 
@@ -49,6 +49,21 @@ export default function Map({ spots, selectedSpot, onSelectSpot }: any) {
     }
   }, []);
 
+  // 지역 변경 시 카메라 중심 부드럽게 이동
+  useEffect(() => {
+    if (!loaded || !mapInstance.current) return;
+    const regionCenters: Record<string, { center: [number, number]; zoom: number }> = {
+      "동해": { center: [37.7, 128.9], zoom: 8 },
+      "남해": { center: [34.9, 128.5], zoom: 8 },
+      "제주": { center: [33.38, 126.55], zoom: 9 },
+      "서해": { center: [36.7, 126.3], zoom: 8 },
+      "전체": { center: [36.3, 127.8], zoom: 7 },
+    };
+
+    const target = regionCenters[activeRegion] || regionCenters["전체"];
+    mapInstance.current.flyTo(target.center, target.zoom, { duration: 1.0 });
+  }, [activeRegion, loaded]);
+
   useEffect(() => {
     if (!loaded || !mapInstance.current) return;
     const L = (window as any).L;
@@ -68,17 +83,17 @@ export default function Map({ spots, selectedSpot, onSelectSpot }: any) {
 
       marker.on("click", () => {
         onSelectSpot(spot);
-        mapInstance.current.flyTo([spot.lat, spot.lng], 11, { duration: 1.2 });
+        mapInstance.current.flyTo([spot.lat, spot.lng], 12, { duration: 1.2 });
       });
 
-      marker.bindTooltip(`<b>${spot.name}</b>`, { direction: "top", offset: [0, -18] });
+      marker.bindTooltip(`<b>${spot.name}</b><br><span style="font-size:11px;color:#0284c7;">${spot.subRegion}</span>`, { direction: "top", offset: [0, -18] });
       markersRef.current.push(marker);
     });
   }, [loaded, spots]);
 
   useEffect(() => {
     if (loaded && mapInstance.current && selectedSpot) {
-      mapInstance.current.flyTo([selectedSpot.lat, selectedSpot.lng], 11, { duration: 1.2 });
+      mapInstance.current.flyTo([selectedSpot.lat, selectedSpot.lng], 12, { duration: 1.2 });
     }
   }, [selectedSpot, loaded]);
 
@@ -89,8 +104,13 @@ export default function Map({ spots, selectedSpot, onSelectSpot }: any) {
       <div className="absolute top-4 left-4 z-[1000] bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-2.5">
         <span className="text-2xl">🏄‍♂️</span>
         <div>
-          <h1 className="text-xs font-black text-slate-800 tracking-tight">SurfMaster AI</h1>
-          <p className="text-[10px] font-semibold text-sky-600">전국 실시간 서핑 지도</p>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xs font-black text-slate-800 tracking-tight">SurfMaster AI</h1>
+            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-sky-100 text-sky-700">
+              전국 {spots.length}개 스팟
+            </span>
+          </div>
+          <p className="text-[10px] font-semibold text-slate-500">실시간 해양 기상 & AI 파도 지수</p>
         </div>
       </div>
     </div>
