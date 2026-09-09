@@ -178,6 +178,14 @@ export default function Home() {
     });
   }, []);
 
+  // 지도 "숙소 보기" 버튼 표기용: 현재 지역 필터 기준으로 마커 표시 가능한 숙소 수
+  const accommodationCount = useMemo(() => {
+    return accommodationsWithCoords.filter((a: any) => {
+      if (activeRegion !== "전체" && a.region !== activeRegion) return false;
+      return Number.isFinite(Number(a.lat)) && Number.isFinite(Number(a.lng));
+    }).length;
+  }, [accommodationsWithCoords, activeRegion]);
+
   const visibleAccommodations = useMemo(() => {
     return accommodationsWithCoords.filter((a: any) => {
       if (!showAccommodations) return false;
@@ -255,13 +263,21 @@ export default function Home() {
     }
   };
 
-  // 컨디션 필터: 지도 범례에서 클릭 → 목록 탭 전환 + 스팟 목록으로 스크롤
+  // 컨디션 필터: 지도 범례 클릭 → 마커만 필터링
+  // 모바일은 지도에 그대로 머무르고(즉시 목록 이동 X), 데스크톱만 사이드바 목록으로 스크롤
   const handleConditionFilter = (value: string) => {
     setActiveConditionFilter((prev) => (prev === value ? "전체" : value));
     setContentTab("spots");
-    if (typeof window !== "undefined" && window.innerWidth < 768) {
-      setMobileTab("list");
+    if (typeof window !== "undefined" && window.innerWidth >= 768) {
+      setTimeout(() => {
+        spotListAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 120);
     }
+  };
+  // 모바일 범례의 "N개 목록 보기" 버튼 → 사용자가 직접 눌렀을 때만 목록 탭으로 이동
+  const handleConditionListJump = () => {
+    setContentTab("spots");
+    setMobileTab("list");
     setTimeout(() => {
       spotListAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 120);
@@ -739,6 +755,8 @@ export default function Home() {
           conditionCounts={conditionCounts}
           onConditionFilter={handleConditionFilter}
           activeConditionFilter={activeConditionFilter}
+          accommodationCount={accommodationCount}
+          onConditionListJump={handleConditionListJump}
         />
 
         {/* 스팟 서랍 */}

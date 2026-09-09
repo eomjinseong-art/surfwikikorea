@@ -27,6 +27,8 @@ export default function Map({
   conditionCounts,
   onConditionFilter,
   activeConditionFilter,
+  accommodationCount,
+  onConditionListJump,
 }: any) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<any>(null);
@@ -198,7 +200,9 @@ export default function Map({
                 : "bg-white text-slate-700 border-slate-200 hover:bg-violet-50"
             }`}
           >
-            {showAccommodations ? "🏨 숙소 표시중 — 끄기" : "🏨 숙소 보기"}
+            {showAccommodations
+              ? `🏨 숙소 표시중${typeof accommodationCount === "number" ? ` (${accommodationCount})` : ""} — 끄기`
+              : `🏨 숙소 보기${typeof accommodationCount === "number" ? ` (${accommodationCount})` : ""}`}
           </button>
         </div>
       )}
@@ -235,6 +239,15 @@ export default function Map({
                 );
               })}
             </div>
+            {/* 모바일: 컨디션 선택 시 지도에 머무르고, 사용자가 원할 때만 목록으로 이동 */}
+            {activeConditionFilter && activeConditionFilter !== "전체" && onConditionListJump && (
+              <button
+                onClick={() => onConditionListJump(activeConditionFilter)}
+                className="md:hidden mt-1.5 w-full px-2 py-1.5 rounded-lg bg-sky-500 text-white text-[10px] font-extrabold shadow-sm active:scale-95 transition"
+              >
+                📋 {activeConditionFilter} 스팟 {spots.length}개 목록 보기 →
+              </button>
+            )}
           </div>
         </div>
       )}
