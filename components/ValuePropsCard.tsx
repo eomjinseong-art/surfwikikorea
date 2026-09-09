@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Waves, MapPin, Wind, Navigation, ShieldCheck, Video, ChevronDown } from "lucide-react";
+import { Waves, MapPin, Wind, Navigation, ShieldCheck, Video, ChevronDown, Share2, Check } from "lucide-react";
 
-// 사이드바 하단: 서프위키Ai만의 차별화 포인트 하이라이트 카드 (펼침/접기)
+// 사이드바 하단: 서프위키Ai만의 차별화 포인트 하이라이트 카드 (펼침/접기) + 공유 기능
 export default function ValuePropsCard() {
   const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const items = [
     {
@@ -39,6 +40,35 @@ export default function ValuePropsCard() {
       desc: "물때·암초·위험 스팟을 입수 전 경고",
     },
   ];
+
+  const handleShare = async () => {
+    const url = "https://surfwikikorea.vercel.app";
+    const shareData = {
+      title: "서프위키Ai — 대한민국 전국 실시간 서핑 지도",
+      text: "전국 100개 서핑 스팟 · 실시간 AI 파도 점수 · 해변 웹캠 한 번에! 🏄‍♂️",
+      url,
+    };
+
+    try {
+      // 모바일 네이티브 공유 (카카오톡, 메시지 등)
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+    } catch {
+      // 사용자가 공유를 취소한 경우 등 — fallback으로 계속
+    }
+
+    // 데스크톱 / 공유 API 미지원 시: 링크 복사
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // clipboard 실패 시 prompt
+      window.prompt("이 링크를 복사하세요:", url);
+    }
+  };
 
   return (
     <div className="rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-sky-950 text-white shadow-lg relative overflow-hidden">
@@ -87,6 +117,25 @@ export default function ValuePropsCard() {
               </li>
             ))}
           </ul>
+
+          {/* 공유 버튼 */}
+          <button
+            onClick={(e) => { e.stopPropagation(); handleShare(); }}
+            className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 bg-sky-500 hover:bg-sky-400 active:scale-[0.98] text-white font-extrabold text-[11px] rounded-xl transition shadow-md"
+          >
+            {copied ? (
+              <>
+                <Check size={13} />
+                <span>링크가 복사되었습니다!</span>
+              </>
+            ) : (
+              <>
+                <Share2 size={13} />
+                <span>친구에게 서프위키 공유하기</span>
+              </>
+            )}
+          </button>
+
           <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between">
             <span className="text-[9px] font-bold text-slate-400">매일 실시간 해양 예보 자동 갱신</span>
             <span className="text-[9px] font-black text-sky-300">서프위키Ai</span>

@@ -122,19 +122,9 @@ export default function Map({
     <div className="relative w-full h-full overflow-hidden">
       <div ref={mapRef} className="w-full h-full" style={{ backgroundColor: "#e0f2fe" }} />
 
-      {/* 우측 상단 스팟 카운터 뱃지 (모바일: 탭 헤더 아래 고정) */}
-      <button
-        onClick={() => setMobileTab && setMobileTab('list')}
-        className="below-tab-header md:top-4 absolute right-3 z-[400] bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full shadow-md border border-slate-200/80 text-[11px] font-bold text-slate-700 flex items-center gap-1.5"
-        title="목록 보기"
-      >
-        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span>실시간 연동 {spots.length}개 스팟</span>
-      </button>
-
       {/* 🔥 지금 파도 좋은 곳 플로팅 칩 (훌륭/최고 등급, AI 점수순) */}
       {hotSpots && hotSpots.length > 0 && (
-        <div className="absolute left-0 right-0 z-[450] px-3 below-tab-header md:top-16">
+        <div className="absolute left-0 right-0 z-[450] px-3 below-tab-header md:top-4">
           <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar overscroll-x-contain pb-1">
             <span className="shrink-0 text-[10px] font-black text-white bg-gradient-to-r from-orange-500 to-red-500 px-2 py-1.5 rounded-full shadow-md flex items-center gap-1">
               🔥 지금 파도 좋은 곳

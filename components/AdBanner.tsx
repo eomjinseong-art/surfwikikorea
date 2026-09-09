@@ -2,45 +2,6 @@
 
 import { ExternalLink, Sparkles } from "lucide-react";
 
-export const ads2to5 = [
-  {
-    id: 2,
-    title: "아브아르 (AVOIR)",
-    desc: "감각적인 데일리 여성의류",
-    tag: "패션",
-    tagBg: "bg-pink-100 text-pink-700",
-    url: "https://avoir24.com/",
-    icon: "👗",
-  },
-  {
-    id: 3,
-    title: "그날의 남녀",
-    desc: "실시간 커플 연애 궁합 테스트",
-    tag: "연애",
-    tagBg: "bg-purple-100 text-purple-700",
-    url: "https://couple-score.vercel.app/",
-    icon: "💑",
-  },
-  {
-    id: 4,
-    title: "나두 Ai",
-    desc: "생산성 최고 AI 툴 모음",
-    tag: "AI",
-    tagBg: "bg-indigo-100 text-indigo-700",
-    url: "https://ai-tools-site-liart-one.vercel.app/",
-    icon: "🤖",
-  },
-  {
-    id: 5,
-    title: "숨숨마을",
-    desc: "반려묘 & 반려동물 필수템",
-    tag: "펫",
-    tagBg: "bg-amber-100 text-amber-700",
-    url: "https://b-cat-cpang.vercel.app/",
-    icon: "🐱",
-  },
-];
-
 // 상단 광고 1 (서핑 용품 & 제휴 숍 전용 고정 배너)
 export function AdSlot1({ onRequestOpen }: { onRequestOpen?: () => void }) {
   return (
@@ -54,7 +15,7 @@ export function AdSlot1({ onRequestOpen }: { onRequestOpen?: () => void }) {
           <div>
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-black tracking-tight">서핑 용품 & 숍 공식 입점</span>
-              <span className="text-[9px] font-bold px-1.5 py-0.2 bg-white/25 rounded-md">광고 1</span>
+              <span className="text-[9px] font-bold px-1.5 py-0.2 bg-white/25 rounded-md">광고</span>
             </div>
             <p className="text-[11px] text-sky-100 mt-0.5">
               서프위키 공식 제휴 스폰서 입점 준비 중 (제보/입점 문의)
@@ -67,28 +28,48 @@ export function AdSlot1({ onRequestOpen }: { onRequestOpen?: () => void }) {
   );
 }
 
-// 하단 상시 노출 광고: 한 줄 스크롤 스트립 (최소 공간)
-export default function AdGrid() {
+// 웨이브파크 서핑 체험 광고 (쿠팡 파트너스)
+export function WaveParkAd() {
   return (
-    <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
-      <span className="text-[8px] font-black text-slate-400 tracking-wider shrink-0 pr-0.5">
-        SPONSOR
-      </span>
-      {ads2to5.map((ad) => (
+    <div className="rounded-2xl border border-cyan-200/80 bg-gradient-to-r from-cyan-50 to-sky-50 overflow-hidden shadow-sm">
+      <div className="px-3 py-2 flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <span className="text-sm">🌊</span>
+          <span className="text-[10px] font-black text-cyan-800">시흥 웨이브파크 서핑 체험</span>
+        </div>
+        <span className="text-[8px] font-bold text-cyan-500/70 px-1.5 py-0.5 bg-cyan-100 rounded-md">쿠팡 제휴</span>
+      </div>
+      <div className="grid grid-cols-2 gap-px bg-cyan-100/50">
         <a
-          key={ad.id}
-          href={ad.url}
+          href="https://link.coupang.com/a/gT8iUXvU0i"
           target="_blank"
-          rel="noopener noreferrer"
-          className="shrink-0 flex items-center gap-1 px-2 py-1 bg-slate-50 hover:bg-sky-50 border border-slate-100 hover:border-sky-200 rounded-full transition"
-          title={ad.desc}
+          rel="sponsored noopener noreferrer"
+          className="flex items-center gap-2 p-2.5 bg-white hover:bg-cyan-50/50 transition group"
         >
-          <span className="text-[11px]">{ad.icon}</span>
-          <span className="text-[10px] font-bold text-slate-700 group-hover:text-sky-600 whitespace-nowrap">
-            {ad.title}
-          </span>
+          <span className="text-lg shrink-0">🏄‍♂️</span>
+          <div className="min-w-0">
+            <div className="text-[11px] font-extrabold text-slate-800 group-hover:text-cyan-700 transition truncate">서프존</div>
+            <div className="text-[9px] text-slate-500 leading-tight">인공 파도에서 실전 서핑!</div>
+          </div>
+          <ExternalLink size={10} className="text-slate-300 group-hover:text-cyan-500 transition shrink-0 ml-auto" />
         </a>
-      ))}
+        <a
+          href="https://link.coupang.com/a/gT8lbc3LEG"
+          target="_blank"
+          rel="sponsored noopener noreferrer"
+          className="flex items-center gap-2 p-2.5 bg-white hover:bg-cyan-50/50 transition group"
+        >
+          <span className="text-lg shrink-0">🏖️</span>
+          <div className="min-w-0">
+            <div className="text-[11px] font-extrabold text-slate-800 group-hover:text-cyan-700 transition truncate">미오코스타존</div>
+            <div className="text-[9px] text-slate-500 leading-tight">워터파크 + 풀빌라 올인원</div>
+          </div>
+          <ExternalLink size={10} className="text-slate-300 group-hover:text-cyan-500 transition shrink-0 ml-auto" />
+        </a>
+      </div>
+      <p className="text-[8px] text-slate-400 text-center py-1">
+        이 포스팅은 쿠팡 파트너스 활동의 일환으로, 일정액의 수수료를 제공받을 수 있습니다.
+      </p>
     </div>
   );
 }

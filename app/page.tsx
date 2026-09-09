@@ -5,7 +5,7 @@ import spotsData from "@/data/spots.json";
 import accommodationsData from "@/data/accommodations.json";
 import Map from "@/components/Map";
 import SpotDrawer from "@/components/SpotDrawer";
-import AdGrid, { AdSlot1 } from "@/components/AdBanner";
+import { AdSlot1, WaveParkAd } from "@/components/AdBanner";
 import ValuePropsCard from "@/components/ValuePropsCard";
 import { getBatchConditionsCached } from "@/lib/batchConditions";
 import { CAM_SPOT_IDS, getCamForSpot } from "@/lib/beachCams";
@@ -262,6 +262,9 @@ export default function Home() {
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {/* 광고 1: 상시 노출 최상단 프리미엄 고정 배너 */}
           <AdSlot1 onRequestOpen={() => setIsRequestModalOpen(true)} />
+
+          {/* 광고 2: 웨이브파크 서핑 체험 (쿠팡 파트너스) */}
+          <WaveParkAd />
 
           {/* 검색창 (폼 + 검색 버튼, 실시간 결과 수 표시) */}
           {contentTab === "spots" && (
@@ -650,9 +653,6 @@ export default function Home() {
         {/* 사이드바 하단: 차별화 포인트 하이라이트 */}
         <div className="p-3 bg-slate-50 border-t border-slate-200 shrink-0">
           <ValuePropsCard />
-          <div className="mt-2">
-            <AdGrid />
-          </div>
         </div>
       </aside>
 
