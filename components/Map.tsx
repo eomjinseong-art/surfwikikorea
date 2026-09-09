@@ -64,6 +64,7 @@ export default function Map({ spots, selectedSpot, onSelectSpot, activeRegion }:
     mapInstance.current.flyTo(target.center, target.zoom, { duration: 1.0 });
   }, [activeRegion, loaded]);
 
+  // 마커 렌더링
   useEffect(() => {
     if (!loaded || !mapInstance.current) return;
     const L = (window as any).L;
@@ -73,7 +74,7 @@ export default function Map({ spots, selectedSpot, onSelectSpot, activeRegion }:
 
     const surfIcon = L.divIcon({
       className: "custom-surf-pin",
-      html: '<div style="background:#0284c7;color:white;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 12px rgba(0,0,0,0.35);border:2.5px solid white;cursor:pointer;">🏄</div>',
+      html: '<div style="background:#0284c7;color:white;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 12px rgba(0,0,0,0.35);border:2.5px solid white;cursor:pointer;transition:transform 0.15s ease;" onmouseover="this.style.transform=\'scale(1.15)\'" onmouseout="this.style.transform=\'scale(1)\'">🏄</div>',
       iconSize: [34, 34],
       iconAnchor: [17, 17],
     });
@@ -91,6 +92,7 @@ export default function Map({ spots, selectedSpot, onSelectSpot, activeRegion }:
     });
   }, [loaded, spots]);
 
+  // 스팟 선택 시 부드러운 카메라 이동
   useEffect(() => {
     if (loaded && mapInstance.current && selectedSpot) {
       mapInstance.current.flyTo([selectedSpot.lat, selectedSpot.lng], 12, { duration: 1.2 });
@@ -98,20 +100,13 @@ export default function Map({ spots, selectedSpot, onSelectSpot, activeRegion }:
   }, [selectedSpot, loaded]);
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden">
-      <div ref={mapRef} style={{ width: "100vw", height: "100vh", backgroundColor: "#e0f2fe" }} />
+    <div className="relative w-full h-full overflow-hidden">
+      <div ref={mapRef} className="w-full h-full" style={{ backgroundColor: "#e0f2fe" }} />
       
-      <div className="absolute top-4 left-4 z-[1000] bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-2.5">
-        <span className="text-2xl">🏄‍♂️</span>
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xs font-black text-slate-800 tracking-tight">SurfMaster AI</h1>
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-sky-100 text-sky-700">
-              전국 {spots.length}개 스팟
-            </span>
-          </div>
-          <p className="text-[10px] font-semibold text-slate-500">실시간 해양 기상 & AI 파도 지수</p>
-        </div>
+      {/* 우측 상단 스팟 카운터 뱃지 */}
+      <div className="absolute top-4 right-4 z-[400] bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full shadow-md border border-slate-200/80 text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>실시간 연동 {spots.length}개 스팟</span>
       </div>
     </div>
   );
