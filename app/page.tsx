@@ -10,6 +10,7 @@ import ValuePropsCard from "@/components/ValuePropsCard";
 import { getBatchConditionsCached } from "@/lib/batchConditions";
 import { CAM_SPOT_IDS, getCamForSpot } from "@/lib/beachCams";
 import SpotRequestModal from "@/components/SpotRequestModal";
+import Link from "next/link";
 import { PlusCircle, RotateCcw, Search, Compass, Layers, ChevronRight, BedDouble, ExternalLink, Star, Video, Flame } from "lucide-react";
 
 export default function Home() {
@@ -520,6 +521,13 @@ export default function Home() {
                       <span>바닥: {spot.bottomType}</span>
                       <span>최적풍향: {spot.optimalWindDir}° 오프쇼어</span>
                     </div>
+                    <Link
+                      href={`/spot/${spot.id}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="mt-1.5 inline-block text-[10px] font-bold text-sky-500 hover:text-sky-700 transition"
+                    >
+                      상세 정보 →
+                    </Link>
                   </div>
                 );
               })
