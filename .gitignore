@@ -5,3 +5,4 @@ dist
 
 .freebuff
 *.log
+*.tsbuildinfo

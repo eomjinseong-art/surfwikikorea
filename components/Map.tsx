@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export default function Map({ spots, selectedSpot, onSelectSpot, activeRegion }: any) {
+export default function Map({ spots, selectedSpot, onSelectSpot, activeRegion, setMobileTab }: any) {
+
+
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
@@ -104,10 +106,14 @@ export default function Map({ spots, selectedSpot, onSelectSpot, activeRegion }:
       <div ref={mapRef} className="w-full h-full" style={{ backgroundColor: "#e0f2fe" }} />
       
       {/* 우측 상단 스팟 카운터 뱃지 */}
-      <div className="absolute top-4 right-4 z-[400] bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full shadow-md border border-slate-200/80 text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+      <button
+        onClick={() => setMobileTab && setMobileTab('list')}
+        className="absolute top-4 right-4 z-[400] bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full shadow-md border border-slate-200/80 text-[11px] font-bold text-slate-700 flex items-center gap-1.5"
+        title="목록 보기"
+      >
         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         <span>실시간 연동 {spots.length}개 스팟</span>
-      </div>
+      </button>
     </div>
   );
 }

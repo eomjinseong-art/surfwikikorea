@@ -82,12 +82,12 @@ export default function AdGrid() {
             href={ad.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2.5 bg-slate-50 hover:bg-sky-50/70 border border-slate-100 hover:border-sky-200 rounded-xl transition flex flex-col justify-between group"
+            className="p-1 bg-slate-50 hover:bg-sky-50/70 border border-slate-100 hover:border-sky-200 rounded-xl transition flex flex-col justify-between group text-[8px] h-11"
           >
             <div>
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-base">{ad.icon}</span>
-                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${ad.tagBg}`}>
+              <div className="flex items-center justify-between mb-0.5">
+                <span className="text-sm">{ad.icon}</span>
+                <span className={`text-[8px] font-bold px-1 py-0.5 rounded-full ${ad.tagBg}`}>
                   {ad.tag}
                 </span>
               </div>
