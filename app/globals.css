@@ -22,14 +22,14 @@ html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
 .mobile-title-bar {
   top: env(safe-area-inset-top, 0px);
 }
-/* 탭 헤더: 타이틀바(36px) 아래 */
+/* 탭 헤더: 타이틀바와 간격(6px) 유지 */
 .mobile-tab-header {
-  top: calc(env(safe-area-inset-top, 0px) + 36px);
+  top: calc(env(safe-area-inset-top, 0px) + 42px);
 }
-/* 핫스팟 칩 등: 타이틀바(36px) + 탭 헤더(44px) 아래 */
+/* 핫스팟 칩 등: 타이틀바 + 탭 헤더 아래 */
 @media (max-width: 767px) {
   .below-tab-header {
-    top: calc(env(safe-area-inset-top, 0px) + 80px);
+    top: calc(env(safe-area-inset-top, 0px) + 88px);
   }
 }
 /* ONLY HERE 하단바: safe-area-bottom 위 */
@@ -40,12 +40,15 @@ html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
 /* 사이드 패널: 타이틀바 + 탭 공간 확보 */
 @media (max-width: 767px) {
   .mobile-panel-top {
-    padding-top: calc(env(safe-area-inset-top, 0px) + 80px);
+    padding-top: calc(env(safe-area-inset-top, 0px) + 88px);
   }
   .mobile-panel-bottom {
     padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 44px);
   }
   .mobile-cams-top {
-    padding-top: calc(env(safe-area-inset-top, 0px) + 80px);
+    padding-top: calc(env(safe-area-inset-top, 0px) + 88px);
+  }
+  .mobile-legend-safe {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 58px);
   }
 }

@@ -12,8 +12,13 @@ const CONDITION_COLORS: Record<string, string> = {
 
 export default function Map({
   spots,
+  accommodations,
   selectedSpot,
+  selectedAccommodation,
   onSelectSpot,
+  onSelectAccommodation,
+  onToggleAccommodations,
+  showAccommodations,
   activeRegion,
   setMobileTab,
   conditions,
@@ -79,7 +84,10 @@ export default function Map({
     const L = (window as any).L;
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
-    const levelKey = userLevel === "Beginner" ? "beginner" : userLevel === "Intermediate" ? "intermediate" : userLevel === "Advanced" ? "advanced" : null;
+
+    const levelKey =
+      userLevel === "Beginner" ? "beginner" : userLevel === "Intermediate" ? "intermediate" : userLevel === "Advanced" ? "advanced" : null;
+
     const surfIcon = (color: string, label: string, myScore: number | null) =>
       L.divIcon({
         className: "custom-surf-pin",
@@ -87,6 +95,15 @@ export default function Map({
         iconSize: [38, 38],
         iconAnchor: [19, 19],
       });
+
+    const stayIcon = () =>
+      L.divIcon({
+        className: "custom-stay-pin",
+        html: `<div style="position:relative;width:38px;height:38px"><div style="background:#7c3aed;color:white;width:34px;height:34px;margin:0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,0.35);border:2.5px solid white;cursor:pointer;transition:transform 0.15s ease;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">🏨</div></div>`,
+        iconSize: [38, 38],
+        iconAnchor: [19, 19],
+      });
+
     spots.forEach((spot: any) => {
       const cond = conditions?.[spot.id];
       const color = cond?.conditionColor ?? "#0284c7";
@@ -97,17 +114,42 @@ export default function Map({
         onSelectSpot(spot);
         mapInstance.current.flyTo([spot.lat, spot.lng], 12, { duration: 1.2 });
       });
-      const condLine = cond ? `<div style="margin-top:2px;"><span style="display:inline-block;font-size:9px;font-weight:800;color:white;background:${color};padding:1px 6px;border-radius:8px;">${label}</span> <span style="font-size:10px;color:#475569;">${cond.waveHeight.toFixed(1)}m · 풍속 ${cond.windSpeed.toFixed(0)}km/h</span></div>` : "";
-      marker.bindTooltip(`<b>${spot.name}</b><div style="font-size:11px;color:#0284c7;">${spot.subRegion}</div>${condLine}`, { direction: "top", offset: [0, -18] });
+      const condLine = cond
+        ? `<div style="margin-top:2px;"><span style="display:inline-block;font-size:9px;font-weight:800;color:white;background:${color};padding:1px 6px;border-radius:8px;">${label}</span> <span style="font-size:10px;color:#475569;">${cond.waveHeight.toFixed(1)}m · 풍속 ${cond.windSpeed.toFixed(0)}km/h</span></div>`
+        : "";
+      marker.bindTooltip(`<b>${spot.name}</b><div style="font-size:11px;color:#0284c7;">${spot.subRegion}</div>${condLine}`, {
+        direction: "top",
+        offset: [0, -18],
+      });
       markersRef.current.push(marker);
     });
-  }, [loaded, spots, conditions, userLevel]);
+
+    (accommodations || []).forEach((stay: any) => {
+      if (typeof stay.lat !== "number" || typeof stay.lng !== "number") return;
+      const marker = L.marker([stay.lat, stay.lng], { icon: stayIcon() }).addTo(mapInstance.current);
+      marker.on("click", () => {
+        onSelectAccommodation?.(stay);
+        mapInstance.current.flyTo([stay.lat, stay.lng], 12, { duration: 1.2 });
+      });
+      marker.bindTooltip(
+        `<b>${stay.name}</b><div style="font-size:11px;color:#7c3aed;">숙소 · ${stay.subRegion || stay.region}</div>`,
+        { direction: "top", offset: [0, -18] }
+      );
+      markersRef.current.push(marker);
+    });
+  }, [loaded, spots, accommodations, conditions, userLevel, onSelectSpot, onSelectAccommodation]);
 
   useEffect(() => {
     if (loaded && mapInstance.current && selectedSpot) {
       mapInstance.current.flyTo([selectedSpot.lat, selectedSpot.lng], 12, { duration: 1.2 });
     }
   }, [selectedSpot, loaded]);
+
+  useEffect(() => {
+    if (loaded && mapInstance.current && selectedAccommodation) {
+      mapInstance.current.flyTo([selectedAccommodation.lat, selectedAccommodation.lng], 12, { duration: 1.2 });
+    }
+  }, [selectedAccommodation, loaded]);
 
   return (
     <div className="relative w-full h-full overflow-hidden">
@@ -142,26 +184,48 @@ export default function Map({
         </div>
       )}
 
+      {/* 우상단: 숙소 마커 토글 */}
+      {onToggleAccommodations && (
+        <div className="absolute right-3 z-[460] below-tab-header md:top-4">
+          <button
+            onClick={onToggleAccommodations}
+            className={`px-3 py-1.5 rounded-full text-[10px] font-extrabold border shadow-md transition ${
+              showAccommodations
+                ? "bg-violet-600 text-white border-violet-700"
+                : "bg-white text-slate-700 border-slate-200 hover:bg-violet-50"
+            }`}
+          >
+            🏨 숙소 {showAccommodations ? "끄기" : "보기"}
+          </button>
+        </div>
+      )}
+
       {/* 좌하단: 컨디션 필터 범례 칩 (클릭 시 목록 필터) */}
       {conditionCounts && onConditionFilter && (
-        <div className="absolute bottom-3 left-3 z-[450]">
+        <div className="absolute bottom-3 left-3 z-[450] mobile-legend-safe">
           <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/80 p-2">
             <div className="text-[9px] font-black text-slate-500 mb-1.5 px-1">파도 상태별 보기</div>
             <div className="flex flex-col gap-1">
-              {(["최고", "훌륭", "좋음", "보통", "잠잠"] as const).map((label) => {
-                const count = conditionCounts[label] || 0;
+              {(["전체", "최고", "훌륭", "좋음", "보통", "잠잠"] as const).map((label) => {
+                const count = label === "전체"
+                  ? (conditionCounts["최고"] || 0) + (conditionCounts["훌륭"] || 0) + (conditionCounts["좋음"] || 0) + (conditionCounts["보통"] || 0) + (conditionCounts["잠잠"] || 0)
+                  : conditionCounts[label] || 0;
                 const isActive = activeConditionFilter === label;
                 return (
                   <button
                     key={label}
-                    onClick={() => onConditionFilter(isActive ? "전체" : label)}
+                    onClick={() => onConditionFilter(label)}
                     className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10px] font-bold transition ${
                       isActive
                         ? "bg-sky-100 text-sky-800 ring-1 ring-sky-400"
                         : "hover:bg-slate-50 text-slate-600"
                     }`}
                   >
-                    <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: CONDITION_COLORS[label] }} />
+                    {label === "전체" ? (
+                      <span className="text-[9px]">↺</span>
+                    ) : (
+                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: CONDITION_COLORS[label] }} />
+                    )}
                     <span>{label}</span>
                     <span className="text-[8px] text-slate-400 ml-auto font-extrabold">{count}</span>
                   </button>

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import spotsData from "@/data/spots.json";
 import accommodationsData from "@/data/accommodations.json";
 import Map from "@/components/Map";
 import SpotDrawer from "@/components/SpotDrawer";
+import AccommodationDrawer from "@/components/AccommodationDrawer";
 import { AdSlot1, WaveParkAd } from "@/components/AdBanner";
 import ValuePropsCard from "@/components/ValuePropsCard";
 import MobileBottomBar from "@/components/MobileBottomBar";
@@ -37,6 +38,9 @@ export default function Home() {
   const [stayRegion, setStayRegion] = useState("전체");
   const [batchConds, setBatchConds] = useState<Record<string, any>>({});
   const [favs, setFavs] = useState<string[]>([]);
+  const [selectedAccommodation, setSelectedAccommodation] = useState<any>(null);
+  const [showAccommodations, setShowAccommodations] = useState(false);
+  const spotListAnchorRef = useRef<HTMLDivElement>(null);
 
   const regions = ["전체", "동해", "남해", "제주", "서해"];
   const difficulties = [
@@ -55,6 +59,7 @@ export default function Home() {
     setActiveDifficulty("전체");
     setSearchQuery("");
     setSelectedSpot(null);
+    setSelectedAccommodation(null);
     setActiveWindFilter("전체");
     setActiveBottomFilter("전체");
     setActiveConditionFilter("전체");
@@ -126,11 +131,19 @@ export default function Home() {
     return order.map((region) => ({ region, items: filtered.filter((a) => a.region === region) })).filter((g) => g.items.length > 0);
   }, [stayRegion]);
 
+  const visibleAccommodations = useMemo(() => {
+    return accommodationsData.filter((a: any) => {
+      if (!showAccommodations) return false;
+      if (activeRegion === "전체") return true;
+      return a.region === activeRegion;
+    });
+  }, [showAccommodations, activeRegion]);
+
   const hotSpots = useMemo(() => {
     return spotsData
       .map((s: any) => ({ spot: s, cond: batchConds[s.id] }))
       .filter((x: any) => x.cond && (x.cond.conditionLabel === "훌륭" || x.cond.conditionLabel === "최고"))
-      .sort((a: any, b: any) => Math.max(b.cond.intermediate, b.cond.advanced) - Math.max(a.cond.intermediate, a.cond.advanced))
+      .sort((a: any, b: any) => b.cond.waveHeight - a.cond.waveHeight)
       .slice(0, 8);
   }, [batchConds]);
 
@@ -153,11 +166,22 @@ export default function Home() {
     if (typeof window !== "undefined" && window.innerWidth < 768 && mobileTab !== "map") {
       setMobileTab("map");
     }
+    setSelectedAccommodation(null);
     setSelectedSpot(spot);
   };
 
   const handleSelectCamSpot = handleSelectSpot;
   const camBeachCode = (spotId: string) => getCamForSpot(spotId)?.beachCode ?? "";
+
+  const handleToggleAccommodations = () => setShowAccommodations((p) => !p);
+  const handleSelectAccommodation = (acc: any) => {
+    setSelectedSpot(null);
+    setSelectedAccommodation(acc);
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setMobileTab("map");
+    }
+  };
+  const handleCloseAccommodation = () => setSelectedAccommodation(null);
 
   const handleSearchInput = (v: string) => {
     setSearchQuery(v);
@@ -166,13 +190,16 @@ export default function Home() {
     }
   };
 
-  // 컨디션 필터: 지도 범례에서 클릭 → 목록 탭 전환 + 필터 적용
+  // 컨디션 필터: 지도 범례에서 클릭 → 목록 탭 전환 + 스팟 목록으로 스크롤
   const handleConditionFilter = (value: string) => {
-    setActiveConditionFilter(value);
+    setActiveConditionFilter((prev) => (prev === value ? "전체" : value));
     setContentTab("spots");
     if (typeof window !== "undefined" && window.innerWidth < 768) {
       setMobileTab("list");
     }
+    setTimeout(() => {
+      spotListAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 120);
   };
 
   useEffect(() => {
@@ -337,7 +364,7 @@ export default function Home() {
               {CONDITION_OPTIONS.map((opt) => (
                 <button
                   key={opt.value}
-                  onClick={() => setActiveConditionFilter(opt.value)}
+                  onClick={() => handleConditionFilter(opt.value)}
                   className={`py-1 px-2 text-[10px] font-bold rounded-xl border transition flex items-center gap-1 ${
                     activeConditionFilter === opt.value
                       ? "bg-sky-50 border-sky-500 text-sky-700"
@@ -424,7 +451,7 @@ export default function Home() {
           )}
 
           {/* 스팟 목록 헤더 */}
-          <div className="flex items-center justify-between pt-1">
+          <div ref={spotListAnchorRef} className="flex items-center justify-between pt-1">
             <span className="text-xs font-black text-slate-800">
               {activeConditionFilter !== "전체" && (
                 <span className="inline-flex items-center gap-1 mr-1">
@@ -520,8 +547,9 @@ export default function Home() {
                     <span className="text-[10px] font-extrabold text-sky-600">{group.items.length}개</span>
                   </div>
                   {group.items.map((stay) => (
-                    <a key={stay.id} href={stay.couponUrl} target="_blank" rel="sponsored noopener noreferrer"
-                      className="block rounded-2xl border bg-white border-slate-200/80 hover:border-sky-300 hover:shadow-md transition-all group overflow-hidden"
+                    <div key={stay.id}
+                      onClick={() => handleSelectAccommodation(stay)}
+                      className="block rounded-2xl border bg-white border-slate-200/80 hover:border-sky-300 hover:shadow-md transition-all group overflow-hidden cursor-pointer"
                     >
                       {stay.image && (
                         <div className="relative h-24 w-full overflow-hidden bg-slate-100">
@@ -541,13 +569,23 @@ export default function Home() {
                           <ExternalLink size={14} className="text-slate-300 group-hover:text-sky-500 transition shrink-0 mt-1" />
                         </div>
                         <div className="mt-2 pt-2 border-t border-slate-100 flex items-center gap-1.5">
-                          <span className="flex-1 py-1.5 bg-sky-500 group-hover:bg-sky-600 text-white font-extrabold text-[11px] rounded-lg transition text-center">쿠팡에서 예약하기</span>
-                          <span role="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open(stay.localSiteUrl, "_blank", "noopener"); }}
-                            className="py-1.5 px-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-[11px] rounded-lg transition cursor-pointer"
-                          >숙소 정보</span>
+                          <a
+                            href={stay.couponUrl}
+                            target="_blank"
+                            rel="sponsored noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex-1 py-1.5 bg-sky-500 hover:bg-sky-600 text-white font-extrabold text-[11px] rounded-lg transition text-center"
+                          >쿠팡에서 예약하기</a>
+                          <a
+                            href={stay.localSiteUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="py-1.5 px-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-[11px] rounded-lg transition"
+                          >숙소 정보</a>
                         </div>
                       </div>
-                    </a>
+                    </div>
                   ))}
                 </div>
               ))}
@@ -622,8 +660,13 @@ export default function Home() {
         {/* 지도 */}
         <Map
           spots={filteredSpots}
+          accommodations={visibleAccommodations}
           selectedSpot={selectedSpot}
-          onSelectSpot={setSelectedSpot}
+          selectedAccommodation={selectedAccommodation}
+          onSelectSpot={handleSelectSpot}
+          onSelectAccommodation={handleSelectAccommodation}
+          onToggleAccommodations={handleToggleAccommodations}
+          showAccommodations={showAccommodations}
           activeRegion={activeRegion}
           setMobileTab={setMobileTab}
           conditions={batchConds}
@@ -637,6 +680,9 @@ export default function Home() {
         {/* 스팟 서랍 */}
         {selectedSpot && (
           <SpotDrawer spot={selectedSpot} onClose={() => setSelectedSpot(null)} />
+        )}
+        {selectedAccommodation && (
+          <AccommodationDrawer accommodation={selectedAccommodation} onClose={handleCloseAccommodation} />
         )}
       </section>
 
