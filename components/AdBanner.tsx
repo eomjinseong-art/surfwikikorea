@@ -67,40 +67,28 @@ export function AdSlot1({ onRequestOpen }: { onRequestOpen?: () => void }) {
   );
 }
 
-// 하단 상시 나열 광고 2~5 그리드
+// 하단 상시 노출 광고: 한 줄 스크롤 스트립 (최소 공간)
 export default function AdGrid() {
   return (
-    <div className="border-t border-slate-200 pt-3 pb-1">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-[11px] font-extrabold text-slate-500 tracking-wider">SPONSOR LINKS</span>
-        <span className="text-[10px] text-slate-400 font-medium">상시 추천 링크</span>
-      </div>
-      <div className="grid grid-cols-2 gap-2">
-        {ads2to5.map((ad) => (
-          <a
-            key={ad.id}
-            href={ad.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-1 bg-slate-50 hover:bg-sky-50/70 border border-slate-100 hover:border-sky-200 rounded-xl transition flex flex-col justify-between group text-[8px] h-11"
-          >
-            <div>
-              <div className="flex items-center justify-between mb-0.5">
-                <span className="text-sm">{ad.icon}</span>
-                <span className={`text-[8px] font-bold px-1 py-0.5 rounded-full ${ad.tagBg}`}>
-                  {ad.tag}
-                </span>
-              </div>
-              <div className="text-xs font-bold text-slate-800 group-hover:text-sky-600 transition truncate">
-                {ad.title}
-              </div>
-            </div>
-            <p className="text-[10px] text-slate-400 truncate mt-1">
-              {ad.desc}
-            </p>
-          </a>
-        ))}
-      </div>
+    <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+      <span className="text-[8px] font-black text-slate-400 tracking-wider shrink-0 pr-0.5">
+        SPONSOR
+      </span>
+      {ads2to5.map((ad) => (
+        <a
+          key={ad.id}
+          href={ad.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="shrink-0 flex items-center gap-1 px-2 py-1 bg-slate-50 hover:bg-sky-50 border border-slate-100 hover:border-sky-200 rounded-full transition"
+          title={ad.desc}
+        >
+          <span className="text-[11px]">{ad.icon}</span>
+          <span className="text-[10px] font-bold text-slate-700 group-hover:text-sky-600 whitespace-nowrap">
+            {ad.title}
+          </span>
+        </a>
+      ))}
     </div>
   );
 }

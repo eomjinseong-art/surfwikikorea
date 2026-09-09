@@ -45,6 +45,14 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
+      <head>
+        {/* 외부 API/지도 사전연결: 첫 실시간 조회 TTFB 단축 */}
+        <link rel="preconnect" href="https://marine-api.open-meteo.com" />
+        <link rel="dns-prefetch" href="https://marine-api.open-meteo.com" />
+        <link rel="preconnect" href="https://api.open-meteo.com" />
+        <link rel="dns-prefetch" href="https://api.open-meteo.com" />
+        <link rel="dns-prefetch" href="https://unpkg.com" />
+      </head>
       <body>{children}</body>
     </html>
   );

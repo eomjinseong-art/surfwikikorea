@@ -80,13 +80,46 @@ export async function getBatchConditions(
   return result;
 }
 
-// 세션 저장소: 같은 페이지 세션에서는 재조회하지 않는다
+// 세션 저장소: 같은 페이지 세션에서는 재조회하지 않는다 (새로고침·재방문 시에도 유지)
 let cache: { at: number; data: Record<string, SpotConditions> } | null = null;
+let inflight: Promise<Record<string, SpotConditions>> | null = null;
 const TTL = 10 * 60 * 1000;
+const SS_KEY = "surfwiki-batch-conds";
+
+function readSession(): { at: number; data: Record<string, SpotConditions> } | null {
+  try {
+    const raw = sessionStorage.getItem(SS_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return null;
+}
+
+function writeSession(entry: { at: number; data: Record<string, SpotConditions> }) {
+  try {
+    sessionStorage.setItem(SS_KEY, JSON.stringify(entry));
+  } catch {}
+}
 
 export async function getBatchConditionsCached(spots: { id: string; lat: number; lng: number; optimalWindDir: number }[]) {
-  if (cache && Date.now() - cache.at < TTL) return cache.data;
-  const data = await getBatchConditions(spots);
-  if (Object.keys(data).length > 0) cache = { at: Date.now(), data };
-  return data;
+  const now = Date.now();
+  if (cache && now - cache.at < TTL) return cache.data;
+  const sess = readSession();
+  if (sess && now - sess.at < TTL) {
+    cache = sess;
+    return sess.data;
+  }
+  // 동시 호출 시 같은 요청 공유 (중복 fetch 방지)
+  if (inflight) return inflight;
+  inflight = getBatchConditions(spots).then((data) => {
+    if (Object.keys(data).length > 0) {
+      cache = { at: Date.now(), data };
+      writeSession(cache);
+    }
+    inflight = null;
+    return data;
+  }).catch(() => {
+    inflight = null;
+    return {};
+  });
+  return inflight;
 }

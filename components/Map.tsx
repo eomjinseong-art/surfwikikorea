@@ -2,9 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export default function Map({ spots, selectedSpot, onSelectSpot, activeRegion, setMobileTab, conditions, userLevel }: any) {
-
-
+export default function Map({
+  spots,
+  selectedSpot,
+  onSelectSpot,
+  activeRegion,
+  setMobileTab,
+  conditions,
+  userLevel,
+  hotSpots,
+}: any) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
@@ -112,7 +119,7 @@ export default function Map({ spots, selectedSpot, onSelectSpot, activeRegion, s
   return (
     <div className="relative w-full h-full overflow-hidden">
       <div ref={mapRef} className="w-full h-full" style={{ backgroundColor: "#e0f2fe" }} />
-      
+
       {/* 우측 상단 스팟 카운터 뱃지 */}
       <button
         onClick={() => setMobileTab && setMobileTab('list')}
@@ -122,6 +129,39 @@ export default function Map({ spots, selectedSpot, onSelectSpot, activeRegion, s
         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         <span>실시간 연동 {spots.length}개 스팟</span>
       </button>
+
+      {/* 🔥 지금 파도 핫한 스팟 플로팅 칩 (훌륭/최고 등급, 점수순) */}
+      {hotSpots && hotSpots.length > 0 && (
+        <div className="absolute top-16 left-3 right-3 z-[400] flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+          <span className="shrink-0 text-[10px] font-black text-white bg-gradient-to-r from-orange-500 to-red-500 px-2 py-1 rounded-full shadow-md flex items-center gap-1">
+            🔥 핫한 스팟
+          </span>
+          {hotSpots.map(({ spot, cond }: any) => (
+            <button
+              key={spot.id}
+              onClick={() => {
+                onSelectSpot(spot);
+                mapInstance.current?.flyTo([spot.lat, spot.lng], 12, { duration: 1.2 });
+              }}
+              className={`shrink-0 flex items-center gap-1 px-2 py-1 rounded-full shadow-md text-[10px] font-extrabold border transition ${
+                selectedSpot?.id === spot.id
+                  ? "bg-sky-600 text-white border-sky-700"
+                  : "bg-white/95 backdrop-blur-md text-slate-700 border-white/60 hover:bg-white"
+              }`}
+              title={`${spot.name} — ${cond.conditionLabel} · 상세 보기`}
+            >
+              <span
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ backgroundColor: cond.conditionColor }}
+              />
+              <span className="whitespace-nowrap">{spot.name}</span>
+              <span className="text-sky-600 font-black whitespace-nowrap">
+                {cond.waveHeight.toFixed(1)}m
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -12,3 +12,7 @@ html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
 @media all and (display-mode: standalone) {
   body { background: #0ea5e9; }
 }
+
+/* 광고 스트립 등 가로 스크롤바 숨김 */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

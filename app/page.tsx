@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import spotsData from "@/data/spots.json";
 import accommodationsData from "@/data/accommodations.json";
 import Map from "@/components/Map";
@@ -8,8 +8,9 @@ import SpotDrawer from "@/components/SpotDrawer";
 import AdGrid, { AdSlot1 } from "@/components/AdBanner";
 import ValuePropsCard from "@/components/ValuePropsCard";
 import { getBatchConditionsCached } from "@/lib/batchConditions";
+import { CAM_SPOT_IDS, getCamForSpot } from "@/lib/beachCams";
 import SpotRequestModal from "@/components/SpotRequestModal";
-import { PlusCircle, RotateCcw, Search, Compass, Layers, ChevronRight, BedDouble, ExternalLink, Star } from "lucide-react";
+import { PlusCircle, RotateCcw, Search, Compass, Layers, ChevronRight, BedDouble, ExternalLink, Star, Video, Flame } from "lucide-react";
 
 export default function Home() {
   const [selectedSpot, setSelectedSpot] = useState<any>(null);
@@ -17,7 +18,7 @@ export default function Home() {
   const [activeDifficulty, setActiveDifficulty] = useState("전체");
   const [searchQuery, setSearchQuery] = useState("");
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
-  const [mobileTab, setMobileTab] = useState<"list" | "map">("map");
+  const [mobileTab, setMobileTab] = useState<"list" | "map" | "cams">("map");
   const [activeWindFilter, setActiveWindFilter] = useState("전체");
   const [activeBottomFilter, setActiveBottomFilter] = useState("전체");
   const [contentTab, setContentTab] = useState<"spots" | "stays">("spots");
@@ -90,13 +91,14 @@ export default function Home() {
         if (!keys.some((k) => bt.includes(k))) return false;
       }
 
-      // 검색어 조건
+      // 검색어 조건 (이름/하위지역/설명/지역 모두 대상)
       if (searchQuery.trim() !== "") {
         const query = searchQuery.toLowerCase();
         const matchName = spot.name.toLowerCase().includes(query);
         const matchSub = spot.subRegion.toLowerCase().includes(query);
         const matchDesc = spot.description.toLowerCase().includes(query);
-        if (!matchName && !matchSub && !matchDesc) return false;
+        const matchRegion = spot.region.toLowerCase().includes(query);
+        if (!matchName && !matchSub && !matchDesc && !matchRegion) return false;
       }
 
       return true;
@@ -129,10 +131,41 @@ export default function Home() {
       .filter((g) => g.items.length > 0);
   }, [stayRegion]);
 
+  // 지도 상단 플로팅: 지금 파도 핫한 스팟 (훌륭/최고만, 점수순 최대 8개)
+  const hotSpots = useMemo(() => {
+    const scored = spotsData
+      .map((s: any) => ({ spot: s, cond: batchConds[s.id] }))
+      .filter((x: any) => x.cond && (x.cond.conditionLabel === "훌륭" || x.cond.conditionLabel === "최고"))
+      .sort((a: any, b: any) => Math.max(b.cond.intermediate, b.cond.advanced) - Math.max(a.cond.intermediate, a.cond.advanced))
+      .slice(0, 8);
+    return scored;
+  }, [batchConds]);
+
+  // CCTV 탭: 웹캠 있는 스팟
+  const [camSpots] = useMemo(() => {
+    const list = spotsData.filter((s: any) => batchConds[s.id] && CAM_SPOT_IDS.has(s.id));
+    return [list];
+  }, [batchConds]);
+
   const handleSelectSpot = (spot: any) => {
     setSelectedSpot(spot);
     if (typeof window !== "undefined" && window.innerWidth < 768) {
       setMobileTab("map");
+    }
+  };
+
+  // CCTV 탭에서 카드 클릭: 해당 스팟 서랍을 연다 (지도 위에 떠 있음)
+  const handleSelectCamSpot = (spot: any) => {
+    setSelectedSpot(spot);
+  };
+
+  const camBeachCode = (spotId: string) => getCamForSpot(spotId)?.beachCode ?? "";
+
+  // 검색 시작 시 모바일이면 목록 뷰로 전환 (지도에서 검색이 안 되는 문제 해결)
+  const handleSearchInput = (v: string) => {
+    setSearchQuery(v);
+    if (v.trim() && typeof window !== "undefined" && window.innerWidth < 768 && mobileTab === "map") {
+      setMobileTab("list");
     }
   };
 
@@ -168,7 +201,7 @@ export default function Home() {
       <aside
         className={`w-full md:w-[420px] md:min-w-[420px] h-full bg-white border-r border-slate-200/90 flex flex-col z-20 shadow-xl transition-all duration-300 pt-12 md:pt-0 ${
           mobileTab === "map" ? "hidden md:flex" : "flex"
-        }`}
+        } ${mobileTab === "cams" ? "md:flex" : ""}`}
       >
         {/* 타이틀 & 초기화 버튼 & 스팟 제보 */}
         <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-white shrink-0">
@@ -229,29 +262,48 @@ export default function Home() {
           {/* 광고 1: 상시 노출 최상단 프리미엄 고정 배너 */}
           <AdSlot1 onRequestOpen={() => setIsRequestModalOpen(true)} />
 
-          {/* 검색창 */}
+          {/* 검색창 (폼 + 검색 버튼, 실시간 결과 수 표시) */}
           {contentTab === "spots" && (
           <>
-          <div className="relative">
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="relative"
+            role="search"
+          >
             <div className="flex items-center bg-slate-50 border border-slate-200/80 rounded-2xl px-3 py-2 focus-within:border-sky-500 focus-within:bg-white transition">
               <Search size={15} className="text-slate-400 mr-2 shrink-0" />
               <input
-                type="text"
-                placeholder="해변 검색 (예: 죽도, 송정, 중문, 만리포...)"
+                type="search"
+                inputMode="search"
+                enterKeyHint="search"
+                placeholder="해변·지역 검색 (예: 죽도, 송정, 부산, 제주...)"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearchInput(e.target.value)}
                 className="w-full bg-transparent text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
               />
               {searchQuery && (
                 <button
+                  type="button"
                   onClick={() => setSearchQuery("")}
                   className="text-slate-400 hover:text-slate-600 text-xs ml-1"
                 >
                   ✕
                 </button>
               )}
+              <button
+                type="submit"
+                className="ml-1.5 shrink-0 px-2.5 py-1 bg-sky-500 hover:bg-sky-600 text-white text-[10px] font-extrabold rounded-xl transition"
+              >
+                검색
+              </button>
             </div>
-          </div>
+            {searchQuery.trim() !== "" && (
+              <div className="absolute left-0 right-0 top-full mt-1 text-[10px] font-bold text-sky-600 bg-sky-50 border border-sky-100 rounded-xl px-3 py-1.5">
+                  "{searchQuery}" 검색 결과 {filteredSpots.length}개 스팟
+                {filteredSpots.length === 0 && " — 다른 키워드로 검색해 보세요"}
+              </div>
+            )}
+          </form>
 
           {/* 권역별 탭 */}
           <div>
@@ -344,6 +396,53 @@ export default function Home() {
               ))}
             </div>
           </div>
+
+          {/* 📹 실시간 웹캠 퀵 스트립: 실시간 파도를 먼저 확인 */}
+          {camSpots.length > 0 && (
+            <div className="-mx-1 px-1">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] font-black text-slate-600 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                  실시간 웹캠 {camSpots.length}곳
+                </span>
+                <span className="text-[9px] text-slate-400">이미지: WSB FARM</span>
+              </div>
+              <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-1">
+                {camSpots.slice(0, 12).map((spot: any) => {
+                  const cond = batchConds[spot.id];
+                  return (
+                    <button
+                      key={spot.id}
+                      onClick={() => handleSelectCamSpot(spot)}
+                      className="shrink-0 w-24 text-left rounded-xl overflow-hidden border border-slate-200 bg-white hover:border-sky-300 shadow-sm transition"
+                      title={`${spot.name} 실시간 보기`}
+                    >
+                      <div className="relative h-14 bg-slate-200">
+                        <img
+                          src={`/api/cam?beach=${camBeachCode(spot.id)}`}
+                          alt={`${spot.name} 실시간 스냅샷`}
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
+                        <span className="absolute top-0.5 left-0.5 w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                      </div>
+                      <div className="px-1.5 py-1">
+                        <div className="text-[9px] font-black text-slate-800 truncate">{spot.name}</div>
+                        {cond && (
+                          <span
+                            className="inline-block mt-0.5 text-[8px] font-extrabold px-1 rounded text-white"
+                            style={{ backgroundColor: cond.conditionColor }}
+                          >
+                            {cond.waveHeight.toFixed(1)}m
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* 스팟 목록 헤더 */}
 
@@ -552,14 +651,14 @@ export default function Home() {
       {/* 2. 우측 인터랙티브 지도 영역 */}
       <section className="flex-1 h-full relative overflow-hidden">
         {/* 모바일 상단 고정 탭 헤더 (모바일 전용) */}
-        <div className="md:hidden fixed top-0 left-0 right-0 z-[600] flex justify-center gap-2 bg-white/95 backdrop-blur-md px-3 py-2 shadow-md border-b border-slate-200">
+        <div className="md:hidden fixed top-0 left-0 right-0 z-[600] flex justify-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-2 shadow-md border-b border-slate-200">
           <button
             onClick={() => setMobileTab("list")}
             className={`flex-1 py-2 text-xs font-extrabold rounded-xl transition ${
               mobileTab === "list" ? "bg-sky-500 text-white shadow-sm" : "bg-slate-100 text-slate-600"
             }`}
           >
-            📋 스팟 목록 ({filteredSpots.length})
+            📋 목록 ({filteredSpots.length})
           </button>
           <button
             onClick={() => setMobileTab("map")}
@@ -567,9 +666,68 @@ export default function Home() {
               mobileTab === "map" ? "bg-sky-500 text-white shadow-sm" : "bg-slate-100 text-slate-600"
             }`}
           >
-            🗺️ 지도 보기
+            🗺️ 지도
+          </button>
+          <button
+            onClick={() => setMobileTab("cams")}
+            className={`flex-1 py-2 text-xs font-extrabold rounded-xl transition ${
+              mobileTab === "cams" ? "bg-red-500 text-white shadow-sm" : "bg-slate-100 text-slate-600"
+            }`}
+          >
+            📹 실시간 ({camSpots.length})
           </button>
         </div>
+
+        {/* 📹 실시간 CCTV 탭 (모바일 전용 풀스크린) */}
+        {mobileTab === "cams" && (
+          <div className="md:hidden absolute inset-0 z-[500] bg-slate-100 pt-14 overflow-y-auto">
+            <div className="px-4 pb-2 pt-3">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                <h2 className="text-sm font-black text-slate-900">실시간 해변 웹캠 {camSpots.length}곳</h2>
+              </div>
+              <p className="text-[10px] text-slate-500 mt-0.5">
+                카드를 누르면 지도와 상세정보(웹캠·AI 점수)가 열립니다 · 이미지 제공: WSB FARM
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-2 px-4 pb-6">
+              {camSpots.map((spot: any) => {
+                const cond = batchConds[spot.id];
+                return (
+                  <button
+                    key={spot.id}
+                    onClick={() => handleSelectCamSpot(spot)}
+                    className="text-left rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm active:scale-[0.98] transition"
+                  >
+                    <div className="relative h-24 bg-slate-200">
+                      <img
+                        src={`/api/cam?beach=${camBeachCode(spot.id)}`}
+                        alt={`${spot.name} 실시간 스냅샷`}
+                        loading="lazy"
+                        className="w-full h-full object-cover"
+                      />
+                      <span className="absolute top-1 left-1 w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                      <span className="absolute bottom-1 right-1 text-[8px] font-bold px-1 py-0.5 rounded bg-black/60 text-white">
+                        LIVE
+                      </span>
+                    </div>
+                    <div className="p-2">
+                      <div className="text-[11px] font-black text-slate-900 truncate">{spot.name}</div>
+                      {cond && (
+                        <span
+                          className="inline-block mt-1 text-[9px] font-extrabold px-1.5 py-0.5 rounded text-white"
+                          style={{ backgroundColor: cond.conditionColor }}
+                        >
+                          {cond.conditionLabel} {cond.waveHeight.toFixed(1)}m
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* 인터랙티브 지도 컴포넌트 */}
         <Map
@@ -580,6 +738,7 @@ export default function Home() {
           setMobileTab={setMobileTab}
           conditions={batchConds}
           userLevel={activeDifficulty}
+          hotSpots={hotSpots}
         />
 
         {/* 스팟 클릭 시 열리는 상세 서랍 (카카오맵 길찾기 내장) */}

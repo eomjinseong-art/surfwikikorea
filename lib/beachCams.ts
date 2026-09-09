@@ -58,6 +58,9 @@ export function getCamForSpot(spotId: string): BeachCam | null {
   return BEACH_CAMS[spotId] ?? null;
 }
 
+// CCTV 탭/빠른 필터용: 웹캠이 있는 스팟 id 집합
+export const CAM_SPOT_IDS: Set<string> = new Set(Object.keys(BEACH_CAMS));
+
 export function snapshotProxyUrl(cam: BeachCam): string | null {
   if (cam.stream) return null; // 라이브 스트림이 우선
   if (cam.beachCode) return `/api/cam?beach=${encodeURIComponent(cam.beachCode)}`;

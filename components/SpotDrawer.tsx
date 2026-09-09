@@ -14,16 +14,20 @@ export default function SpotDrawer({ spot, onClose }: any) {
   const [camError, setCamError] = useState(false);
   const [showFinder, setShowFinder] = useState(false);
   const [showWindy, setShowWindy] = useState(false);
+  const [windyFailed, setWindyFailed] = useState(false);
   const [finderDays, setFinderDays] = useState<any[]>([]);
   const [waterTemp, setWaterTemp] = useState<number | null>(null);
 
   useEffect(() => {
     if (!spot) return;
+    const controller = new AbortController();
     setLoading(true);
     setCamError(false);
     setShowFinder(false);
     setShowWindy(false);
-    getMarineForecast(spot.lat, spot.lng).then((res) => {
+    setWindyFailed(false);
+    getMarineForecast(spot.lat, spot.lng, controller.signal).then((res) => {
+      if (controller.signal.aborted) return;
       if (res) {
         setData(res);
         setScores(calculateSurfScores(res.waveHeight, res.wavePeriod, res.windSpeed, res.windDirection, spot.optimalWindDir));
@@ -35,14 +39,23 @@ export default function SpotDrawer({ spot, onClose }: any) {
     const marineUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&hourly=wave_height,wave_period&timezone=Asia%2FTokyo&forecast_days=7`;
     const windUrl = `https://api.open-meteo.com/v1/forecast?latitude=${spot.lat}&longitude=${spot.lng}&hourly=wind_speed_10m,wind_direction_10m&timezone=Asia%2FTokyo&forecast_days=7`;
     const tempUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${spot.lat}&longitude=${spot.lng}&current=sea_surface_temperature&timezone=Asia%2FTokyo`;
-    Promise.all([fetch(marineUrl).then((r) => r.json()), fetch(windUrl).then((r) => r.json()), fetch(tempUrl).then((r) => r.json())])
+    Promise.all([
+      fetch(marineUrl, { signal: controller.signal }).then((r) => r.json()),
+      fetch(windUrl, { signal: controller.signal }).then((r) => r.json()),
+      fetch(tempUrl, { signal: controller.signal }).then((r) => r.json()),
+    ])
       .then(([m, w, t]) => {
+        if (controller.signal.aborted) return;
         if (m.hourly && w.hourly) {
           setFinderDays(buildFinderGrid(m.hourly.time, m.hourly.time.map((iso: string) => parseInt(iso.slice(11, 13), 10)), m.hourly.wave_height, m.hourly.wave_period, w.hourly.wind_speed_10m, w.hourly.wind_direction_10m, spot.optimalWindDir));
         }
         setWaterTemp(typeof t.current?.sea_surface_temperature === "number" ? t.current.sea_surface_temperature : null);
       })
       .catch(() => {});
+
+    return () => {
+      controller.abort(); // 서랍을 닫거나 스팟을 바꾸면 진행 중인 요청을 즉시 취소 (모바일 안정성)
+    };
   }, [spot]);
 
   const cam = spot ? getCamForSpot(spot.id) : null;
@@ -195,7 +208,7 @@ export default function SpotDrawer({ spot, onClose }: any) {
             </div>
           )}
 
-          {/* Windy 실시간 풍향/파도 애니메이션 위젯 */}
+          {/* Windy 실시간 풍향/파도 애니메이션 위젯 (펼칠 때만 로드 → 초기 로딩 최소화) */}
           <div className="rounded-2xl overflow-hidden border border-slate-200">
             <button
               onClick={() => setShowWindy(!showWindy)}
@@ -207,14 +220,28 @@ export default function SpotDrawer({ spot, onClose }: any) {
               </span>
               <ChevronDown size={14} className={`text-slate-400 transition-transform ${showWindy ? "rotate-180" : ""}`} />
             </button>
-            {showWindy && (
+            {showWindy && !windyFailed && (
               <iframe
                 width="100%"
                 height="260"
                 frameBorder="0"
+                onError={() => setWindyFailed(true)}
                 src={`https://embed.windy.com/embed2.html?lat=${spot.lat}&lon=${spot.lng}&detailLat=${spot.lat}&detailLon=${spot.lng}&zoom=9&level=surface&overlay=wind&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=kt&metricTemp=%C2%B0C&radarRange=-1`}
                 title="Windy 풍향 애니메이션"
               />
+            )}
+            {showWindy && windyFailed && (
+              <div className="p-4 text-center text-[11px] text-slate-500">
+                Windy 위젯을 불러올 수 없습니다.
+                <a
+                  href={`https://www.windy.com/?${spot.lat},${spot.lng},9`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ml-1 text-sky-600 font-bold underline underline-offset-2"
+                >
+                  windy.com에서 열기 ↗
+                </a>
+              </div>
             )}
           </div>
 

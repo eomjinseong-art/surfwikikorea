@@ -5,12 +5,12 @@
   windDirection: number;
 }
 
-export async function getMarineForecast(lat: number, lng: number): Promise<MarineForecast | null> {
+export async function getMarineForecast(lat: number, lng: number, signal?: AbortSignal): Promise<MarineForecast | null> {
   try {
     const marineUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lng}&current=wave_height,wave_period&timezone=Asia%2FTokyo`;
     const windUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=wind_speed_10m,wind_direction_10m&timezone=Asia%2FTokyo`;
 
-    const [mRes, wRes] = await Promise.all([fetch(marineUrl), fetch(windUrl)]);
+    const [mRes, wRes] = await Promise.all([fetch(marineUrl, { signal }), fetch(windUrl, { signal })]);
     const mData = await mRes.json();
     const wData = await wRes.json();
 
