@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export default function Map({ spots, selectedSpot, onSelectSpot, activeRegion, setMobileTab }: any) {
+export default function Map({ spots, selectedSpot, onSelectSpot, activeRegion, setMobileTab, conditions, userLevel }: any) {
 
 
   const mapRef = useRef<HTMLDivElement>(null);
@@ -74,25 +74,33 @@ export default function Map({ spots, selectedSpot, onSelectSpot, activeRegion, s
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
 
-    const surfIcon = L.divIcon({
-      className: "custom-surf-pin",
-      html: '<div style="background:#0284c7;color:white;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 12px rgba(0,0,0,0.35);border:2.5px solid white;cursor:pointer;transition:transform 0.15s ease;" onmouseover="this.style.transform=\'scale(1.15)\'" onmouseout="this.style.transform=\'scale(1)\'">🏄</div>',
-      iconSize: [34, 34],
-      iconAnchor: [17, 17],
-    });
+    const levelKey = userLevel === "Beginner" ? "beginner" : userLevel === "Intermediate" ? "intermediate" : userLevel === "Advanced" ? "advanced" : null;
+
+    const surfIcon = (color: string, label: string, myScore: number | null) =>
+      L.divIcon({
+        className: "custom-surf-pin",
+        html: `<div style="position:relative;width:38px;height:38px"><div style="background:${color};color:white;width:34px;height:34px;margin:0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 4px 12px rgba(0,0,0,0.35);border:2.5px solid white;cursor:pointer;transition:transform 0.15s ease;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">${label === "최고" ? "🔥" : "🏄"}</div>${myScore !== null ? `<div style="position:absolute;top:-7px;right:-7px;background:#0f172a;color:white;font-size:8px;font-weight:800;padding:1px 4px;border-radius:8px;border:1.5px solid white;">${myScore}</div>` : ""}</div>`,
+        iconSize: [38, 38],
+        iconAnchor: [19, 19],
+      });
 
     spots.forEach((spot: any) => {
-      const marker = L.marker([spot.lat, spot.lng], { icon: surfIcon }).addTo(mapInstance.current);
+      const cond = conditions?.[spot.id];
+      const color = cond?.conditionColor ?? "#0284c7";
+      const label = cond?.conditionLabel ?? "";
+      const myScore = levelKey && cond ? cond[levelKey] : null;
+      const marker = L.marker([spot.lat, spot.lng], { icon: surfIcon(color, label, myScore) }).addTo(mapInstance.current);
 
       marker.on("click", () => {
         onSelectSpot(spot);
         mapInstance.current.flyTo([spot.lat, spot.lng], 12, { duration: 1.2 });
       });
 
-      marker.bindTooltip(`<b>${spot.name}</b><br><span style="font-size:11px;color:#0284c7;">${spot.subRegion}</span>`, { direction: "top", offset: [0, -18] });
+      const condLine = cond ? `<div style="margin-top:2px;"><span style="display:inline-block;font-size:9px;font-weight:800;color:white;background:${color};padding:1px 6px;border-radius:8px;">${label}</span> <span style="font-size:10px;color:#475569;">${cond.waveHeight.toFixed(1)}m · 풍속 ${cond.windSpeed.toFixed(0)}km/h</span></div>` : "";
+      marker.bindTooltip(`<b>${spot.name}</b><div style="font-size:11px;color:#0284c7;">${spot.subRegion}</div>${condLine}`, { direction: "top", offset: [0, -18] });
       markersRef.current.push(marker);
     });
-  }, [loaded, spots]);
+  }, [loaded, spots, conditions, userLevel]);
 
   // 스팟 선택 시 부드러운 카메라 이동
   useEffect(() => {

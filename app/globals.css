@@ -2,3 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+
+/* PWA 독립앱 모드: 노치/상태바 영역 대응 */
+@supports (padding: max(0px)) {
+  body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+}
+
+/* iOS 독립앱(standalone)에서 배경이 새지 않도록 상단 영역 채우기 */
+@media all and (display-mode: standalone) {
+  body { background: #0ea5e9; }
+}

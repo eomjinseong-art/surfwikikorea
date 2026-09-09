@@ -1,13 +1,15 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import spotsData from "@/data/spots.json";
 import accommodationsData from "@/data/accommodations.json";
 import Map from "@/components/Map";
 import SpotDrawer from "@/components/SpotDrawer";
 import AdGrid, { AdSlot1 } from "@/components/AdBanner";
+import ValuePropsCard from "@/components/ValuePropsCard";
+import { getBatchConditionsCached } from "@/lib/batchConditions";
 import SpotRequestModal from "@/components/SpotRequestModal";
-import { PlusCircle, RotateCcw, Search, Compass, Layers, ChevronRight, BedDouble, ExternalLink } from "lucide-react";
+import { PlusCircle, RotateCcw, Search, Compass, Layers, ChevronRight, BedDouble, ExternalLink, Star } from "lucide-react";
 
 export default function Home() {
   const [selectedSpot, setSelectedSpot] = useState<any>(null);
@@ -20,6 +22,8 @@ export default function Home() {
   const [activeBottomFilter, setActiveBottomFilter] = useState("전체");
   const [contentTab, setContentTab] = useState<"spots" | "stays">("spots");
   const [stayRegion, setStayRegion] = useState("전체");
+  const [batchConds, setBatchConds] = useState<Record<string, any>>({});
+  const [favs, setFavs] = useState<string[]>([]);
 
   const regions = ["전체", "동해", "남해", "제주", "서해"];
   const difficulties = [
@@ -45,7 +49,7 @@ export default function Home() {
 
   // 2. 다차원 필터링 (지역 + 난이도 + 검색어 + 바람 + 바닥)
   const filteredSpots = useMemo(() => {
-    return spotsData.filter((spot) => {
+    const list = spotsData.filter((spot) => {
       // 지역 조건
       if (activeRegion !== "전체" && spot.region !== activeRegion) return false;
       
@@ -97,7 +101,22 @@ export default function Home() {
 
       return true;
     });
-  }, [activeRegion, activeDifficulty, searchQuery, activeWindFilter, activeBottomFilter]);
+
+    // 내 레벨 선택 시 해당 레벨 점수순 정렬 + 즐겨찾기 최상단
+    const levelKey = activeDifficulty === "Beginner" ? "beginner" : activeDifficulty === "Intermediate" ? "intermediate" : activeDifficulty === "Advanced" ? "advanced" : null;
+    const scoreOf = (s: any) => {
+      const c = batchConds[s.id];
+      if (!c) return -1;
+      return levelKey ? c[levelKey] : Math.max(c.beginner, c.intermediate, c.advanced);
+    };
+    return [...list].sort((a: any, b: any) => {
+      const fa = favs.includes(a.id) ? 1 : 0;
+      const fb = favs.includes(b.id) ? 1 : 0;
+      if (fa !== fb) return fb - fa;
+      if (levelKey) return scoreOf(b) - scoreOf(a);
+      return 0;
+    });
+  }, [activeRegion, activeDifficulty, searchQuery, activeWindFilter, activeBottomFilter, batchConds, favs]);
 
   // 숙소: 지역별 그룹핑
   const groupedStays = useMemo(() => {
@@ -115,6 +134,32 @@ export default function Home() {
     if (typeof window !== "undefined" && window.innerWidth < 768) {
       setMobileTab("map");
     }
+  };
+
+  // 실시간 컨디션 배치 조회 (10분 캐시)
+  useEffect(() => {
+    let alive = true;
+    getBatchConditionsCached(spotsData).then((data) => {
+      if (alive && data && Object.keys(data).length > 0) setBatchConds(data);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  // 즐겨찾기 (localStorage)
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("surfwiki-favs");
+      if (saved) setFavs(JSON.parse(saved));
+    } catch {}
+  }, []);
+  const toggleFav = (id: string) => {
+    setFavs((prev) => {
+      const next = prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id];
+      try { localStorage.setItem("surfwiki-favs", JSON.stringify(next)); } catch {}
+      return next;
+    });
   };
 
   return (
@@ -343,12 +388,29 @@ export default function Home() {
                           <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
                             {spot.difficulty === "All" ? "초급~전체" : spot.difficulty === "Beginner" ? "초보 추천" : spot.difficulty === "Intermediate" ? "중급" : "상급 전용"}
                           </span>
+                          {batchConds[spot.id] && (
+                            <span
+                              className="text-[10px] font-extrabold px-1.5 py-0.5 rounded text-white"
+                              style={{ backgroundColor: batchConds[spot.id].conditionColor }}
+                            >
+                              {batchConds[spot.id].conditionLabel} {batchConds[spot.id].waveHeight.toFixed(1)}m
+                            </span>
+                          )}
                         </div>
                         <h3 className="text-sm font-black text-slate-900 group-hover:text-sky-600 transition">
                           {spot.name}
                         </h3>
                       </div>
-                      <ChevronRight size={16} className={`text-slate-300 group-hover:text-sky-500 group-hover:translate-x-0.5 transition ${isSelected ? "text-sky-500" : ""}`} />
+                      <div className="flex items-center gap-0.5 shrink-0">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); toggleFav(spot.id); }}
+                          className={`p-1 rounded-full transition ${favs.includes(spot.id) ? "text-amber-400" : "text-slate-300 hover:text-amber-300"}`}
+                          title={favs.includes(spot.id) ? "즐겨찾기 해제" : "즐겨찾기 추가"}
+                        >
+                          <Star size={14} fill={favs.includes(spot.id) ? "currentColor" : "none"} />
+                        </button>
+                        <ChevronRight size={16} className={`text-slate-300 group-hover:text-sky-500 group-hover:translate-x-0.5 transition ${isSelected ? "text-sky-500" : ""}`} />
+                      </div>
                     </div>
 
                     <p className="text-[11px] text-slate-500 line-clamp-2 mt-1 leading-relaxed">
@@ -406,28 +468,58 @@ export default function Home() {
                   {group.items.map((stay) => (
                     <a
                       key={stay.id}
-                      href={stay.url}
+                      href={stay.couponUrl}
                       target="_blank"
                       rel="sponsored noopener noreferrer"
-                      className="block p-3 rounded-2xl border bg-white border-slate-200/80 hover:border-sky-300 hover:shadow-md transition-all group"
+                      className="block rounded-2xl border bg-white border-slate-200/80 hover:border-sky-300 hover:shadow-md transition-all group overflow-hidden"
                     >
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                            <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-amber-100 text-amber-700">
-                              쿠팡트립
-                            </span>
-                            {stay.subRegion && (
-                              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
-                                {stay.subRegion}
-                              </span>
-                            )}
-                          </div>
-                          <h3 className="text-sm font-black text-slate-900 group-hover:text-sky-600 transition truncate">
-                            {stay.name}
-                          </h3>
+                      {/* 숙소 대표 이미지 */}
+                      {stay.image && (
+                        <div className="relative h-24 w-full overflow-hidden bg-slate-100">
+                          <img
+                            src={stay.image}
+                            alt={stay.name}
+                            className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300"
+                            loading="lazy"
+                          />
+                          <span className="absolute top-1.5 left-1.5 text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-white/90 text-slate-700 shadow-sm">
+                            쿠팡트립 예약가능
+                          </span>
                         </div>
-                        <ExternalLink size={14} className="text-slate-300 group-hover:text-sky-500 transition shrink-0 mt-1" />
+                      )}
+                      <div className="p-3">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                              <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-amber-100 text-amber-700">
+                                {stay.subRegion || stay.region}
+                              </span>
+                            </div>
+                            <h3 className="text-sm font-black text-slate-900 group-hover:text-sky-600 transition truncate">
+                              {stay.name}
+                            </h3>
+                            <p className="text-[11px] text-slate-500 line-clamp-2 mt-0.5 leading-relaxed">
+                              {stay.desc}
+                            </p>
+                          </div>
+                          <ExternalLink size={14} className="text-slate-300 group-hover:text-sky-500 transition shrink-0 mt-1" />
+                        </div>
+                        <div className="mt-2 pt-2 border-t border-slate-100 flex items-center gap-1.5">
+                          <span className="flex-1 py-1.5 bg-sky-500 group-hover:bg-sky-600 text-white font-extrabold text-[11px] rounded-lg transition text-center">
+                            쿠팡에서 예약하기
+                          </span>
+                          <span
+                            role="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              window.open(stay.localSiteUrl, "_blank", "noopener");
+                            }}
+                            className="py-1.5 px-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-[11px] rounded-lg transition cursor-pointer"
+                          >
+                            숙소 정보
+                          </span>
+                        </div>
                       </div>
                     </a>
                   ))}
@@ -448,9 +540,12 @@ export default function Home() {
           )}
         </div>
 
-        {/* 사이드바 하단: 상시 노출 광고 2~5 그리드 */}
-        <div className="p-3 bg-white border-t border-slate-200 shrink-0">
-          <AdGrid />
+        {/* 사이드바 하단: 차별화 포인트 하이라이트 */}
+        <div className="p-3 bg-slate-50 border-t border-slate-200 shrink-0">
+          <ValuePropsCard />
+          <div className="mt-2">
+            <AdGrid />
+          </div>
         </div>
       </aside>
 
@@ -483,6 +578,8 @@ export default function Home() {
           onSelectSpot={setSelectedSpot}
           activeRegion={activeRegion}
           setMobileTab={setMobileTab}
+          conditions={batchConds}
+          userLevel={activeDifficulty}
         />
 
         {/* 스팟 클릭 시 열리는 상세 서랍 (카카오맵 길찾기 내장) */}

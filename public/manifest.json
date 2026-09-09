@@ -1,0 +1,50 @@
+{
+  "name": "서프위키Ai - 대한민국 전국 서핑 지도",
+  "short_name": "서프위키Ai",
+  "description": "대한민국 전국 100개 서핑 스팟의 실시간 파도, 풍향, AI 서핑 점수와 해변 웹캠 가이드",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "fullscreen", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#0ea5e9",
+  "lang": "ko",
+  "dir": "ltr",
+  "categories": ["sports", "travel", "weather"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "숙소 보기",
+      "short_name": "숙소",
+      "description": "지역별 서핑 숙소 목록",
+      "url": "/?tab=stays"
+    }
+  ]
+}
