@@ -4,12 +4,16 @@ import { useState } from "react";
 import spotsData from "@/data/spots.json";
 import Map from "@/components/Map";
 import SpotDrawer from "@/components/SpotDrawer";
+import AdBanner from "@/components/AdBanner";
+import SpotRequestModal from "@/components/SpotRequestModal";
+import { PlusCircle } from "lucide-react";
 
 export default function Home() {
   const [selectedSpot, setSelectedSpot] = useState<any>(null);
   const [activeRegion, setActiveRegion] = useState("전체");
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
 
   const regions = ["전체", "동해", "남해", "제주", "서해"];
 
@@ -35,8 +39,17 @@ export default function Home() {
 
   return (
     <main className="relative w-screen h-screen overflow-hidden">
-      {/* 상단 컨트롤 영역 (검색창 + 지역 필터) */}
+      {/* 상단 컨트롤 영역 (스팟 제보 + 검색창 + 지역 필터) */}
       <div className="absolute top-4 right-4 z-[1000] flex flex-col md:flex-row items-end md:items-center gap-2">
+        {/* 스팟 제보 버튼 */}
+        <button
+          onClick={() => setIsRequestModalOpen(true)}
+          className="bg-sky-500 hover:bg-sky-600 text-white px-3 py-1.5 rounded-2xl text-xs font-bold shadow-lg transition flex items-center gap-1.5 border border-sky-400"
+        >
+          <PlusCircle size={14} />
+          <span>스팟 제보</span>
+        </button>
+
         {/* 스팟 실시간 검색창 */}
         <div className="relative">
           <div className="flex items-center bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-xl border border-slate-100">
@@ -115,8 +128,22 @@ export default function Home() {
         activeRegion={activeRegion}
       />
 
-      {/* 스팟 상세 카드 */}
-      {selectedSpot && <SpotDrawer spot={selectedSpot} onClose={() => setSelectedSpot(null)} />}
+      {/* 스팟 상세 카드 서랍 */}
+      {selectedSpot && (
+        <SpotDrawer
+          spot={selectedSpot}
+          onClose={() => setSelectedSpot(null)}
+        />
+      )}
+
+      {/* 하단 5개 롤링 광고 배너 */}
+      <AdBanner onRequestOpen={() => setIsRequestModalOpen(true)} />
+
+      {/* 서핑 스팟 추가 제보 모달 (Formspree 연동) */}
+      <SpotRequestModal
+        isOpen={isRequestModalOpen}
+        onClose={() => setIsRequestModalOpen(false)}
+      />
     </main>
   );
 }
