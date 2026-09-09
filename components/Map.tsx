@@ -96,10 +96,11 @@ export default function Map({
         iconAnchor: [19, 19],
       });
 
+    // 숙소: 네모(사각) 핀 + 휴양지 느낌의 팜 트리 배지 — 서핑 핀(원형)과 즉시 구별
     const stayIcon = () =>
       L.divIcon({
         className: "custom-stay-pin",
-        html: `<div style="position:relative;width:38px;height:38px"><div style="background:#7c3aed;color:white;width:34px;height:34px;margin:0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,0.35);border:2.5px solid white;cursor:pointer;transition:transform 0.15s ease;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">🏨</div></div>`,
+        html: `<div style="position:relative;width:38px;height:38px"><div style="background:linear-gradient(135deg,#7c3aed,#a855f7);color:white;width:32px;height:32px;margin:0 auto;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,0.35);border:2.5px solid white;cursor:pointer;transition:transform 0.15s ease;" onmouseover="this.style.transform='scale(1.15) rotate(-3deg)'" onmouseout="this.style.transform='scale(1)'">🏨</div><div style="position:absolute;bottom:-4px;right:-2px;background:#fde68a;font-size:9px;line-height:1;padding:2px 3px;border-radius:6px;border:1.5px solid white;">🌴</div></div>`,
         iconSize: [38, 38],
         iconAnchor: [19, 19],
       });
@@ -125,11 +126,13 @@ export default function Map({
     });
 
     (accommodations || []).forEach((stay: any) => {
-      if (typeof stay.lat !== "number" || typeof stay.lng !== "number") return;
-      const marker = L.marker([stay.lat, stay.lng], { icon: stayIcon() }).addTo(mapInstance.current);
+      const lat = Number(stay.lat);
+      const lng = Number(stay.lng);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+      const marker = L.marker([lat, lng], { icon: stayIcon() }).addTo(mapInstance.current);
       marker.on("click", () => {
         onSelectAccommodation?.(stay);
-        mapInstance.current.flyTo([stay.lat, stay.lng], 12, { duration: 1.2 });
+        mapInstance.current.flyTo([lat, lng], 12, { duration: 1.2 });
       });
       marker.bindTooltip(
         `<b>${stay.name}</b><div style="font-size:11px;color:#7c3aed;">숙소 · ${stay.subRegion || stay.region}</div>`,
@@ -184,9 +187,9 @@ export default function Map({
         </div>
       )}
 
-      {/* 우상단: 숙소 마커 토글 */}
+      {/* 우상단: 숙소 보기 (핫스팟 칩 행 아래로 배치해 겹침 방지) */}
       {onToggleAccommodations && (
-        <div className="absolute right-3 z-[460] below-tab-header md:top-4">
+        <div className="absolute right-3 z-[460] below-hotspot-row md:top-16">
           <button
             onClick={onToggleAccommodations}
             className={`px-3 py-1.5 rounded-full text-[10px] font-extrabold border shadow-md transition ${
@@ -195,7 +198,7 @@ export default function Map({
                 : "bg-white text-slate-700 border-slate-200 hover:bg-violet-50"
             }`}
           >
-            🏨 숙소 {showAccommodations ? "끄기" : "보기"}
+            {showAccommodations ? "🏨 숙소 표시중 — 끄기" : "🏨 숙소 보기"}
           </button>
         </div>
       )}

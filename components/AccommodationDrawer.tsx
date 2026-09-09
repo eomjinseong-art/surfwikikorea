@@ -6,7 +6,7 @@ export default function AccommodationDrawer({ accommodation, onClose }: any) {
   if (!accommodation) return null;
 
   return (
-    <div className="absolute bottom-16 md:bottom-20 left-0 right-0 md:left-6 md:right-auto md:w-[410px] bg-white/98 backdrop-blur-md rounded-t-3xl md:rounded-3xl shadow-2xl z-[1001] border border-slate-200/80 p-5 max-h-[80vh] overflow-y-auto transition-all animate-slideUp">
+    <div className="absolute mobile-drawer-safe md:bottom-20 left-0 right-0 md:left-6 md:right-auto md:w-[410px] bg-white/98 backdrop-blur-md rounded-t-3xl md:rounded-3xl shadow-2xl z-[1001] border border-slate-200/80 p-5 max-h-[80vh] overflow-y-auto transition-all animate-slideUp">
       <div className="flex justify-between items-start pb-3 border-b border-slate-100">
         <div>
           <div className="flex items-center gap-1.5 flex-wrap">

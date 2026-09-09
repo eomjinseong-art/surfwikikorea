@@ -8,10 +8,9 @@ import SpotDrawer from "@/components/SpotDrawer";
 import AccommodationDrawer from "@/components/AccommodationDrawer";
 import { AdSlot1, WaveParkAd } from "@/components/AdBanner";
 import ValuePropsCard from "@/components/ValuePropsCard";
-import MobileBottomBar from "@/components/MobileBottomBar";
 import { getBatchConditionsCached } from "@/lib/batchConditions";
 import { CAM_SPOT_IDS, getCamForSpot } from "@/lib/beachCams";
-import SpotRequestModal from "@/components/SpotRequestModal";
+import InfoAndRequestModal from "@/components/InfoAndRequestModal";
 import Link from "next/link";
 import { PlusCircle, RotateCcw, Search, Compass, Layers, ChevronRight, BedDouble, ExternalLink, Star, Video } from "lucide-react";
 
@@ -29,7 +28,8 @@ export default function Home() {
   const [activeRegion, setActiveRegion] = useState("전체");
   const [activeDifficulty, setActiveDifficulty] = useState("전체");
   const [searchQuery, setSearchQuery] = useState("");
-  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+  const [infoModal, setInfoModal] = useState<{ open: boolean; tab: "info" | "request" }>({ open: false, tab: "info" });
+  const openInfoModal = (tab: "info" | "request") => setInfoModal({ open: true, tab });
   const [mobileTab, setMobileTab] = useState<"list" | "map" | "cams">("map");
   const [activeWindFilter, setActiveWindFilter] = useState("전체");
   const [activeBottomFilter, setActiveBottomFilter] = useState("전체");
@@ -41,6 +41,7 @@ export default function Home() {
   const [selectedAccommodation, setSelectedAccommodation] = useState<any>(null);
   const [showAccommodations, setShowAccommodations] = useState(false);
   const spotListAnchorRef = useRef<HTMLDivElement>(null);
+  const scrollContentRef = useRef<HTMLDivElement>(null);
 
   const regions = ["전체", "동해", "남해", "제주", "서해"];
   const difficulties = [
@@ -60,9 +61,18 @@ export default function Home() {
     setSearchQuery("");
     setSelectedSpot(null);
     setSelectedAccommodation(null);
+    setShowAccommodations(false);
     setActiveWindFilter("전체");
     setActiveBottomFilter("전체");
     setActiveConditionFilter("전체");
+    setContentTab("spots");
+    setStayRegion("전체");
+    setMobileTab("map");
+    // 목록 스크롤 위치까지 완전 초기화 (모바일 타이틀 클릭 = 처음 상태로)
+    requestAnimationFrame(() => {
+      scrollContentRef.current?.scrollTo({ top: 0, behavior: "auto" });
+      window.scrollTo(0, 0);
+    });
   };
 
   // 다차원 필터링 (지역 + 난이도 + 검색어 + 바람 + 바닥 + 컨디션)
@@ -131,13 +141,50 @@ export default function Home() {
     return order.map((region) => ({ region, items: filtered.filter((a) => a.region === region) })).filter((g) => g.items.length > 0);
   }, [stayRegion]);
 
-  const visibleAccommodations = useMemo(() => {
-    return accommodationsData.filter((a: any) => {
-      if (!showAccommodations) return false;
-      if (activeRegion === "전체") return true;
-      return a.region === activeRegion;
+  const accommodationsWithCoords = useMemo(() => {
+    const spotsByRegion = spotsData.reduce((acc: Record<string, any[]>, spot: any) => {
+      if (!acc[spot.region]) acc[spot.region] = [];
+      acc[spot.region].push(spot);
+      return acc;
+    }, {} as Record<string, any[]>);
+
+    const normalize = (v: any) => String(v ?? "").toLowerCase().replace(/[^a-z0-9가-힣ㄱ-ㅎㅏ-ㅣ\s]/g, " ");
+
+    return accommodationsData.map((stay: any) => {
+      const regionSpots = spotsByRegion[stay.region] || spotsData;
+      const hay = normalize(`${stay.subRegion ?? ""} ${stay.name ?? ""} ${stay.address ?? ""}`);
+      const tokens = hay.split(/\s+/).filter((t) => t.length >= 2);
+
+      let best = regionSpots[0] ?? spotsData[0];
+      let bestScore = -1;
+
+      for (const spot of regionSpots) {
+        const text = normalize(`${spot.name} ${spot.subRegion} ${spot.description}`);
+        let score = 0;
+        for (const t of tokens) {
+          if (text.includes(t)) score += 1;
+        }
+        if (score > bestScore) {
+          bestScore = score;
+          best = spot;
+        }
+      }
+
+      return {
+        ...stay,
+        lat: Number.isFinite(Number(stay.lat)) ? Number(stay.lat) : best?.lat,
+        lng: Number.isFinite(Number(stay.lng)) ? Number(stay.lng) : best?.lng,
+      };
     });
-  }, [showAccommodations, activeRegion]);
+  }, []);
+
+  const visibleAccommodations = useMemo(() => {
+    return accommodationsWithCoords.filter((a: any) => {
+      if (!showAccommodations) return false;
+      if (activeRegion !== "전체" && a.region !== activeRegion) return false;
+      return Number.isFinite(Number(a.lat)) && Number.isFinite(Number(a.lng));
+    });
+  }, [accommodationsWithCoords, showAccommodations, activeRegion]);
 
   const hotSpots = useMemo(() => {
     return spotsData
@@ -173,7 +220,25 @@ export default function Home() {
   const handleSelectCamSpot = handleSelectSpot;
   const camBeachCode = (spotId: string) => getCamForSpot(spotId)?.beachCode ?? "";
 
-  const handleToggleAccommodations = () => setShowAccommodations((p) => !p);
+  const handleToggleAccommodations = () => {
+    setShowAccommodations((prev) => {
+      const next = !prev;
+      if (!next) setSelectedAccommodation(null);
+      return next;
+    });
+  };
+  // 지도의 "숙소 보기" → 숙소 마커 표시 + 목록을 숙소 탭으로 전환 (모바일은 지도 유지)
+  const handleShowAccommodations = () => {
+    setShowAccommodations(true);
+    setContentTab("stays");
+    setSelectedSpot(null);
+    scrollContentRef.current?.scrollTo({ top: 0, behavior: "auto" });
+    if (typeof window !== "undefined" && window.innerWidth >= 768) {
+      setTimeout(() => {
+        spotListAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 120);
+    }
+  };
   const handleSelectAccommodation = (acc: any) => {
     setSelectedSpot(null);
     setSelectedAccommodation(acc);
@@ -227,23 +292,35 @@ export default function Home() {
   return (
     <main className="relative w-screen h-screen overflow-hidden flex flex-col md:flex-row bg-slate-100">
 
-      {/* ── 모바일 타이틀바 (최상단 고정) ── */}
-      <div className="mobile-title-bar md:hidden fixed left-0 right-0 z-[700] flex items-center justify-between bg-white/95 backdrop-blur-md px-3 py-1.5 shadow-sm border-b border-slate-200/80">
-        <button onClick={handleResetAll} className="flex items-center gap-1.5 group" title="전체 초기화">
-          <span className="text-lg">🏄‍♂️</span>
-          <div>
-            <h1 className="text-sm font-black text-slate-900 tracking-tight group-hover:text-sky-600 transition leading-tight">서프위키Ai</h1>
-            <p className="text-[8px] font-semibold text-slate-400 leading-tight">전국 실시간 서핑 지도</p>
-          </div>
-        </button>
-        <button
-          onClick={() => setIsRequestModalOpen(true)}
-          className="bg-sky-500 hover:bg-sky-600 text-white px-2 py-1 rounded-lg text-[10px] font-extrabold shadow-sm transition flex items-center gap-1 shrink-0"
-        >
-          <PlusCircle size={11} />
-          <span>스팟 제보</span>
-        </button>
-      </div>
+      {/* ── 모바일 일체형 상단 헤더 (타이틀 + 탭을 하나의 불투명 컨테이너로 묶어 지도 비침 원천 차단) ── */}
+      <header className="mobile-header md:hidden fixed left-0 right-0 z-[700] bg-white shadow-sm border-b border-slate-200">
+        <div className="flex items-center justify-between px-3 py-1.5">
+          <button onClick={handleResetAll} className="flex items-center gap-1.5 group" title="전체 초기화">
+            <span className="text-lg">🏄‍♂️</span>
+            <div>
+              <h1 className="text-sm font-black text-slate-900 tracking-tight group-hover:text-sky-600 transition leading-tight">서프위키Ai</h1>
+              <p className="text-[8px] font-semibold text-slate-400 leading-tight">전국 실시간 서핑 지도</p>
+            </div>
+          </button>
+          <button
+            onClick={() => openInfoModal("info")}
+            className="bg-slate-900 hover:bg-slate-800 active:scale-95 text-white px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold shadow-sm transition flex items-center gap-1 shrink-0"
+          >
+            <span>✨ 안내·제보</span>
+          </button>
+        </div>
+        <div className="flex justify-center gap-1.5 px-3 pb-1.5">
+          <button onClick={() => setMobileTab("list")}
+            className={`flex-1 py-1.5 text-xs font-extrabold rounded-xl transition ${mobileTab === "list" ? "bg-sky-500 text-white shadow-sm" : "bg-slate-100 text-slate-600"}`}
+          >📋 목록 ({filteredSpots.length})</button>
+          <button onClick={() => setMobileTab("map")}
+            className={`flex-1 py-1.5 text-xs font-extrabold rounded-xl transition ${mobileTab === "map" ? "bg-sky-500 text-white shadow-sm" : "bg-slate-100 text-slate-600"}`}
+          >🗺️ 지도</button>
+          <button onClick={() => setMobileTab("cams")}
+            className={`flex-1 py-1.5 text-xs font-extrabold rounded-xl transition ${mobileTab === "cams" ? "bg-red-500 text-white shadow-sm" : "bg-slate-100 text-slate-600"}`}
+          >📹 실시간 ({camSpots.length})</button>
+        </div>
+      </header>
 
       {/* 1. 좌측 탐색 사이드 패널 */}
       <aside
@@ -264,7 +341,7 @@ export default function Home() {
             </div>
           </button>
           <button
-            onClick={() => setIsRequestModalOpen(true)}
+            onClick={() => openInfoModal("request")}
             className="bg-sky-500 hover:bg-sky-600 text-white px-2.5 py-1.5 rounded-xl text-xs font-extrabold shadow-sm transition flex items-center gap-1 shrink-0"
           >
             <PlusCircle size={13} />
@@ -295,8 +372,8 @@ export default function Home() {
         </div>
 
         {/* 스크롤 본문 */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          <AdSlot1 onRequestOpen={() => setIsRequestModalOpen(true)} />
+        <div ref={scrollContentRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+          <AdSlot1 onRequestOpen={() => openInfoModal("request")} />
           <WaveParkAd />
 
           {contentTab === "spots" && (
@@ -607,19 +684,6 @@ export default function Home() {
 
       {/* 2. 우측 인터랙티브 지도 영역 */}
       <section className="flex-1 h-full relative overflow-hidden">
-        {/* 모바일 탭 헤더 (타이틀바 바로 아래) */}
-        <div className="mobile-tab-header md:hidden fixed left-0 right-0 z-[600] flex justify-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-1.5 shadow-sm border-b border-slate-200">
-          <button onClick={() => setMobileTab("list")}
-            className={`flex-1 py-1.5 text-xs font-extrabold rounded-xl transition ${mobileTab === "list" ? "bg-sky-500 text-white shadow-sm" : "bg-slate-100 text-slate-600"}`}
-          >📋 목록 ({filteredSpots.length})</button>
-          <button onClick={() => setMobileTab("map")}
-            className={`flex-1 py-1.5 text-xs font-extrabold rounded-xl transition ${mobileTab === "map" ? "bg-sky-500 text-white shadow-sm" : "bg-slate-100 text-slate-600"}`}
-          >🗺️ 지도</button>
-          <button onClick={() => setMobileTab("cams")}
-            className={`flex-1 py-1.5 text-xs font-extrabold rounded-xl transition ${mobileTab === "cams" ? "bg-red-500 text-white shadow-sm" : "bg-slate-100 text-slate-600"}`}
-          >📹 실시간 ({camSpots.length})</button>
-        </div>
-
         {/* CCTV 탭 */}
         {mobileTab === "cams" && (
           <div className="md:hidden absolute inset-0 z-[500] bg-slate-100 mobile-cams-top overflow-y-auto overscroll-contain">
@@ -630,7 +694,7 @@ export default function Home() {
               </div>
               <p className="text-[10px] text-slate-500 mt-0.5">카드를 누르면 지도와 상세정보가 열립니다 · 이미지: WSB FARM</p>
             </div>
-            <div className="grid grid-cols-2 gap-2 px-4 pb-20">
+            <div className="grid grid-cols-2 gap-2 px-4 pb-6">
               {camSpots.map((spot: any) => {
                 const cond = batchConds[spot.id];
                 return (
@@ -665,7 +729,7 @@ export default function Home() {
           selectedAccommodation={selectedAccommodation}
           onSelectSpot={handleSelectSpot}
           onSelectAccommodation={handleSelectAccommodation}
-          onToggleAccommodations={handleToggleAccommodations}
+          onToggleAccommodations={handleShowAccommodations}
           showAccommodations={showAccommodations}
           activeRegion={activeRegion}
           setMobileTab={setMobileTab}
@@ -686,11 +750,12 @@ export default function Home() {
         )}
       </section>
 
-      {/* 모바일 하단 고정: ONLY HERE + 공유 */}
-      <MobileBottomBar />
-
-      {/* 서핑 스팟 제보 모달 */}
-      <SpotRequestModal isOpen={isRequestModalOpen} onClose={() => setIsRequestModalOpen(false)} />
+      {/* ONLY HERE 안내 + 스팟 제보 통합 모달 */}
+      <InfoAndRequestModal
+        isOpen={infoModal.open}
+        defaultTab={infoModal.tab}
+        onClose={() => setInfoModal((p) => ({ ...p, open: false }))}
+      />
     </main>
   );
 }

@@ -17,38 +17,44 @@ html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* ── 모바일 플로팅 레이아웃 ── */
-/* 타이틀바: 최상단 고정 (safe-area 아래) */
-.mobile-title-bar {
-  top: env(safe-area-inset-top, 0px);
+/* ── 모바일 플로팅 레이아웃 ──
+   타이틀바+탭 헤더를 하나의 일체형 상단 컨테이너(.mobile-header)로 묶고
+   화면 최상단(top:0)에 완전 밀착시킨다. 안전영역은 바 "내부 패딩"으로
+   흡수하므로 어떤 브라우저/기기/safe-area 환경에서도 틈새로
+   지도 배경이 비쳐 보이지 않는다. */
+
+/* 일체형 상단 헤더(타이틀 + 탭): 최상단 밀착 + 노치 대응 내부 패딩 */
+.mobile-header {
+  top: 0;
+  padding-top: env(safe-area-inset-top, 0px);
 }
-/* 탭 헤더: 타이틀바와 간격(6px) 유지 */
-.mobile-tab-header {
-  top: calc(env(safe-area-inset-top, 0px) + 42px);
-}
-/* 핫스팟 칩 등: 타이틀바 + 탭 헤더 아래 */
+/* 핫스팟 칩 등: 일체형 헤더(타이틀+탭) 아래 */
 @media (max-width: 767px) {
   .below-tab-header {
-    top: calc(env(safe-area-inset-top, 0px) + 88px);
+    top: calc(env(safe-area-inset-top, 0px) + 92px);
   }
-}
-/* ONLY HERE 하단바: safe-area-bottom 위 */
-.mobile-bottom-bar {
-  bottom: env(safe-area-inset-bottom, 0px);
+  /* 숙소 보기 토글: 핫스팟 칩 행 아래로 한 줄 더 내림 */
+  .below-hotspot-row {
+    top: calc(env(safe-area-inset-top, 0px) + 136px);
+  }
 }
 
-/* 사이드 패널: 타이틀바 + 탭 공간 확보 */
+/* 사이드 패널: 일체형 헤더 공간 확보 / 하단은 홈 인디케이터만 피함 */
 @media (max-width: 767px) {
   .mobile-panel-top {
-    padding-top: calc(env(safe-area-inset-top, 0px) + 88px);
+    padding-top: calc(env(safe-area-inset-top, 0px) + 92px);
   }
   .mobile-panel-bottom {
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 44px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
   }
   .mobile-cams-top {
-    padding-top: calc(env(safe-area-inset-top, 0px) + 88px);
+    padding-top: calc(env(safe-area-inset-top, 0px) + 92px);
   }
   .mobile-legend-safe {
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 58px);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+  }
+  /* 스팟/숙소 서랍: 하단 고정 바 제거 후 홈 인디케이터만 피해 밀착 */
+  .mobile-drawer-safe {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
   }
 }
