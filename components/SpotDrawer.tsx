@@ -153,17 +153,37 @@ export default function SpotDrawer({ spot, onClose }: any) {
             </ul>
           </div>
 
-          {/* 길찾기 바로가기 */}
-          <div className="pt-1">
+          {/* 카카오맵 정식 연동 길찾기 버튼 그룹 */}
+          <div className="pt-2 space-y-1.5">
             <a
               href={`https://map.kakao.com/link/to/${encodeURIComponent(spot.name)},${spot.lat},${spot.lng}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm"
+              className="w-full py-3 bg-[#FEE500] hover:bg-[#FDD800] text-[#191919] font-black text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-md active:scale-[0.99]"
             >
-              <Navigation size={13} />
-              <span>카카오맵으로 길찾기</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#191919">
+                <path d="M12 3C6.477 3 2 6.477 2 10.765c0 2.768 1.838 5.19 4.606 6.556l-.973 3.654a.434.434 0 0 0 .604.496l4.316-2.856c.477.068.964.105 1.447.105 5.523 0 10-3.477 10-7.955C22 6.477 17.523 3 12 3z"/>
+              </svg>
+              <span>카카오맵으로 실시간 길찾기</span>
             </a>
+            <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+              <a
+                href={`https://map.kakao.com/link/map/${encodeURIComponent(spot.name)},${spot.lat},${spot.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition text-center"
+              >
+                📍 카카오맵 위치
+              </a>
+              <a
+                href={`https://kakaonavi.kakao.com/navigate?name=${encodeURIComponent(spot.name)}&x=${spot.lng}&y=${spot.lat}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition text-center"
+              >
+                🚗 카카오내비 안내
+              </a>
+            </div>
           </div>
         </div>
       ) : null}
