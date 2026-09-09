@@ -16,3 +16,16 @@ html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
 /* 광고 스트립 등 가로 스크롤바 숨김 */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* 모바일 상단 탭 헤더: 노치/상태바 높이만큼 위쪽 여백 확보 (독립앱 모드) */
+.mobile-tab-header {
+  top: env(safe-area-inset-top, 0px);
+}
+/* 모바일에서 헤더 바로 아래에 플로팅 요소(핫스팟 칩·카운터)를 고정 —
+   top 값이 없으면 전체화면 지도 뒤(뷰포트 밖)로 밀려나 클릭도 보이지도 않게 된다.
+   데스크톱(md 이상)은 Tailwind top-* 클래스를 그대로 쓴다. */
+@media (max-width: 767px) {
+  .below-tab-header {
+    top: calc(env(safe-area-inset-top, 0px) + 52px);
+  }
+}

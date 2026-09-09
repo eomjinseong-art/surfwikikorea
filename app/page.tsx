@@ -147,17 +147,17 @@ export default function Home() {
     return [list];
   }, [batchConds]);
 
+  // 통합 스팟 오픈: 목록·지도·핫스팟 칩·웹캠 어디에서 눌러도 동일하게 동작한다.
+  // 모바일에서는 지도 탭으로 전환한 뒤 서랍을 열어 "눌렀는데 아무 반응 없음"을 방지한다.
   const handleSelectSpot = (spot: any) => {
-    setSelectedSpot(spot);
-    if (typeof window !== "undefined" && window.innerWidth < 768) {
+    if (typeof window !== "undefined" && window.innerWidth < 768 && mobileTab !== "map") {
       setMobileTab("map");
     }
-  };
-
-  // CCTV 탭에서 카드 클릭: 해당 스팟 서랍을 연다 (지도 위에 떠 있음)
-  const handleSelectCamSpot = (spot: any) => {
     setSelectedSpot(spot);
   };
+
+  // CCTV 탭에서 카드 클릭: 지도로 전환 + 해당 스팟 서랍을 연다
+  const handleSelectCamSpot = handleSelectSpot;
 
   const camBeachCode = (spotId: string) => getCamForSpot(spotId)?.beachCode ?? "";
 
@@ -200,8 +200,8 @@ export default function Home() {
       {/* 1. 좌측 탐색 사이드 패널 */}
       <aside
         className={`w-full md:w-[420px] md:min-w-[420px] h-full bg-white border-r border-slate-200/90 flex flex-col z-20 shadow-xl transition-all duration-300 pt-12 md:pt-0 ${
-          mobileTab === "map" ? "hidden md:flex" : "flex"
-        } ${mobileTab === "cams" ? "md:flex" : ""}`}
+          mobileTab === "map" || mobileTab === "cams" ? "hidden md:flex" : "flex"
+        }`}
       >
         {/* 타이틀 & 초기화 버튼 & 스팟 제보 */}
         <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-white shrink-0">
@@ -407,8 +407,8 @@ export default function Home() {
                 </span>
                 <span className="text-[9px] text-slate-400">이미지: WSB FARM</span>
               </div>
-              <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-1">
-                {camSpots.slice(0, 12).map((spot: any) => {
+              <div className="flex gap-1.5 overflow-x-auto no-scrollbar overscroll-x-contain pb-1" style={{ WebkitOverflowScrolling: "touch" }}>
+                {camSpots.map((spot: any) => {
                   const cond = batchConds[spot.id];
                   return (
                     <button
@@ -557,7 +557,7 @@ export default function Home() {
               {/* 지역별 그룹 섹션 */}
               {groupedStays.map((group) => (
                 <div key={group.region} className="space-y-2">
-                  <div className="sticky top-0 z-10 flex items-center justify-between bg-white/95 backdrop-blur-sm py-1.5 -mx-1 px-1 border-b border-slate-100">
+                  <div className="flex items-center justify-between py-1.5 -mx-1 px-1 border-b border-slate-100">
                     <span className="text-xs font-black text-slate-800 flex items-center gap-1">
                       <span>{regionEmoji[group.region] ?? "📍"}</span>
                       <span>{group.region}</span>
@@ -651,7 +651,7 @@ export default function Home() {
       {/* 2. 우측 인터랙티브 지도 영역 */}
       <section className="flex-1 h-full relative overflow-hidden">
         {/* 모바일 상단 고정 탭 헤더 (모바일 전용) */}
-        <div className="md:hidden fixed top-0 left-0 right-0 z-[600] flex justify-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-2 shadow-md border-b border-slate-200">
+        <div className="mobile-tab-header md:hidden fixed left-0 right-0 z-[600] flex justify-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-2 shadow-md border-b border-slate-200">
           <button
             onClick={() => setMobileTab("list")}
             className={`flex-1 py-2 text-xs font-extrabold rounded-xl transition ${
@@ -680,7 +680,7 @@ export default function Home() {
 
         {/* 📹 실시간 CCTV 탭 (모바일 전용 풀스크린) */}
         {mobileTab === "cams" && (
-          <div className="md:hidden absolute inset-0 z-[500] bg-slate-100 pt-14 overflow-y-auto">
+          <div className="md:hidden absolute inset-0 z-[500] bg-slate-100 pt-[calc(env(safe-area-inset-top,0px)+56px)] overflow-y-auto overscroll-contain">
             <div className="px-4 pb-2 pt-3">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
