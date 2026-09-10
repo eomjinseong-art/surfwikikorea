@@ -2,29 +2,31 @@
 
 import { ExternalLink, Sparkles } from "lucide-react";
 
-// 상단 광고 1 (서핑 용품 & 제휴 숍 전용 고정 배너)
-export function AdSlot1({ onRequestOpen }: { onRequestOpen?: () => void }) {
+// 상단 광고 1 (서핑용품 스토어 — 서프위키Ai 큐레이션 숍)
+export function AdSlot1() {
   return (
-    <div
-      onClick={onRequestOpen}
-      className="p-3 bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl text-white shadow-md cursor-pointer hover:shadow-lg transition group relative overflow-hidden"
+    <a
+      href="https://surfwikikoreacpang.vercel.app/"
+      target="_blank"
+      rel="sponsored noopener noreferrer"
+      className="block p-3 bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl text-white shadow-md hover:shadow-lg transition group relative overflow-hidden"
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-xl">🏄</span>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-black tracking-tight">서핑 용품 & 숍 공식 입점</span>
+              <span className="text-xs font-black tracking-tight">서핑용품 스토어 오픈!</span>
               <span className="text-[9px] font-bold px-1.5 py-0.2 bg-white/25 rounded-md">광고</span>
             </div>
             <p className="text-[11px] text-sky-100 mt-0.5">
-              서프위키 공식 제휴 스폰서 입점 준비 중 (제보/입점 문의)
+              보드·슈트·왁스·리쉬 — 서프위키Ai 엄선 큐레이션 보러가기
             </p>
           </div>
         </div>
         <ExternalLink size={14} className="text-sky-200 group-hover:text-white transition shrink-0" />
       </div>
-    </div>
+    </a>
   );
 }
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getMarineForecast } from "@/lib/marine";
 import { calculateSurfScores } from "@/lib/scoring";
+import { isArtificialWaveSpot } from "@/lib/batchConditions";
 import { getCamForSpot, snapshotProxyUrl } from "@/lib/beachCams";
 import { buildFinderGrid, wetsuitAdvice } from "@/lib/finder";
 import { Wind, Waves, Gauge, Compass, X, AlertTriangle, MapPin, Sparkles, Navigation, Video, ChevronDown, Wind as WindyIcon } from "lucide-react";
@@ -26,6 +27,24 @@ export default function SpotDrawer({ spot, onClose }: any) {
     setShowFinder(false);
     setShowWindy(false);
     setWindyFailed(false);
+
+    // 인공파도(시흥 웨이브파크): 해양 예보 대신 고정값 — 바람 무관, 전 레벨 이용 가능
+    if (isArtificialWaveSpot(spot.id)) {
+      setData({ waveHeight: 0.8, wavePeriod: 8, windSpeed: 0, windDirection: 0 });
+      setScores({
+        beginner: 90,
+        intermediate: 90,
+        advanced: 90,
+        windStatus: "바람 무관 (인공파도)",
+        summary:
+          "세계 최대 규모의 인공 서핑 테마파크(Cove)입니다. 기상과 무관하게 운영 시간 내내 일정한 파도(약 0.8m)를 제공하며, 바람 영향 없이 초보·중급·상급 모두 안정적으로 서핑을 즐길 수 있습니다.",
+      });
+      setFinderDays([]);
+      setWaterTemp(null);
+      setLoading(false);
+      return () => controller.abort();
+    }
+
     getMarineForecast(spot.lat, spot.lng, controller.signal).then((res) => {
       if (controller.signal.aborted) return;
       if (res) {
@@ -60,11 +79,12 @@ export default function SpotDrawer({ spot, onClose }: any) {
 
   const cam = spot ? getCamForSpot(spot.id) : null;
   const wetsuit = wetsuitAdvice(waterTemp);
+  const artificial = spot ? isArtificialWaveSpot(spot.id) : false;
 
   if (!spot) return null;
 
   // 조석/지형 특성에 따른 꿀팁 및 경고 생성
-  const isWestOrJeju = spot.region === "서해" || spot.region === "제주" || spot.name.includes("다대포");
+  const isWestOrJeju = !artificial && (spot.region === "서해" || spot.region === "제주" || spot.name.includes("다대포"));
   const isHeavySpot = spot.difficulty === "Advanced" || spot.name.includes("신항만") || spot.name.includes("봉수대") || spot.name.includes("기사문") || spot.name.includes("물치");
   const needsShoes = spot.bottomType.includes("암초") || spot.bottomType.includes("자갈") || spot.bottomType.includes("테트라") || spot.name.includes("신항만");
 
@@ -142,7 +162,7 @@ export default function SpotDrawer({ spot, onClose }: any) {
               <Gauge size={17} className="text-indigo-500 shrink-0" />
               <div>
                 <div className="text-slate-400 text-[10px]">파주기</div>
-                <div className="font-extrabold text-slate-800">{data.wavePeriod}초</div>
+                <div className="font-extrabold text-slate-800">{artificial ? "인공 (Cove)" : `${data.wavePeriod}초`}</div>
               </div>
             </div>
             <div className="flex items-center gap-2.5 p-2.5 bg-slate-50 rounded-2xl border border-slate-100">
@@ -208,7 +228,8 @@ export default function SpotDrawer({ spot, onClose }: any) {
             </div>
           )}
 
-          {/* Windy 실시간 풍향/파도 애니메이션 위젯 (펼칠 때만 로드 → 초기 로딩 최소화) */}
+          {/* Windy 실시간 풍향/파도 애니메이션 위젯 (펼칠 때만 로드 → 초기 로딩 최소화) — 인공파도는 바람 무관이라 숨김 */}
+          {!artificial && (
           <div className="rounded-2xl overflow-hidden border border-slate-200">
             <button
               onClick={() => setShowWindy(!showWindy)}
@@ -244,8 +265,10 @@ export default function SpotDrawer({ spot, onClose }: any) {
               </div>
             )}
           </div>
+          )}
 
-          {/* 7일 오전/오후/야간 파도 파인더 그리드 + 수온/웻슈트 */}
+          {/* 7일 오전/오후/야간 파도 파인더 그리드 + 수온/웻슈트 — 인공파도는 예보 무의미하므로 숨김 */}
+          {!artificial && (
           <div className="rounded-2xl overflow-hidden border border-slate-200">
             <button
               onClick={() => setShowFinder(!showFinder)}
@@ -304,6 +327,7 @@ export default function SpotDrawer({ spot, onClose }: any) {
               </div>
             )}
           </div>
+          )}
 
           {/* 실전 안전 및 서퍼 꿀팁 */}
           <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-2 text-[11px]">

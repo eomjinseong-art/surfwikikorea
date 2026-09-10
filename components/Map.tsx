@@ -29,6 +29,7 @@ export default function Map({
   activeConditionFilter,
   accommodationCount,
   onConditionListJump,
+  resetSeq,
 }: any) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<any>(null);
@@ -80,6 +81,18 @@ export default function Map({
     const target = regionCenters[activeRegion] || regionCenters["전체"];
     mapInstance.current.flyTo(target.center, target.zoom, { duration: 1.0 });
   }, [activeRegion, loaded]);
+
+  // 초기화 신호(resetSeq): 타이틀 클릭 등으로 값이 바뀌면 필터 상태와 무관하게
+  // 지도를 대한민국 전체 조망(전국 뷰)으로 되돌린다. 최초 마운트 시에는 건너뜀.
+  const resetSkipFirst = useRef(true);
+  useEffect(() => {
+    if (!loaded || !mapInstance.current) return;
+    if (resetSkipFirst.current) {
+      resetSkipFirst.current = false;
+      return;
+    }
+    mapInstance.current.flyTo([36.3, 127.8], 7, { duration: 1.0 });
+  }, [resetSeq, loaded]);
 
   useEffect(() => {
     if (!loaded || !mapInstance.current) return;
@@ -245,7 +258,7 @@ export default function Map({
                 onClick={() => onConditionListJump(activeConditionFilter)}
                 className="md:hidden mt-1.5 w-full px-2 py-1.5 rounded-lg bg-sky-500 text-white text-[10px] font-extrabold shadow-sm active:scale-95 transition"
               >
-                📋 {activeConditionFilter} 스팟 {spots.length}개 목록 보기 →
+                📋 목록 보기
               </button>
             )}
           </div>

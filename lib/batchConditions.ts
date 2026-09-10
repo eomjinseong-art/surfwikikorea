@@ -25,6 +25,23 @@ const parseWindDir = (raw: unknown): number => {
 const toNum = (v: unknown, fallback = 0): number =>
   typeof v === "number" && Number.isFinite(v) ? v : fallback;
 
+// 인공파도 서핑장(시흥 웨이브파크): 기상 예보와 무관하게 운영 시간 내내
+// 일정한 파도를 제공하므로 예보 대신 고정값을 사용한다.
+export const ARTIFICIAL_WAVE_SPOT_IDS = new Set(["siheung-wavepark"]);
+export const isArtificialWaveSpot = (id: string): boolean => ARTIFICIAL_WAVE_SPOT_IDS.has(id);
+
+const ARTIFICIAL_FIXED: SpotConditions = {
+  waveHeight: 0.8,
+  wavePeriod: 8,
+  windSpeed: 0,
+  windDirection: 0,
+  beginner: 90,
+  intermediate: 90,
+  advanced: 90,
+  conditionLabel: "훌륭",
+  conditionColor: "#0891b2",
+};
+
 function classify(scores: { beginner: number; intermediate: number; advanced: number }): {
   conditionLabel: string;
   conditionColor: string;
@@ -43,6 +60,11 @@ export async function getBatchConditions(
   const result: Record<string, SpotConditions> = {};
   if (spots.length === 0) return result;
 
+  // 인공파도 스팟은 API 성공/실패와 무관하게 항상 고정값 우선 채움
+  spots.forEach((s) => {
+    if (isArtificialWaveSpot(s.id)) result[s.id] = { ...ARTIFICIAL_FIXED };
+  });
+
   const lats = spots.map((s) => s.lat.toFixed(2)).join(",");
   const lngs = spots.map((s) => s.lng.toFixed(2)).join(",");
   const marineUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${lats}&longitude=${lngs}&current=wave_height,wave_period&timezone=Asia%2FTokyo`;
@@ -56,6 +78,7 @@ export async function getBatchConditions(
     const wArr = Array.isArray(wList) ? wList : [wList];
 
     spots.forEach((spot, idx) => {
+      if (isArtificialWaveSpot(spot.id)) return; // 인공파도는 고정값 유지 (예보로 덮어쓰지 않음)
       const m = mArr[idx]?.current ?? {};
       const w = wArr[idx]?.current ?? {};
       const forecast: MarineForecast = {

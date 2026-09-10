@@ -8,7 +8,7 @@ import SpotDrawer from "@/components/SpotDrawer";
 import AccommodationDrawer from "@/components/AccommodationDrawer";
 import { AdSlot1, WaveParkAd } from "@/components/AdBanner";
 import ValuePropsCard from "@/components/ValuePropsCard";
-import { getBatchConditionsCached } from "@/lib/batchConditions";
+import { getBatchConditionsCached, isArtificialWaveSpot } from "@/lib/batchConditions";
 import { CAM_SPOT_IDS, getCamForSpot } from "@/lib/beachCams";
 import InfoAndRequestModal from "@/components/InfoAndRequestModal";
 import Link from "next/link";
@@ -42,6 +42,8 @@ export default function Home() {
   const [showAccommodations, setShowAccommodations] = useState(false);
   const spotListAnchorRef = useRef<HTMLDivElement>(null);
   const scrollContentRef = useRef<HTMLDivElement>(null);
+  // 초기화 시 지도를 전국 뷰로 되돌리기 위한 신호 (값이 바뀌면 Map이 전국 조망으로 flyTo)
+  const [mapResetSeq, setMapResetSeq] = useState(0);
 
   const regions = ["전체", "동해", "남해", "제주", "서해"];
   const difficulties = [
@@ -68,6 +70,7 @@ export default function Home() {
     setContentTab("spots");
     setStayRegion("전체");
     setMobileTab("map");
+    setMapResetSeq((s) => s + 1); // 필터 상태와 무관하게 지도를 전국 조망으로 리셋
     // 목록 스크롤 위치까지 완전 초기화 (모바일 타이틀 클릭 = 처음 상태로)
     requestAnimationFrame(() => {
       scrollContentRef.current?.scrollTo({ top: 0, behavior: "auto" });
@@ -85,14 +88,19 @@ export default function Home() {
         if (activeDifficulty === "Advanced" && spot.difficulty !== "Advanced") return false;
       }
       if (activeWindFilter !== "전체") {
-        const windMap: Record<string, string[]> = {
-          "북(N)": ["N", "북"], "북동(NE)": ["NE", "북동"], "동(E)": ["E", "동"],
-          "남동(SE)": ["SE", "남동"], "남(S)": ["S", "남"], "남서(SW)": ["SW", "남서"],
-          "서(W)": ["W", "서"], "북서(NW)": ["NW", "북서"],
-        };
-        const keys = windMap[activeWindFilter] || [];
-        const dir = String((spot as any).optimalWindDir ?? "");
-        if (!keys.some((k) => dir.includes(k))) return false;
+        // 인공파도(시흥 웨이브파크)는 바람 영향이 없으므로 풍향 필터와 무관하게 항상 통과
+        if (!isArtificialWaveSpot(spot.id)) {
+          const dirMap: Record<string, number> = {
+            "북(N)": 0, "북동(NE)": 45, "동(E)": 90, "남동(SE)": 135,
+            "남(S)": 180, "남서(SW)": 225, "서(W)": 270, "북서(NW)": 315,
+          };
+          const target = dirMap[activeWindFilter];
+          const dir = Number((spot as any).optimalWindDir);
+          // optimalWindDir는 도(°) 숫자 — 선택한 방향과 ±22.5°(8방위 버킷) 이내인지 비교
+          const raw = Math.abs(dir - target) % 360;
+          const angularDiff = raw > 180 ? 360 - raw : raw;
+          if (!Number.isFinite(dir) || target === undefined || angularDiff > 22.5) return false;
+        }
       }
       if (activeBottomFilter !== "전체") {
         const bt = ((spot as any).bottomType ?? "").toLowerCase();
@@ -400,7 +408,7 @@ export default function Home() {
 
         {/* 스크롤 본문 */}
         <div ref={scrollContentRef} className="flex-1 overflow-y-auto p-4 space-y-4">
-          <AdSlot1 onRequestOpen={() => openInfoModal("request")} />
+          <AdSlot1 />
           <WaveParkAd />
 
           {contentTab === "spots" && (
@@ -612,7 +620,7 @@ export default function Home() {
                     <p className="text-[11px] text-slate-500 line-clamp-2 mt-1 leading-relaxed">{spot.description}</p>
                     <div className="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
                       <span>바닥: {spot.bottomType}</span>
-                      <span>최적풍향: {spot.optimalWindDir}° 오프쇼어</span>
+                      <span>{isArtificialWaveSpot(spot.id) ? "바람 무관 (인공파도)" : `최적풍향: ${spot.optimalWindDir}° 오프쇼어`}</span>
                     </div>
                     <Link href={`/spot/${spot.id}`} onClick={(e) => e.stopPropagation()}
                       className="mt-1.5 inline-block text-[10px] font-bold text-sky-500 hover:text-sky-700 transition"
@@ -768,6 +776,7 @@ export default function Home() {
           activeConditionFilter={activeConditionFilter}
           accommodationCount={accommodationCount}
           onConditionListJump={handleConditionListJump}
+          resetSeq={mapResetSeq}
         />
 
         {/* 스팟 서랍 */}
