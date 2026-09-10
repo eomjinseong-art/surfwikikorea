@@ -337,12 +337,23 @@ export default function Home() {
               <p className="text-[8px] font-semibold text-slate-400 leading-tight">전국 실시간 서핑 지도</p>
             </div>
           </button>
-          <button
-            onClick={() => openInfoModal("info")}
-            className="bg-slate-900 hover:bg-slate-800 active:scale-95 text-white px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold shadow-sm transition flex items-center gap-1 shrink-0"
-          >
-            <span>✨ 안내·제보</span>
-          </button>
+          <div className="flex items-center gap-1.5 shrink-0">
+            {/* 서핑용품 스토어 바로가기 (새 창) */}
+            <a
+              href="https://surfwikikoreacpang.vercel.app/"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-900 px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold shadow-sm transition flex items-center gap-1 shrink-0"
+            >
+              <span>🛍 서핑용품</span>
+            </a>
+            <button
+              onClick={() => openInfoModal("info")}
+              className="bg-slate-900 hover:bg-slate-800 active:scale-95 text-white px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold shadow-sm transition flex items-center gap-1 shrink-0"
+            >
+              <span>✨ 안내·제보</span>
+            </button>
+          </div>
         </div>
         <div className="flex justify-center gap-1.5 px-3 pb-1.5">
           <button onClick={() => setMobileTab("list")}
