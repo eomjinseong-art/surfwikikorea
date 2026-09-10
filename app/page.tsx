@@ -297,6 +297,17 @@ export default function Home() {
       if (saved) setFavs(JSON.parse(saved));
     } catch {}
   }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tab = (params.get("tab") || params.get("view") || "").toLowerCase();
+    if (tab === "stays" || tab === "stay" || tab === "lodging") {
+      setShowAccommodations(true);
+      setContentTab("stays");
+      setSelectedSpot(null);
+      if (window.innerWidth < 768) setMobileTab("list");
+    }
+  }, []);
   const toggleFav = (id: string) => {
     setFavs((prev) => {
       const next = prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id];
