@@ -338,12 +338,21 @@ export default function Home() {
             </div>
           </button>
           <div className="flex items-center gap-1.5 shrink-0">
+            {/* 서핑가이드(입문) 바로가기 — 서핑용품 스토어 wiki 페이지 (새 창) */}
+            <a
+              href="https://surfwikikoreacpang.vercel.app/wiki/?cat=%EC%84%9C%ED%95%91%20%EC%9E%85%EB%AC%B8"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+              className="bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-white px-2 py-1.5 rounded-lg text-[10px] font-extrabold shadow-sm transition flex items-center gap-1 shrink-0"
+            >
+              <span>📖 서핑가이드</span>
+            </a>
             {/* 서핑용품 스토어 바로가기 (새 창) */}
             <a
               href="https://surfwikikoreacpang.vercel.app/"
               target="_blank"
               rel="sponsored noopener noreferrer"
-              className="bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-900 px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold shadow-sm transition flex items-center gap-1 shrink-0"
+              className="bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-900 px-2 py-1.5 rounded-lg text-[10px] font-extrabold shadow-sm transition flex items-center gap-1 shrink-0"
             >
               <span>🛍 서핑용품</span>
             </a>
