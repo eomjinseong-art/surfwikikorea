@@ -39,23 +39,51 @@ html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
   }
 }
 
-/* 사이드 패널: 일체형 헤더 공간 확보 / 하단은 홈 인디케이터만 피함 */
+/* 모바일 하단 광고·공유 바 높이 (버튼 행). 브라우저마다 safe-area가
+   과다 잡히는 경우가 있어, 일반 브라우저에서는 바를 첫 화면처럼
+   compact하게 두고, PWA(standalone)에서만 홈 인디케이터 패딩을 더한다. */
+:root {
+  --mobile-ad-bar-h: 52px;
+}
+
+.mobile-ad-bar {
+  padding-bottom: 0;
+}
+@media all and (display-mode: standalone) {
+  .mobile-ad-bar {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+/* 사이드 패널: 일체형 헤더 공간 확보 / 하단은 광고바만 피함 */
 @media (max-width: 767px) {
   .mobile-panel-top {
     padding-top: calc(env(safe-area-inset-top, 0px) + 92px);
   }
   .mobile-panel-bottom {
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 64px);
+    padding-bottom: calc(var(--mobile-ad-bar-h) + 12px);
   }
   .mobile-cams-top {
     padding-top: calc(env(safe-area-inset-top, 0px) + 92px);
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 64px);
+    padding-bottom: calc(var(--mobile-ad-bar-h) + 12px);
   }
-  /* 파도 상태별 보기 범례: 브라우저 하단 툴바/홈 인디케이터와 겹치지 않게 여유 확보 */
+  /* 파도 상태별 보기: 광고바·브라우저 하단 UI와 절대 겹치지 않게 충분히 위로 */
   .mobile-legend-safe {
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 78px);
+    bottom: calc(var(--mobile-ad-bar-h) + 56px) !important;
   }
   .mobile-drawer-safe {
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 68px);
+    bottom: calc(var(--mobile-ad-bar-h) + 12px);
+  }
+}
+@media all and (display-mode: standalone) and (max-width: 767px) {
+  .mobile-panel-bottom,
+  .mobile-cams-top {
+    padding-bottom: calc(var(--mobile-ad-bar-h) + env(safe-area-inset-bottom, 0px) + 12px);
+  }
+  .mobile-legend-safe {
+    bottom: calc(var(--mobile-ad-bar-h) + env(safe-area-inset-bottom, 0px) + 56px) !important;
+  }
+  .mobile-drawer-safe {
+    bottom: calc(var(--mobile-ad-bar-h) + env(safe-area-inset-bottom, 0px) + 12px);
   }
 }

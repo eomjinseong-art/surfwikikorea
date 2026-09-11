@@ -994,15 +994,12 @@ export default function Home() {
         )}
       </section>
 
-      {/* 모바일 하단: 광고문의 + 공유하기 */}
-      <div
-        className="md:hidden fixed inset-x-0 bottom-0 z-[680] bg-sky-600 text-white shadow-[0_-4px_16px_rgba(2,132,199,0.35)]"
-        style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
-      >
-        <div className="flex items-stretch">
+      {/* 모바일 하단: 광고문의 + 공유하기 (일반 브라우저는 compact, PWA만 safe-area) */}
+      <div className="mobile-ad-bar md:hidden fixed inset-x-0 bottom-0 z-[680] bg-sky-600 text-white shadow-[0_-4px_16px_rgba(2,132,199,0.35)]">
+        <div className="flex items-stretch h-[52px]">
           <a
             href="mailto:artcontinue@naver.com?subject=%EC%84%9C%ED%94%84%EC%9C%84%ED%82%A4Ai%20%EA%B4%91%EA%B3%A0%EB%AC%B8%EC%9D%98"
-            className="flex-1 flex items-center justify-center gap-1.5 py-3 text-[13px] font-extrabold tracking-wide border-r border-sky-500/60 active:bg-sky-700"
+            className="flex-1 flex items-center justify-center gap-1.5 text-[13px] font-extrabold tracking-wide border-r border-white/25 active:bg-sky-700"
           >
             <Megaphone size={15} />
             광고문의
@@ -1010,7 +1007,7 @@ export default function Home() {
           <button
             type="button"
             onClick={handleShareApp}
-            className="flex-1 flex items-center justify-center gap-1.5 py-3 text-[13px] font-extrabold tracking-wide active:bg-sky-700"
+            className="flex-1 flex items-center justify-center gap-1.5 text-[13px] font-extrabold tracking-wide active:bg-sky-700"
           >
             <Share2 size={15} />
             공유하기

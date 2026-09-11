@@ -266,7 +266,7 @@ export default function Map({
 
       {/* 좌하단: 컨디션 필터 범례 칩 (클릭 시 목록 필터) */}
       {conditionCounts && onConditionFilter && (
-        <div className="absolute bottom-3 left-3 z-[450] mobile-legend-safe">
+        <div className="absolute left-3 z-[450] bottom-28 md:bottom-3 mobile-legend-safe">
           <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200/80 p-2">
             <div className="text-[9px] font-black text-slate-500 mb-1.5 px-1">파도 상태별 보기</div>
             <div className="flex flex-col gap-1">
