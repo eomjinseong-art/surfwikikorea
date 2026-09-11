@@ -31,8 +31,8 @@ export default function InfoAndRequestModal({
   const [activeTab, setActiveTab] = useState<"info" | "request">(defaultTab);
   const [copied, setCopied] = useState(false);
 
-  // 폼 상태
   const [formData, setFormData] = useState({
+    reportType: "서핑스팟",
     spotName: "",
     region: "동해",
     address: "",
@@ -59,7 +59,7 @@ export default function InfoAndRequestModal({
     const url = "https://surfwikikorea.vercel.app";
     const shareData = {
       title: "서프위키Ai — 대한민국 전국 실시간 서핑 지도",
-      text: "전국 100개 서핑 스팟 · 실시간 AI 파도 점수 · 해변 웹캠 한 번에! 🏄‍♂️",
+      text: "전국 서핑 스팟 · 숙소 · 서핑샵 · 실시간 AI 파도 점수를 한곳에서! 🏄‍♂️",
       url,
     };
 
@@ -79,6 +79,18 @@ export default function InfoAndRequestModal({
     }
   };
 
+  const resetForm = () =>
+    setFormData({
+      reportType: "서핑스팟",
+      spotName: "",
+      region: "동해",
+      address: "",
+      difficulty: "초급~전체",
+      features: "",
+      submitter: "",
+      contact: "",
+    });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -92,7 +104,7 @@ export default function InfoAndRequestModal({
           Accept: "application/json",
         },
         body: JSON.stringify({
-          _subject: `[SurfMaster] 신규 서핑 스팟 제보: ${formData.spotName}`,
+          _subject: `[서프위키Ai] ${formData.reportType} 제보: ${formData.spotName}`,
           ...formData,
         }),
       });
@@ -102,15 +114,7 @@ export default function InfoAndRequestModal({
         setTimeout(() => {
           setIsSuccess(false);
           onClose();
-          setFormData({
-            spotName: "",
-            region: "동해",
-            address: "",
-            difficulty: "초급~전체",
-            features: "",
-            submitter: "",
-            contact: "",
-          });
+          resetForm();
         }, 2000);
       } else {
         setErrorMessage("전송 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
@@ -137,8 +141,8 @@ export default function InfoAndRequestModal({
     },
     {
       icon: MapPin,
-      title: "전국 100개 스팟 통합 지도",
-      desc: "동해·남해·제주·서해 모든 서핑 해변을 단 한 장의 지도에",
+      title: "스팟 · 숙소 · 서핑샵",
+      desc: "전국 서핑 해변과 근처 숙소·서핑샵 정보를 한 지도에서",
       color: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
     },
     {
@@ -161,10 +165,18 @@ export default function InfoAndRequestModal({
     },
   ];
 
+  const nameLabel =
+    formData.reportType === "숙소"
+      ? "숙소 이름"
+      : formData.reportType === "서핑샵"
+        ? "서핑샵 이름"
+        : formData.reportType === "수정요청"
+          ? "대상 이름"
+          : "이름 / 스팟명";
+
   return (
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
       <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[90vh]">
-        {/* 상단 모달 헤더 */}
         <div className="px-5 py-3.5 border-b border-slate-100 flex justify-between items-center bg-slate-50/80 shrink-0">
           <div className="flex items-center gap-2">
             <span className="text-xl">🏄‍♂️</span>
@@ -175,7 +187,7 @@ export default function InfoAndRequestModal({
                   ONLY HERE
                 </span>
               </h2>
-              <p className="text-[10px] text-slate-500 font-semibold">대한민국 전국 실시간 서핑 지도</p>
+              <p className="text-[10px] text-slate-500 font-semibold">스팟 · 숙소 · 서핑샵 정보도 함께 제보해 주세요</p>
             </div>
           </div>
           <button
@@ -187,7 +199,6 @@ export default function InfoAndRequestModal({
           </button>
         </div>
 
-        {/* 탭 전환 버튼 */}
         <div className="grid grid-cols-2 p-1.5 bg-slate-100 border-b border-slate-200/70 shrink-0 gap-1">
           <button
             onClick={() => setActiveTab("info")}
@@ -198,7 +209,7 @@ export default function InfoAndRequestModal({
             }`}
           >
             <Sparkles size={13} className="text-amber-500" />
-            <span>서비스 소개 & ONLY HERE</span>
+            <span>서비스 소개</span>
           </button>
           <button
             onClick={() => setActiveTab("request")}
@@ -209,27 +220,23 @@ export default function InfoAndRequestModal({
             }`}
           >
             <PlusCircle size={13} className="text-sky-500" />
-            <span>스팟 제보·수정</span>
+            <span>정보 제보</span>
           </button>
         </div>
 
-        {/* 본문 영역 */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4 overscroll-contain">
           {activeTab === "info" ? (
             <div className="space-y-3.5">
-              {/* 차별화 가치 헤더 */}
               <div className="p-3.5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-sky-950 text-white shadow-sm relative overflow-hidden">
                 <div className="flex items-center gap-1.5 mb-1">
                   <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-amber-400 text-slate-900">
                     ONLY HERE
                   </span>
-                  <span className="text-xs font-black text-sky-200">서프위키Ai만의 6가지 기능</span>
+                  <span className="text-xs font-black text-sky-200">서프위키Ai만의 기능</span>
                 </div>
                 <p className="text-[11px] text-slate-200 leading-snug">
-                  복잡한 기상청 수치 대신, 서퍼에게 진짜 필요한 <strong>AI 파도 점수와 실시간 웹캠</strong>을 한 번에 제공합니다.
+                  파도 점수와 웹캠뿐 아니라 <strong>숙소·서핑샵</strong> 정보까지 모아, 서핑 여행을 한곳에서 준비할 수 있게 합니다.
                 </p>
-
-                {/* 원클릭 공유 버튼 */}
                 <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between gap-2">
                   <span className="text-[10px] text-slate-300 font-semibold">서퍼 친구들에게 링크 보내기</span>
                   <button
@@ -251,7 +258,6 @@ export default function InfoAndRequestModal({
                 </div>
               </div>
 
-              {/* 기능 목록 그리드 */}
               <div className="space-y-2">
                 {valueProps.map((item) => (
                   <div
@@ -269,13 +275,12 @@ export default function InfoAndRequestModal({
                 ))}
               </div>
 
-              {/* 제보 바로가기 버튼 */}
               <button
                 onClick={() => setActiveTab("request")}
                 className="w-full py-2.5 px-3 rounded-2xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-700 text-xs font-extrabold flex items-center justify-center gap-1.5 transition"
               >
                 <PlusCircle size={14} />
-                <span>알고 계신 서핑 스팟이나 수정사항 제보하기 →</span>
+                <span>스팟·숙소·서핑샵 제보하기 →</span>
               </button>
 
               <div className="text-[10px] text-slate-400 text-center leading-relaxed pt-1">
@@ -288,9 +293,9 @@ export default function InfoAndRequestModal({
               {isSuccess ? (
                 <div className="py-12 text-center space-y-3">
                   <CheckCircle2 size={48} className="text-emerald-500 mx-auto animate-bounce" />
-                  <h3 className="text-base font-extrabold text-slate-800">스팟 제보가 접수되었습니다!</h3>
+                  <h3 className="text-base font-extrabold text-slate-800">제보가 접수되었습니다!</h3>
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    소중한 정보 감사합니다.<br />검토 후 서프위키 전국 서핑 지도에 신속히 반영하겠습니다.
+                    소중한 정보 감사합니다.<br />검토 후 서프위키에 신속히 반영하겠습니다.
                   </p>
                 </div>
               ) : (
@@ -301,14 +306,36 @@ export default function InfoAndRequestModal({
                     </div>
                   )}
 
+                  <div className="p-2.5 rounded-xl bg-sky-50 border border-sky-100 text-[11px] text-sky-800 leading-relaxed font-semibold">
+                    서핑스팟뿐 아니라 <strong>숙소, 서핑샵(강습·렌탈·게하)</strong>, 잘못된 정보 수정도 모두 제보해 주세요.
+                    현지 정보가 모일수록 모두가 더 정확한 지도를 쓰게 됩니다.
+                  </div>
+
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      스팟 이름 <span className="text-red-500">*</span>
+                      제보 유형 <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      value={formData.reportType}
+                      onChange={(e) => setFormData({ ...formData, reportType: e.target.value })}
+                      className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                    >
+                      <option value="서핑스팟">서핑스팟 (신규/누락)</option>
+                      <option value="숙소">숙소</option>
+                      <option value="서핑샵">서핑샵 · 강습 · 렌탈</option>
+                      <option value="수정요청">기존 정보 수정</option>
+                      <option value="기타">기타</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      {nameLabel} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="예: 양양 죽도해변, 부산 송정"
+                      placeholder="예: 양양 죽도해변, ○○ 서프샵, ○○ 펜션"
                       value={formData.spotName}
                       onChange={(e) => setFormData({ ...formData, spotName: e.target.value })}
                       className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500"
@@ -329,15 +356,17 @@ export default function InfoAndRequestModal({
                         <option value="남해">남해</option>
                         <option value="제주">제주</option>
                         <option value="서해">서해</option>
+                        <option value="기타">기타</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">추천 난이도</label>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">난이도 (스팟)</label>
                       <select
                         value={formData.difficulty}
                         onChange={(e) => setFormData({ ...formData, difficulty: e.target.value })}
                         className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
                       >
+                        <option value="해당없음">해당없음</option>
                         <option value="초급~전체">초급~전체</option>
                         <option value="초보 추천">초보 추천</option>
                         <option value="중급">중급</option>
@@ -347,10 +376,10 @@ export default function InfoAndRequestModal({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">상세 위치 / 주소</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">상세 위치 / 주소 / 링크</label>
                     <input
                       type="text"
-                      placeholder="예: 강원 양양군 현남면 인구리"
+                      placeholder="주소, 네이버 예약 링크, 홈페이지 등"
                       value={formData.address}
                       onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                       className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500"
@@ -358,10 +387,10 @@ export default function InfoAndRequestModal({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">스팟 특징 및 꿀팁</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">상세 내용 · 꿀팁</label>
                     <textarea
                       rows={3}
-                      placeholder="바닥 지형(모래/암초), 최적 바람(남서풍 등), 주차/샤워 팁 등"
+                      placeholder="스팟 특징, 숙소/샵 운영 정보, 수정이 필요한 내용 등"
                       value={formData.features}
                       onChange={(e) => setFormData({ ...formData, features: e.target.value })}
                       className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 resize-none"
@@ -397,7 +426,7 @@ export default function InfoAndRequestModal({
                     className="w-full py-2.5 bg-sky-500 hover:bg-sky-600 active:scale-[0.99] text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-1.5 disabled:opacity-50"
                   >
                     <Send size={13} />
-                    <span>{isSubmitting ? "제보 전송 중..." : "서핑 스팟 제보하기"}</span>
+                    <span>{isSubmitting ? "제보 전송 중..." : "제보 보내기"}</span>
                   </button>
                 </form>
               )}

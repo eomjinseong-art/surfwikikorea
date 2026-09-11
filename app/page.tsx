@@ -13,7 +13,7 @@ import { getBatchConditionsCached, isArtificialWaveSpot } from "@/lib/batchCondi
 import { CAM_SPOT_IDS, getCamForSpot } from "@/lib/beachCams";
 import InfoAndRequestModal from "@/components/InfoAndRequestModal";
 import Link from "next/link";
-import { PlusCircle, RotateCcw, Search, Compass, Layers, ChevronRight, BedDouble, ExternalLink, Star, Video, Store } from "lucide-react";
+import { PlusCircle, RotateCcw, Search, Compass, Layers, ChevronRight, BedDouble, ExternalLink, Star, Video, Store, Share2, Megaphone } from "lucide-react";
 
 const CONDITION_OPTIONS = [
   { label: "전체", value: "전체", color: "" },
@@ -291,14 +291,43 @@ export default function Home() {
     });
   };
   const handleSelectAccommodation = (acc: any) => {
+    const item = { ...acc, kind: acc.kind || (String(acc.id || "").startsWith("shop-") ? "shop" : "stay") };
     setSelectedSpot(null);
-    setSelectedAccommodation({ ...acc, kind: acc.kind || (String(acc.id || "").startsWith("shop-") ? "shop" : "stay") });
-    if (typeof window !== "undefined" && window.innerWidth < 768) {
-      setMobileTab("map");
+    setSelectedAccommodation(item);
+    // 모바일: 목록에 상세를 펼치고 지도로 강제 이동하지 않음 (1+2안)
+    // 데스크톱: 지도 핀/서랍과 함께 표시
+    if (typeof window !== "undefined" && window.innerWidth >= 768) {
+      if (item.kind === "shop") setShowShops(true);
+      else setShowAccommodations(true);
+    } else {
+      setMobileTab("list");
+      if (item.kind === "shop") setContentTab("shops");
+      else setContentTab("stays");
     }
   };
   const handleSelectShop = (shop: any) => handleSelectAccommodation({ ...shop, kind: "shop" });
   const handleCloseAccommodation = () => setSelectedAccommodation(null);
+
+  const handleShareApp = async () => {
+    const url = "https://surfwikikorea.vercel.app";
+    const shareData = {
+      title: "서프위키Ai — 대한민국 전국 실시간 서핑 지도",
+      text: "전국 서핑 스팟 · 숙소 · 서핑샵 · 실시간 파도 점수를 한곳에서! 🏄‍♂️",
+      url,
+    };
+    try {
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+    } catch {}
+    try {
+      await navigator.clipboard.writeText(url);
+      alert("링크가 복사되었습니다.");
+    } catch {
+      window.prompt("이 링크를 복사하세요:", url);
+    }
+  };
 
   const handleSearchInput = (v: string) => {
     setSearchQuery(v);
@@ -442,36 +471,42 @@ export default function Home() {
             className="bg-sky-500 hover:bg-sky-600 text-white px-2.5 py-1.5 rounded-xl text-xs font-extrabold shadow-sm transition flex items-center gap-1 shrink-0"
           >
             <PlusCircle size={13} />
-            <span>스팟 제보</span>
+            <span>제보하기</span>
           </button>
         </div>
 
         {/* 스팟 | 숙소 | 서핑샵 전환 탭 */}
-        <div className="px-4 py-3 bg-white border-b border-slate-100 shrink-0">
+        <div className="px-3 sm:px-4 py-3 bg-white border-b border-slate-100 shrink-0 sticky top-0 z-10">
+          <p className="md:hidden text-[10px] font-extrabold text-slate-500 mb-2 px-0.5">
+            아래에서 <span className="text-sky-600">스팟</span> · <span className="text-violet-600">숙소</span> · <span className="text-emerald-600">서핑샵</span>을 골라 보세요
+          </p>
           <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-2xl">
             <button
               onClick={() => setContentTab("spots")}
-              className={`py-2 text-[11px] font-extrabold rounded-xl transition flex items-center justify-center gap-1 ${
-                contentTab === "spots" ? "bg-white text-sky-600 shadow-sm" : "text-slate-500 hover:text-slate-800"
+              className={`py-2.5 sm:py-2 text-[12px] sm:text-[11px] font-extrabold rounded-xl transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 ${
+                contentTab === "spots" ? "bg-white text-sky-600 shadow-sm ring-1 ring-sky-200" : "text-slate-500 hover:text-slate-800"
               }`}
             >
-              🏄 스팟 ({spotsData.length})
+              <span>🏄 스팟</span>
+              <span className="text-[10px] font-bold opacity-80">({spotsData.length})</span>
             </button>
             <button
               onClick={() => { setContentTab("stays"); setShowAccommodations(true); }}
-              className={`py-2 text-[11px] font-extrabold rounded-xl transition flex items-center justify-center gap-1 ${
-                contentTab === "stays" ? "bg-white text-violet-600 shadow-sm" : "text-slate-500 hover:text-slate-800"
+              className={`py-2.5 sm:py-2 text-[12px] sm:text-[11px] font-extrabold rounded-xl transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 ${
+                contentTab === "stays" ? "bg-white text-violet-600 shadow-sm ring-1 ring-violet-200" : "text-slate-500 hover:text-slate-800"
               }`}
             >
-              🏨 숙소 ({accommodationsData.length})
+              <span>🏨 숙소</span>
+              <span className="text-[10px] font-bold opacity-80">({accommodationsData.length})</span>
             </button>
             <button
               onClick={() => { setContentTab("shops"); setShowShops(true); }}
-              className={`py-2 text-[11px] font-extrabold rounded-xl transition flex items-center justify-center gap-1 ${
-                contentTab === "shops" ? "bg-white text-emerald-600 shadow-sm" : "text-slate-500 hover:text-slate-800"
+              className={`py-2.5 sm:py-2 text-[12px] sm:text-[11px] font-extrabold rounded-xl transition flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 ${
+                contentTab === "shops" ? "bg-white text-emerald-600 shadow-sm ring-1 ring-emerald-200" : "text-slate-500 hover:text-slate-800"
               }`}
             >
-              서핑샵 ({shopsData.length})
+              <span>서핑샵</span>
+              <span className="text-[10px] font-bold opacity-80">({shopsData.length})</span>
             </button>
           </div>
         </div>
@@ -730,10 +765,13 @@ export default function Home() {
                   </div>
                   {group.items.map((stay) => {
                     const bookingUrl = stay.bookingUrl || stay.localSiteUrl || stay.couponUrl;
+                    const selected = selectedAccommodation?.id === stay.id;
                     return (
                     <div key={stay.id}
                       onClick={() => handleSelectAccommodation(stay)}
-                      className="block rounded-2xl border bg-white border-slate-200/80 hover:border-violet-300 hover:shadow-md transition-all group overflow-hidden cursor-pointer"
+                      className={`block rounded-2xl border bg-white transition-all group overflow-hidden cursor-pointer ${
+                        selected ? "border-violet-400 shadow-md ring-1 ring-violet-200" : "border-slate-200/80 hover:border-violet-300 hover:shadow-md"
+                      }`}
                     >
                       <div className="p-3">
                         <div className="flex items-start justify-between gap-2">
@@ -749,14 +787,31 @@ export default function Home() {
                           </div>
                           <ExternalLink size={14} className="text-slate-300 group-hover:text-violet-500 transition shrink-0 mt-1" />
                         </div>
+                        {selected && (
+                          <div className="mt-2 space-y-2 rounded-xl bg-violet-50/80 border border-violet-100 p-2.5 text-[11px] text-slate-600">
+                            <div><span className="font-extrabold text-slate-500">위치</span> · {stay.address || stay.location || "-"}</div>
+                            {stay.nearSpotName && <div><span className="font-extrabold text-slate-500">근처 스팟</span> · {stay.nearSpotName}</div>}
+                            <p className="text-[10px] text-violet-700 font-bold">아래에서 예약 사이트로 바로 이동할 수 있습니다.</p>
+                          </div>
+                        )}
                         <div className="mt-2 pt-2 border-t border-slate-100 flex items-center gap-1.5">
                           <a
                             href={bookingUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="flex-1 py-1.5 bg-violet-600 hover:bg-violet-700 text-white font-extrabold text-[11px] rounded-lg transition text-center"
+                            className="flex-1 py-2 bg-violet-600 hover:bg-violet-700 text-white font-extrabold text-[11px] rounded-lg transition text-center"
                           >예약 사이트 열기</a>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowAccommodations(true);
+                              setSelectedAccommodation({ ...stay, kind: "stay" });
+                              setMobileTab("map");
+                            }}
+                            className="md:hidden py-2 px-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-lg transition"
+                          >지도</button>
                         </div>
                       </div>
                     </div>
@@ -797,10 +852,14 @@ export default function Home() {
                     </span>
                     <span className="text-[10px] font-extrabold text-emerald-600">{group.items.length}개</span>
                   </div>
-                  {group.items.map((shop) => (
+                  {group.items.map((shop) => {
+                    const selected = selectedAccommodation?.id === shop.id;
+                    return (
                     <div key={shop.id}
                       onClick={() => handleSelectShop(shop)}
-                      className="block rounded-2xl border bg-white border-slate-200/80 hover:border-emerald-300 hover:shadow-md transition-all group overflow-hidden cursor-pointer"
+                      className={`block rounded-2xl border bg-white transition-all group overflow-hidden cursor-pointer ${
+                        selected ? "border-emerald-400 shadow-md ring-1 ring-emerald-200" : "border-slate-200/80 hover:border-emerald-300 hover:shadow-md"
+                      }`}
                     >
                       <div className="p-3">
                         <div className="flex items-start justify-between gap-2">
@@ -814,18 +873,36 @@ export default function Home() {
                           </div>
                           <ExternalLink size={14} className="text-slate-300 group-hover:text-emerald-500 transition shrink-0 mt-1" />
                         </div>
-                        <div className="mt-2 pt-2 border-t border-slate-100">
+                        {selected && (
+                          <div className="mt-2 space-y-2 rounded-xl bg-emerald-50/80 border border-emerald-100 p-2.5 text-[11px] text-slate-600">
+                            <div><span className="font-extrabold text-slate-500">위치</span> · {shop.address || shop.location || "-"}</div>
+                            <div><span className="font-extrabold text-slate-500">유형</span> · {shop.type || "서핑샵"}</div>
+                            {shop.nearSpotName && <div><span className="font-extrabold text-slate-500">근처 스팟</span> · {shop.nearSpotName}</div>}
+                            <p className="text-[10px] text-emerald-700 font-bold">아래에서 서핑샵 페이지로 바로 이동할 수 있습니다.</p>
+                          </div>
+                        )}
+                        <div className="mt-2 pt-2 border-t border-slate-100 flex items-center gap-1.5">
                           <a
                             href={shop.bookingUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="block w-full py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-lg transition text-center"
+                            className="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-lg transition text-center"
                           >서핑샵 바로가기</a>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowShops(true);
+                              setSelectedAccommodation({ ...shop, kind: "shop" });
+                              setMobileTab("map");
+                            }}
+                            className="md:hidden py-2 px-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-lg transition"
+                          >지도</button>
                         </div>
                       </div>
                     </div>
-                  ))}
+                  );})}
                 </div>
               ))}
               {groupedShops.length === 0 && (
@@ -916,6 +993,30 @@ export default function Home() {
           <AccommodationDrawer accommodation={selectedAccommodation} onClose={handleCloseAccommodation} />
         )}
       </section>
+
+      {/* 모바일 하단: 광고문의 + 공유하기 */}
+      <div
+        className="md:hidden fixed inset-x-0 bottom-0 z-[680] bg-sky-600 text-white shadow-[0_-4px_16px_rgba(2,132,199,0.35)]"
+        style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
+      >
+        <div className="flex items-stretch">
+          <a
+            href="mailto:artcontinue@naver.com?subject=%EC%84%9C%ED%94%84%EC%9C%84%ED%82%A4Ai%20%EA%B4%91%EA%B3%A0%EB%AC%B8%EC%9D%98"
+            className="flex-1 flex items-center justify-center gap-1.5 py-3 text-[13px] font-extrabold tracking-wide border-r border-sky-500/60 active:bg-sky-700"
+          >
+            <Megaphone size={15} />
+            광고문의
+          </a>
+          <button
+            type="button"
+            onClick={handleShareApp}
+            className="flex-1 flex items-center justify-center gap-1.5 py-3 text-[13px] font-extrabold tracking-wide active:bg-sky-700"
+          >
+            <Share2 size={15} />
+            공유하기
+          </button>
+        </div>
+      </div>
 
       {/* ONLY HERE 안내 + 스팟 제보 통합 모달 */}
       <InfoAndRequestModal

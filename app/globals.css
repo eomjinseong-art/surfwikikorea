@@ -45,17 +45,17 @@ html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
     padding-top: calc(env(safe-area-inset-top, 0px) + 92px);
   }
   .mobile-panel-bottom {
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 64px);
   }
   .mobile-cams-top {
     padding-top: calc(env(safe-area-inset-top, 0px) + 92px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 64px);
   }
   /* 파도 상태별 보기 범례: 브라우저 하단 툴바/홈 인디케이터와 겹치지 않게 여유 확보 */
   .mobile-legend-safe {
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 30px);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 78px);
   }
-  /* 스팟/숙소 서랍: 하단 고정 바 제거 후 홈 인디케이터만 피해 밀착 */
   .mobile-drawer-safe {
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 68px);
   }
 }
