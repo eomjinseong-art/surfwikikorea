@@ -84,7 +84,7 @@ function inferRegionFromText(text) {
   if (/부산|기장|송정|다대|경남|남해|통영|거제|여수|완도|진도|해남/.test(t)) return "남해";
   if (/인천|시흥|태안|대천|보령|서산|당진|강화|영종|을왕|왕산|무창포|서해/.test(t)) return "서해";
   if (/강원|동해시|울릉/.test(t)) return "동해";
-  return "미분류";
+  return "기타";
 }
 
 function subRegionFromLocation(location, region) {

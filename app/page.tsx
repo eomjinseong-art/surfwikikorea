@@ -57,8 +57,9 @@ export default function Home() {
   ];
   const windOptions = ["전체", "북(N)", "북동(NE)", "동(E)", "남동(SE)", "남(S)", "남서(SW)", "서(W)", "북서(NW)"];
   const bottomOptions = ["전체", "모래", "자갈", "암반", "혼합"];
-  const stayRegions = ["전체", "동해", "남해", "제주", "서해", "미분류"];
-  const regionEmoji: Record<string, string> = { "동해": "🌅", "남해": "🏝️", "제주": "🌋", "서해": "🌇", "미분류": "📍" };
+  const stayRegions = ["전체", "동해", "남해", "제주", "서해", "기타"];
+  const regionEmoji: Record<string, string> = { "동해": "🌅", "남해": "🏝️", "제주": "🌋", "서해": "🌇", "기타": "📍", "미분류": "📍" };
+  const regionLabel = (region: string) => (region === "미분류" ? "기타" : region);
 
   const handleResetAll = () => {
     setActiveRegion("전체");
@@ -149,15 +150,33 @@ export default function Home() {
   }, [activeRegion, activeDifficulty, searchQuery, activeWindFilter, activeBottomFilter, activeConditionFilter, batchConds, favs]);
 
   const groupedStays = useMemo(() => {
-    const filtered = accommodationsData.filter((a) => stayRegion === "전체" || a.region === stayRegion);
-    const order = ["동해", "남해", "제주", "서해", "미분류"];
-    return order.map((region) => ({ region, items: filtered.filter((a) => a.region === region) })).filter((g) => g.items.length > 0);
+    const filtered = accommodationsData.filter((a) => {
+      if (stayRegion === "전체") return true;
+      if (stayRegion === "기타") return a.region === "기타" || a.region === "미분류";
+      return a.region === stayRegion;
+    });
+    const order = ["동해", "남해", "제주", "서해", "기타"];
+    return order
+      .map((region) => ({
+        region,
+        items: filtered.filter((a) => regionLabel(a.region) === region),
+      }))
+      .filter((g) => g.items.length > 0);
   }, [stayRegion]);
 
   const groupedShops = useMemo(() => {
-    const filtered = shopsData.filter((a) => shopRegion === "전체" || a.region === shopRegion);
-    const order = ["동해", "남해", "제주", "서해", "미분류"];
-    return order.map((region) => ({ region, items: filtered.filter((a) => a.region === region) })).filter((g) => g.items.length > 0);
+    const filtered = shopsData.filter((a) => {
+      if (shopRegion === "전체") return true;
+      if (shopRegion === "기타") return a.region === "기타" || a.region === "미분류";
+      return a.region === shopRegion;
+    });
+    const order = ["동해", "남해", "제주", "서해", "기타"];
+    return order
+      .map((region) => ({
+        region,
+        items: filtered.filter((a) => regionLabel(a.region) === region),
+      }))
+      .filter((g) => g.items.length > 0);
   }, [shopRegion]);
 
   const accommodationsWithCoords = useMemo(() => {
