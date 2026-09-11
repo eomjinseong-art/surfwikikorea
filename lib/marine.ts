@@ -14,13 +14,19 @@ export async function getMarineForecast(lat: number, lng: number, signal?: Abort
     const mData = await mRes.json();
     const wData = await wRes.json();
 
+    const waveHeight = mData.current?.wave_height;
+    const wavePeriod = mData.current?.wave_period;
+    const windSpeed = wData.current?.wind_speed_10m;
+    const windDirection = wData.current?.wind_direction_10m;
+    if (typeof waveHeight !== "number" || !Number.isFinite(waveHeight)) return null;
+
     return {
-      waveHeight: mData.current?.wave_height ?? 0.6,
-      wavePeriod: mData.current?.wave_period ?? 5.5,
-      windSpeed: wData.current?.wind_speed_10m ?? 8.0,
-      windDirection: wData.current?.wind_direction_10m ?? 270
+      waveHeight,
+      wavePeriod: typeof wavePeriod === "number" && Number.isFinite(wavePeriod) ? wavePeriod : 0,
+      windSpeed: typeof windSpeed === "number" && Number.isFinite(windSpeed) ? windSpeed : 0,
+      windDirection: typeof windDirection === "number" && Number.isFinite(windDirection) ? windDirection : 0,
     };
   } catch {
-    return { waveHeight: 0.6, wavePeriod: 5.5, windSpeed: 8.0, windDirection: 270 };
+    return null;
   }
 }

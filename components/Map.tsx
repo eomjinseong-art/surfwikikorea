@@ -13,12 +13,16 @@ const CONDITION_COLORS: Record<string, string> = {
 export default function Map({
   spots,
   accommodations,
+  shops,
   selectedSpot,
   selectedAccommodation,
   onSelectSpot,
   onSelectAccommodation,
+  onSelectShop,
   onToggleAccommodations,
+  onToggleShops,
   showAccommodations,
+  showShops,
   activeRegion,
   setMobileTab,
   conditions,
@@ -28,6 +32,7 @@ export default function Map({
   onConditionFilter,
   activeConditionFilter,
   accommodationCount,
+  shopCount,
   onConditionListJump,
   resetSeq,
 }: any) {
@@ -111,11 +116,18 @@ export default function Map({
         iconAnchor: [19, 19],
       });
 
-    // 숙소: 네모(사각) 핀 + 휴양지 느낌의 팜 트리 배지 — 서핑 핀(원형)과 즉시 구별
     const stayIcon = () =>
       L.divIcon({
         className: "custom-stay-pin",
         html: `<div style="position:relative;width:38px;height:38px"><div style="background:linear-gradient(135deg,#7c3aed,#a855f7);color:white;width:32px;height:32px;margin:0 auto;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,0.35);border:2.5px solid white;cursor:pointer;transition:transform 0.15s ease;" onmouseover="this.style.transform='scale(1.15) rotate(-3deg)'" onmouseout="this.style.transform='scale(1)'">🏨</div><div style="position:absolute;bottom:-4px;right:-2px;background:#fde68a;font-size:9px;line-height:1;padding:2px 3px;border-radius:6px;border:1.5px solid white;">🌴</div></div>`,
+        iconSize: [38, 38],
+        iconAnchor: [19, 19],
+      });
+
+    const shopIcon = () =>
+      L.divIcon({
+        className: "custom-shop-pin",
+        html: `<div style="position:relative;width:38px;height:38px"><div style="background:linear-gradient(135deg,#059669,#10b981);color:white;width:32px;height:32px;margin:0 auto;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,0.35);border:2.5px solid white;cursor:pointer;transition:transform 0.15s ease;" onmouseover="this.style.transform='scale(1.15) rotate(3deg)'" onmouseout="this.style.transform='scale(1)'">🏄</div><div style="position:absolute;bottom:-4px;right:-2px;background:#d1fae5;font-size:9px;line-height:1;padding:2px 3px;border-radius:6px;border:1.5px solid white;">샵</div></div>`,
         iconSize: [38, 38],
         iconAnchor: [19, 19],
       });
@@ -131,7 +143,7 @@ export default function Map({
         mapInstance.current.flyTo([spot.lat, spot.lng], 12, { duration: 1.2 });
       });
       const condLine = cond
-        ? `<div style="margin-top:2px;"><span style="display:inline-block;font-size:9px;font-weight:800;color:white;background:${color};padding:1px 6px;border-radius:8px;">${label}</span> <span style="font-size:10px;color:#475569;">${cond.waveHeight.toFixed(1)}m · 풍속 ${cond.windSpeed.toFixed(0)}km/h</span></div>`
+        ? `<div style="margin-top:2px;"><span style="display:inline-block;font-size:9px;font-weight:800;color:white;background:${color};padding:1px 6px;border-radius:8px;">${label}</span> <span style="font-size:10px;color:#475569;">${cond.waveHeight.toFixed(1)}m · 풍속 ${cond.windSpeed.toFixed(1)}m/s</span></div>`
         : "";
       marker.bindTooltip(`<b>${spot.name}</b><div style="font-size:11px;color:#0284c7;">${spot.subRegion}</div>${condLine}`, {
         direction: "top",
@@ -155,7 +167,23 @@ export default function Map({
       );
       markersRef.current.push(marker);
     });
-  }, [loaded, spots, accommodations, conditions, userLevel, onSelectSpot, onSelectAccommodation]);
+
+    (shops || []).forEach((shop: any) => {
+      const lat = Number(shop.lat);
+      const lng = Number(shop.lng);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+      const marker = L.marker([lat, lng], { icon: shopIcon() }).addTo(mapInstance.current);
+      marker.on("click", () => {
+        onSelectShop?.(shop);
+        mapInstance.current.flyTo([lat, lng], 12, { duration: 1.2 });
+      });
+      marker.bindTooltip(
+        `<b>${shop.name}</b><div style="font-size:11px;color:#059669;">서핑샵 · ${shop.type || shop.subRegion || shop.region}</div>`,
+        { direction: "top", offset: [0, -18] }
+      );
+      markersRef.current.push(marker);
+    });
+  }, [loaded, spots, accommodations, shops, conditions, userLevel, onSelectSpot, onSelectAccommodation, onSelectShop]);
 
   useEffect(() => {
     if (loaded && mapInstance.current && selectedSpot) {
@@ -202,21 +230,37 @@ export default function Map({
         </div>
       )}
 
-      {/* 우상단: 숙소 보기 (핫스팟 칩 행 아래로 배치해 겹침 방지) */}
-      {onToggleAccommodations && (
-        <div className="absolute right-3 z-[460] below-hotspot-row md:top-16">
-          <button
-            onClick={onToggleAccommodations}
-            className={`px-3 py-1.5 rounded-full text-[10px] font-extrabold border shadow-md transition ${
-              showAccommodations
-                ? "bg-violet-600 text-white border-violet-700"
-                : "bg-white text-slate-700 border-slate-200 hover:bg-violet-50"
-            }`}
-          >
-            {showAccommodations
-              ? `🏨 숙소 표시중${typeof accommodationCount === "number" ? ` (${accommodationCount})` : ""} — 끄기`
-              : `🏨 숙소 보기${typeof accommodationCount === "number" ? ` (${accommodationCount})` : ""}`}
-          </button>
+      {/* 우상단: 숙소 / 서핑샵 토글 */}
+      {(onToggleAccommodations || onToggleShops) && (
+        <div className="absolute right-3 z-[460] below-hotspot-row md:top-16 flex flex-col items-end gap-1.5">
+          {onToggleAccommodations && (
+            <button
+              onClick={onToggleAccommodations}
+              className={`px-3 py-1.5 rounded-full text-[10px] font-extrabold border shadow-md transition ${
+                showAccommodations
+                  ? "bg-violet-600 text-white border-violet-700"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-violet-50"
+              }`}
+            >
+              {showAccommodations
+                ? `🏨 숙소 표시중${typeof accommodationCount === "number" ? ` (${accommodationCount})` : ""} — 끄기`
+                : `🏨 숙소보기${typeof accommodationCount === "number" ? `(${accommodationCount})` : ""}`}
+            </button>
+          )}
+          {onToggleShops && (
+            <button
+              onClick={onToggleShops}
+              className={`px-3 py-1.5 rounded-full text-[10px] font-extrabold border shadow-md transition ${
+                showShops
+                  ? "bg-emerald-600 text-white border-emerald-700"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-emerald-50"
+              }`}
+            >
+              {showShops
+                ? `🏄 서핑샵 표시중${typeof shopCount === "number" ? ` (${shopCount})` : ""} — 끄기`
+                : `🏄 서핑샵${typeof shopCount === "number" ? `(${shopCount})` : ""}`}
+            </button>
+          )}
         </div>
       )}
 

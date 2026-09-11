@@ -9,7 +9,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "Intermediate",
-    "description": "대한민국 최북단 서핑 스팟. 자연 그대로의 맑은 바다와 여유로운 라인업."
+    "description": "대한민국 최북단 서핑 스팟. 자연 그대로의 맑은 바다와 여유로운 라인업.",
+    "group": "Z-01",
+    "zoneName": "고성 북부 (현내/죽왕)",
+    "address": "강원특별자치도 고성군 현내면 제진리",
+    "sheetNo": 1
   },
   {
     "id": "goseong-machajin",
@@ -21,7 +25,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "금강산콘도 앞 완만한 백사장. 동스웰에 차분하고 긴 파도가 들어옵니다."
+    "description": "금강산콘도 앞 완만한 백사장. 동스웰에 차분하고 긴 파도가 들어옵니다.",
+    "group": "Z-01",
+    "zoneName": "고성 북부 (현내/죽왕)",
+    "address": "강원특별자치도 고성군 현내면 한나루로",
+    "sheetNo": 2
   },
   {
     "id": "goseong-gajin",
@@ -33,7 +41,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "투명한 수질과 프라이빗한 분위기. 북동스웰 시 깔끔한 브레이크 형성."
+    "description": "투명한 수질과 프라이빗한 분위기. 북동스웰 시 깔끔한 브레이크 형성.",
+    "group": "Z-01",
+    "zoneName": "고성 북부 (현내/죽왕)",
+    "address": "강원특별자치도 고성군 죽왕면 가진리",
+    "sheetNo": 3
   },
   {
     "id": "goseong-gonghyeonjin",
@@ -45,7 +57,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "수멧돌 바위 배경의 아름다운 풍경. 조용히 파도를 타기 좋은 스팟."
+    "description": "수멧돌 바위 배경의 아름다운 풍경. 조용히 파도를 타기 좋은 스팟.",
+    "group": "Z-01",
+    "zoneName": "고성 북부 (현내/죽왕)",
+    "address": "강원특별자치도 고성군 죽왕면 공현진리",
+    "sheetNo": 4
   },
   {
     "id": "goseong-songjiho",
@@ -57,7 +73,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "Beginner",
-    "description": "수심이 완만하고 바다가 맑아 비기너 강습과 롱보더 크루징의 천국."
+    "description": "수심이 완만하고 바다가 맑아 비기너 강습과 롱보더 크루징의 천국.",
+    "group": "Z-01",
+    "zoneName": "고성 북부 (현내/죽왕)",
+    "address": "강원특별자치도 고성군 죽왕면 동해안 자전거길",
+    "sheetNo": 5
   },
   {
     "id": "goseong-baekdo",
@@ -69,7 +89,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "백도항 인근의 아담한 해변. 차분하고 안정적인 파도가 특징."
+    "description": "백도항 인근의 아담한 해변. 차분하고 안정적인 파도가 특징.",
+    "group": "Z-01",
+    "zoneName": "고성 북부 (현내/죽왕)",
+    "address": "강원특별자치도 고성군 죽왕면 송암리",
+    "sheetNo": 6
   },
   {
     "id": "goseong-munam",
@@ -81,7 +105,11 @@
     "bottomType": "모래/암초",
     "optimalWindDir": 270,
     "difficulty": "Intermediate",
-    "description": "문암항 방파제 영향으로 파도면이 잘 정돈되며 좌우 브레이크가 우수."
+    "description": "문암항 방파제 영향으로 파도면이 잘 정돈되며 좌우 브레이크가 우수.",
+    "group": "Z-01",
+    "zoneName": "고성 북부 (현내/죽왕)",
+    "address": "강원특별자치도 고성군 죽왕면 야촌뜰길",
+    "sheetNo": 7
   },
   {
     "id": "goseong-jajakdo",
@@ -93,7 +121,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "Beginner",
-    "description": "초승달 모양의 아늑한 백사장. 파도가 비교적 순해 초보자 연습에 최적."
+    "description": "초승달 모양의 아늑한 백사장. 파도가 비교적 순해 초보자 연습에 최적.",
+    "group": "Z-02",
+    "zoneName": "고성 남부 (토성)",
+    "address": "강원특별자치도 고성군 토성면 동해대로",
+    "sheetNo": 8
   },
   {
     "id": "goseong-sampo",
@@ -105,7 +137,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "넓은 모래사장과 울창한 송림. 북동풍 스웰에 좋은 라인이 생깁니다."
+    "description": "넓은 모래사장과 울창한 송림. 북동풍 스웰에 좋은 라인이 생깁니다.",
+    "group": "Z-02",
+    "zoneName": "고성 남부 (토성)",
+    "address": "강원특별자치도 고성군 죽왕면 봉수대길",
+    "sheetNo": 9
   },
   {
     "id": "goseong-ayajin",
@@ -117,7 +153,11 @@
     "bottomType": "모래/암초",
     "optimalWindDir": 270,
     "difficulty": "Intermediate",
-    "description": "기암괴석과 어우러진 해변. 물때에 따라 힘 있는 파도가 들어옵니다."
+    "description": "기암괴석과 어우러진 해변. 물때에 따라 힘 있는 파도가 들어옵니다.",
+    "group": "Z-02",
+    "zoneName": "고성 남부 (토성)",
+    "address": "강원특별자치도 고성군 토성면 아야진해변1길",
+    "sheetNo": 10
   },
   {
     "id": "goseong-cheonjin",
@@ -129,7 +169,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "고성 서핑의 중심지. 감성 카페거리와 서프숍 인프라가 풍부합니다."
+    "description": "고성 서핑의 중심지. 감성 카페거리와 서프숍 인프라가 풍부합니다.",
+    "group": "Z-02",
+    "zoneName": "고성 남부 (토성)",
+    "address": "강원특별자치도 고성군 토성면 천진해변길",
+    "sheetNo": 11
   },
   {
     "id": "goseong-bongpo",
@@ -141,7 +185,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "천진 바로 옆 해변으로 접근성이 좋고 고른 파도 품질을 제공합니다."
+    "description": "천진 바로 옆 해변으로 접근성이 좋고 고른 파도 품질을 제공합니다.",
+    "group": "Z-02",
+    "zoneName": "고성 남부 (토성)",
+    "address": "강원특별자치도 고성군 토성면 학사촌길",
+    "sheetNo": 12
   },
   {
     "id": "sokcho-beach",
@@ -153,7 +201,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "대관람차 속초아이가 한눈에 보이는 도심형 스팟. 교통과 편의시설 편리."
+    "description": "대관람차 속초아이가 한눈에 보이는 도심형 스팟. 교통과 편의시설 편리.",
+    "group": "Z-03",
+    "zoneName": "속초 통합",
+    "address": "강원특별자치도 속초시 청호해안길",
+    "sheetNo": 13
   },
   {
     "id": "sokcho-oeongchi",
@@ -165,7 +217,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "Intermediate",
-    "description": "바다향기로 둘레길 옆 아늑한 해변. 스웰이 강할 때 좋은 파도가 형성."
+    "description": "바다향기로 둘레길 옆 아늑한 해변. 스웰이 강할 때 좋은 파도가 형성.",
+    "group": "Z-03",
+    "zoneName": "속초 통합",
+    "address": "강원특별자치도 속초시 해오름로",
+    "sheetNo": 14
   },
   {
     "id": "yangyang-mulchi",
@@ -177,7 +233,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "송이버섯 등대가 있는 항구 옆 스팟. 북동스웰에 길게 이어지는 파도."
+    "description": "송이버섯 등대가 있는 항구 옆 스팟. 북동스웰에 길게 이어지는 파도.",
+    "group": "Z-04",
+    "zoneName": "양양 북부 (강현)",
+    "address": "강원특별자치도 양양군 강현면 동해안 자전거길",
+    "sheetNo": 15
   },
   {
     "id": "yangyang-seorak",
@@ -189,7 +249,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "Beginner",
-    "description": "수심이 얕고 백사장이 넓어 초보 강습과 패들 연습에 가장 인기 있는 스팟."
+    "description": "수심이 얕고 백사장이 넓어 초보 강습과 패들 연습에 가장 인기 있는 스팟.",
+    "group": "Z-04",
+    "zoneName": "양양 북부 (강현)",
+    "address": "강원특별자치도 양양군 강현면 동해안 자전거길",
+    "sheetNo": 16
   },
   {
     "id": "yangyang-naksan",
@@ -201,7 +265,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "광활한 4km 백사장. 파도가 크게 올라오는 날에는 웅장한 라인업 형성."
+    "description": "광활한 4km 백사장. 파도가 크게 올라오는 날에는 웅장한 라인업 형성.",
+    "group": "Z-04",
+    "zoneName": "양양 북부 (강현)",
+    "address": "강원특별자치도 양양군 강현면 낙산사로",
+    "sheetNo": 17
   },
   {
     "id": "yangyang-dongho",
@@ -213,7 +281,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "Intermediate",
-    "description": "모래가 곱고 경사가 있어 파도의 힘이 좋음. 조용한 세션을 원하는 서퍼 추천."
+    "description": "모래가 곱고 경사가 있어 파도의 힘이 좋음. 조용한 세션을 원하는 서퍼 추천.",
+    "group": "Z-05",
+    "zoneName": "양양 중부 (손양/현북)",
+    "address": "강원특별자치도 양양군 손양면 수산리",
+    "sheetNo": 18
   },
   {
     "id": "yangyang-surfyy",
@@ -225,7 +297,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "국내 최초의 서핑 전용 해변. 이국적인 비치바와 트렌디한 서핑 문화 공간."
+    "description": "국내 최초의 서핑 전용 해변. 이국적인 비치바와 트렌디한 서핑 문화 공간.",
+    "group": "Z-05",
+    "zoneName": "양양 중부 (손양/현북)",
+    "address": "강원특별자치도 양양군 현북면 하조대해안길",
+    "sheetNo": 19
   },
   {
     "id": "yangyang-hajodae",
@@ -237,7 +313,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "기암절벽과 울창한 소나무 숲. 여름 남동스웰과 가을 북동스웰 모두 우수."
+    "description": "기암절벽과 울창한 소나무 숲. 여름 남동스웰과 가을 북동스웰 모두 우수.",
+    "group": "Z-05",
+    "zoneName": "양양 중부 (손양/현북)",
+    "address": "강원특별자치도 양양군 현북면 하조대3길",
+    "sheetNo": 20
   },
   {
     "id": "yangyang-gisamun",
@@ -249,7 +329,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 280,
     "difficulty": "All",
-    "description": "방파제가 바람을 막아주어 다른 스팟이 차피(Choppy)할 때도 클린한 파도."
+    "description": "방파제가 바람을 막아주어 다른 스팟이 차피(Choppy)할 때도 클린한 파도.",
+    "group": "Z-05",
+    "zoneName": "양양 중부 (손양/현북)",
+    "address": "강원특별자치도 양양군 현북면 동해대로",
+    "sheetNo": 21
   },
   {
     "id": "yangyang-dongsanpo",
@@ -261,7 +345,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "Beginner",
-    "description": "죽도 북쪽 위치. 파도가 비교적 잔잔하여 입문자 강습과 싱글핀 롱보드에 제격."
+    "description": "죽도 북쪽 위치. 파도가 비교적 잔잔하여 입문자 강습과 싱글핀 롱보드에 제격.",
+    "group": "Z-06",
+    "zoneName": "양양 핵심 (죽도/인구)",
+    "address": "강원특별자치도 양양군 현남면 동해대로",
+    "sheetNo": 22
   },
   {
     "id": "yangyang-dongsan",
@@ -273,7 +361,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "동산항 방파제 옆 포인트. 조류가 안정적이고 레프트 파도가 부드럽게 열림."
+    "description": "동산항 방파제 옆 포인트. 조류가 안정적이고 레프트 파도가 부드럽게 열림.",
+    "group": "Z-06",
+    "zoneName": "양양 핵심 (죽도/인구)",
+    "address": "강원특별자치도 양양군 현남면 동해대로",
+    "sheetNo": 23
   },
   {
     "id": "yangyang-jukdo",
@@ -285,7 +377,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "대한민국 서핑의 메카. 초보 강습부터 프로 숏보더까지 사계절 붐비는 성지."
+    "description": "대한민국 서핑의 메카. 초보 강습부터 프로 숏보더까지 사계절 붐비는 성지.",
+    "group": "Z-06",
+    "zoneName": "양양 핵심 (죽도/인구)",
+    "address": "강원특별자치도 양양군 현남면 새나루길 43",
+    "sheetNo": 24
   },
   {
     "id": "yangyang-ingu",
@@ -297,7 +393,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "Intermediate",
-    "description": "죽도 바로 옆. 북동 스웰에 질 좋은 레프트/라이트 브레이크와 힙한 빌리지."
+    "description": "죽도 바로 옆. 북동 스웰에 질 좋은 레프트/라이트 브레이크와 힙한 빌리지.",
+    "group": "Z-06",
+    "zoneName": "양양 핵심 (죽도/인구)",
+    "address": "강원특별자치도 양양군 현남면 인구길",
+    "sheetNo": 25
   },
   {
     "id": "yangyang-gwangjin",
@@ -309,7 +409,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "조용하고 한적한 로컬 스팟. 붐비지 않는 파도를 원할 때 추천."
+    "description": "조용하고 한적한 로컬 스팟. 붐비지 않는 파도를 원할 때 추천.",
+    "group": "Z-07",
+    "zoneName": "양양 남부 (현남)",
+    "address": "강원특별자치도 양양군 현남면 광진리",
+    "sheetNo": 26
   },
   {
     "id": "yangyang-gaetmaeul",
@@ -321,7 +425,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "남애해변 북쪽에 위치하여 여유로운 라인업과 깨끗한 수질 자랑."
+    "description": "남애해변 북쪽에 위치하여 여유로운 라인업과 깨끗한 수질 자랑.",
+    "group": "Z-07",
+    "zoneName": "양양 남부 (현남)",
+    "address": "강원특별자치도 양양군 현남면 동해안 자전거길",
+    "sheetNo": 27
   },
   {
     "id": "yangyang-namae3",
@@ -333,7 +441,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "완만한 경사와 긴 파도 라인. 클래식 롱보더와 초급자 모두에게 사랑받는 명소."
+    "description": "완만한 경사와 긴 파도 라인. 클래식 롱보더와 초급자 모두에게 사랑받는 명소.",
+    "group": "Z-07",
+    "zoneName": "양양 남부 (현남)",
+    "address": "강원특별자치도 양양군 현남면 안남애길",
+    "sheetNo": 28
   },
   {
     "id": "yangyang-jigyeong",
@@ -345,7 +457,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "양양 최남단 해변. 주문진 경계에 있어 한적하고 파도 힘이 좋습니다."
+    "description": "양양 최남단 해변. 주문진 경계에 있어 한적하고 파도 힘이 좋습니다.",
+    "group": "Z-07",
+    "zoneName": "양양 남부 (현남)",
+    "address": "강원특별자치도 양양군 현남면 동해대로",
+    "sheetNo": 29
   },
   {
     "id": "gangneung-jumunjin",
@@ -357,7 +473,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "BTS 정류장 인근 넓은 해변. 가을/겨울 북동 스웰에 파도가 잘 섭니다."
+    "description": "BTS 정류장 인근 넓은 해변. 가을/겨울 북동 스웰에 파도가 잘 섭니다.",
+    "group": "Z-08",
+    "zoneName": "강릉 북부 (주문진/사천)",
+    "address": "강원특별자치도 강릉시 주문진읍",
+    "sheetNo": 30
   },
   {
     "id": "gangneung-yeongjin",
@@ -369,7 +489,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "드라마 도깨비 촬영지 인근. 카페거리와 함께 감성 서핑을 즐기기 좋은 스팟."
+    "description": "드라마 도깨비 촬영지 인근. 카페거리와 함께 감성 서핑을 즐기기 좋은 스팟.",
+    "group": "Z-08",
+    "zoneName": "강릉 북부 (주문진/사천)",
+    "address": "강원특별자치도 강릉시 연곡면",
+    "sheetNo": 31
   },
   {
     "id": "gangneung-sacheonjin",
@@ -381,7 +505,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "강릉 서핑의 신흥 메카. 질 좋은 파도와 서프스쿨이 밀집해 있습니다."
+    "description": "강릉 서핑의 신흥 메카. 질 좋은 파도와 서프스쿨이 밀집해 있습니다.",
+    "group": "Z-08",
+    "zoneName": "강릉 북부 (주문진/사천)",
+    "address": "강원특별자치도 강릉시 사천면",
+    "sheetNo": 32
   },
   {
     "id": "gangneung-sacheon",
@@ -393,7 +521,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "소나무 숲과 맑은 바다. 북동스웰에 파도가 안정적으로 들어옵니다."
+    "description": "소나무 숲과 맑은 바다. 북동스웰에 파도가 안정적으로 들어옵니다.",
+    "group": "Z-08",
+    "zoneName": "강릉 북부 (주문진/사천)",
+    "address": "강원특별자치도 강릉시 사천면 해안로",
+    "sheetNo": 33
   },
   {
     "id": "gangneung-gyeongpo",
@@ -405,7 +537,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "Intermediate",
-    "description": "동해안 최대 해변 중 하나. 스웰이 클 때는 힘찬 배럴 파도가 형성."
+    "description": "동해안 최대 해변 중 하나. 스웰이 클 때는 힘찬 배럴 파도가 형성.",
+    "group": "Z-09",
+    "zoneName": "강릉 도심 (경포/안목)",
+    "address": "강원특별자치도 강릉시 경포동 창해로",
+    "sheetNo": 34
   },
   {
     "id": "gangneung-anmok",
@@ -417,7 +553,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "커피거리 바로 앞 해변. 파도가 올라올 때 서퍼들이 즐겨 찾는 도심형 스팟."
+    "description": "커피거리 바로 앞 해변. 파도가 올라올 때 서퍼들이 즐겨 찾는 도심형 스팟.",
+    "group": "Z-09",
+    "zoneName": "강릉 도심 (경포/안목)",
+    "address": "강원특별자치도 강릉시 송정동 경강로",
+    "sheetNo": 35
   },
   {
     "id": "gangneung-geumjin",
@@ -429,7 +569,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 260,
     "difficulty": "All",
-    "description": "헌화로 드라이브 코스 옆. 파도 길이 길게 열려 클래식 롱보더들이 극찬하는 명소."
+    "description": "헌화로 드라이브 코스 옆. 파도 길이 길게 열려 클래식 롱보더들이 극찬하는 명소.",
+    "group": "Z-10",
+    "zoneName": "강릉 남부 (옥계)",
+    "address": "강원특별자치도 강릉시 옥계면 헌화로",
+    "sheetNo": 36
   },
   {
     "id": "donghae-mangsang",
@@ -441,7 +585,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "Beginner",
-    "description": "광활하고 완만한 백사장. 서핑 입문 강습과 패들보드(SUP)에 최적."
+    "description": "광활하고 완만한 백사장. 서핑 입문 강습과 패들보드(SUP)에 최적.",
+    "group": "Z-11",
+    "zoneName": "동해",
+    "address": "강원특별자치도 동해시 망상동",
+    "sheetNo": 37
   },
   {
     "id": "donghae-daejin",
@@ -453,7 +601,11 @@
     "bottomType": "모래/자갈",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "동해시의 대표 서핑 스팟. 동풍과 북동풍 스웰에 힘 있는 파도가 지속됩니다."
+    "description": "동해시의 대표 서핑 스팟. 동풍과 북동풍 스웰에 힘 있는 파도가 지속됩니다.",
+    "group": "Z-11",
+    "zoneName": "동해",
+    "address": "강원특별자치도 동해시 묵호동 일출로",
+    "sheetNo": 38
   },
   {
     "id": "samcheok-beach",
@@ -465,7 +617,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "쏠비치 삼척 앞 해변. 깔끔한 편의시설과 함께 남동/동스웰을 받습니다."
+    "description": "쏠비치 삼척 앞 해변. 깔끔한 편의시설과 함께 남동/동스웰을 받습니다.",
+    "group": "Z-12",
+    "zoneName": "삼척",
+    "address": "강원특별자치도 삼척시 교동",
+    "sheetNo": 39
   },
   {
     "id": "samcheok-maengbang",
@@ -477,7 +633,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "명사십리 맑은 바다. 파도 소리와 함께 조용히 서핑에 집중할 수 있는 스팟."
+    "description": "명사십리 맑은 바다. 파도 소리와 함께 조용히 서핑에 집중할 수 있는 스팟.",
+    "group": "Z-12",
+    "zoneName": "삼척",
+    "address": "강원특별자치도 삼척시 상맹방리",
+    "sheetNo": 40
   },
   {
     "id": "samcheok-yonghwa",
@@ -489,7 +649,11 @@
     "bottomType": "모래/암초",
     "optimalWindDir": 270,
     "difficulty": "Intermediate",
-    "description": "양쪽 곶이 파도를 모아주는 반달 모양 해변. 스웰이 들어올 때 질 좋은 파도."
+    "description": "양쪽 곶이 파도를 모아주는 반달 모양 해변. 스웰이 들어올 때 질 좋은 파도.",
+    "group": "Z-12",
+    "zoneName": "삼척",
+    "address": "강원특별자치도 삼척시 초곡리",
+    "sheetNo": 41
   },
   {
     "id": "yeongdeok-goraebul",
@@ -501,7 +665,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "동해 남부의 명사십리. 북동/동스웰에 넓게 펼쳐지는 브레이크."
+    "description": "동해 남부의 명사십리. 북동/동스웰에 넓게 펼쳐지는 브레이크.",
+    "group": "Z-13",
+    "zoneName": "영덕",
+    "address": "경상북도 영덕군 병곡면 고래불로",
+    "sheetNo": 42
   },
   {
     "id": "yeongdeok-jangsa",
@@ -513,7 +681,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "장사상륙작전 문산호 배경의 해변. 포항과 영덕 경계의 인기 스팟."
+    "description": "장사상륙작전 문산호 배경의 해변. 포항과 영덕 경계의 인기 스팟.",
+    "group": "Z-13",
+    "zoneName": "영덕",
+    "address": "경상북도 영덕군 남정면 동해안 자전거길",
+    "sheetNo": 43
   },
   {
     "id": "pohang-wolpo",
@@ -525,7 +697,11 @@
     "bottomType": "모래/자갈",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "경북 대표 서핑 성지. 동해 남부의 질 좋은 파도와 풍부한 서핑 커뮤니티."
+    "description": "경북 대표 서핑 성지. 동해 남부의 질 좋은 파도와 풍부한 서핑 커뮤니티.",
+    "group": "Z-14",
+    "zoneName": "포항 북부 (월포/신항만)",
+    "address": "경상북도 포항시 이가리",
+    "sheetNo": 44
   },
   {
     "id": "pohang-chilpo",
@@ -537,7 +713,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "넓은 모래사장과 고른 파도. 비기너부터 중급자까지 다양하게 즐김."
+    "description": "넓은 모래사장과 고른 파도. 비기너부터 중급자까지 다양하게 즐김.",
+    "group": "Z-14",
+    "zoneName": "포항 북부 (월포/신항만)",
+    "address": "경상북도 포항시 흥해읍 동해안 자전거길",
+    "sheetNo": 45
   },
   {
     "id": "pohang-shinhangman",
@@ -549,7 +729,11 @@
     "bottomType": "테트라/모래",
     "optimalWindDir": 280,
     "difficulty": "Advanced",
-    "description": "방파제 옆 파워풀한 파도. 경북 최고의 숏보더들이 모여드는 헤비 스팟."
+    "description": "방파제 옆 파워풀한 파도. 경북 최고의 숏보더들이 모여드는 헤비 스팟.",
+    "group": "Z-14",
+    "zoneName": "포항 북부 (월포/신항만)",
+    "address": "경상북도 포항시 흥해읍 용한길",
+    "sheetNo": 46
   },
   {
     "id": "pohang-yeongildae",
@@ -561,7 +745,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "Beginner",
-    "description": "도심 속 해상누각 배경의 해변. 패들보드와 입문 강습이 활발."
+    "description": "도심 속 해상누각 배경의 해변. 패들보드와 입문 강습이 활발.",
+    "group": "Z-15",
+    "zoneName": "포항 남부 (영일대/구룡포)",
+    "address": "경상북도 포항시 북구",
+    "sheetNo": 47
   },
   {
     "id": "pohang-guryongpo",
@@ -573,7 +761,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 300,
     "difficulty": "All",
-    "description": "호미곶 인근의 반달형 백사장. 동/남동스웰에 좋은 파도가 들어옵니다."
+    "description": "호미곶 인근의 반달형 백사장. 동/남동스웰에 좋은 파도가 들어옵니다.",
+    "group": "Z-15",
+    "zoneName": "포항 남부 (영일대/구룡포)",
+    "address": "경상북도 포항시 구룡포읍",
+    "sheetNo": 48
   },
   {
     "id": "gyeongju-gwanseong",
@@ -585,7 +777,11 @@
     "bottomType": "모래/자갈",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "울산 경계의 아늑한 해변. 남동스웰에 차분한 롱보드 파도."
+    "description": "울산 경계의 아늑한 해변. 남동스웰에 차분한 롱보드 파도.",
+    "group": "Z-16",
+    "zoneName": "경주",
+    "address": "경상북도 경주시 양남면 후동",
+    "sheetNo": 49
   },
   {
     "id": "ulsan-gangdong",
@@ -597,7 +793,11 @@
     "bottomType": "자갈/몽돌",
     "optimalWindDir": 270,
     "difficulty": "Intermediate",
-    "description": "몽돌 해변 특유의 맑은 물과 힘 있는 쇼어브레이크."
+    "description": "몽돌 해변 특유의 맑은 물과 힘 있는 쇼어브레이크.",
+    "group": "Z-17",
+    "zoneName": "울산",
+    "address": "울산광역시 북구 신명길",
+    "sheetNo": 50
   },
   {
     "id": "ulsan-ilsan",
@@ -609,7 +809,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "Beginner",
-    "description": "대왕암공원 옆 도심 휴양 해변. 파도가 잔잔하여 초보 패들 연습에 적합."
+    "description": "대왕암공원 옆 도심 휴양 해변. 파도가 잔잔하여 초보 패들 연습에 적합.",
+    "group": "Z-17",
+    "zoneName": "울산",
+    "address": "울산광역시 동구 일산진11길",
+    "sheetNo": 51
   },
   {
     "id": "ulsan-jinha",
@@ -621,7 +825,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 300,
     "difficulty": "All",
-    "description": "명선도 앞 사계절 해양레포츠 성지. 남동/동스웰에 질 좋은 서핑 파도 형성."
+    "description": "명선도 앞 사계절 해양레포츠 성지. 남동/동스웰에 질 좋은 서핑 파도 형성.",
+    "group": "Z-17",
+    "zoneName": "울산",
+    "address": "울산광역시 울주군 서생면 진하해변길",
+    "sheetNo": 52
   },
   {
     "id": "ulsan-nasari",
@@ -633,403 +841,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 315,
     "difficulty": "All",
-    "description": "간절곶 남쪽의 아담한 포구 해변. 조용히 파도를 즐길 수 있는 힐링 스팟."
-  },
-  {
-    "id": "busan-imrang",
-    "name": "부산 임랑해수욕장",
-    "region": "남해",
-    "subRegion": "부산 기장",
-    "lat": 35.3181,
-    "lng": 129.2639,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 315,
-    "difficulty": "All",
-    "description": "부산 북부 기장의 조용한 스팟. 동스웰 시 길게 이어지는 파도."
-  },
-  {
-    "id": "busan-ilgwang",
-    "name": "부산 일광해수욕장",
-    "region": "남해",
-    "subRegion": "부산 기장",
-    "lat": 35.2639,
-    "lng": 129.2361,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 315,
-    "difficulty": "Beginner",
-    "description": "수심이 얕고 파도가 온화하여 비기너 패들링과 강습에 최적."
-  },
-  {
-    "id": "busan-songjeong",
-    "name": "부산 송정해수욕장",
-    "region": "남해",
-    "subRegion": "부산 해운대",
-    "lat": 35.1786,
-    "lng": 129.1997,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 315,
-    "difficulty": "All",
-    "description": "대한민국 남부 서핑 1번지. 사계절 내내 서핑이 가능하며 남/동스웰 모두 반응."
-  },
-  {
-    "id": "busan-haeundae",
-    "name": "부산 해운대해수욕장",
-    "region": "남해",
-    "subRegion": "부산 해운대",
-    "lat": 35.1586,
-    "lng": 129.1603,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 0,
-    "difficulty": "Intermediate",
-    "description": "한국 최대 해변. 태풍 스웰이나 강한 남스웰 시 다이내믹한 파도 형성."
-  },
-  {
-    "id": "busan-gwangalli",
-    "name": "부산 광안리해수욕장",
-    "region": "남해",
-    "subRegion": "부산 수영",
-    "lat": 35.1531,
-    "lng": 129.1186,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 0,
-    "difficulty": "Beginner",
-    "description": "광안대교 뷰를 품은 도심 스팟. 패들보드(SUP)와 카약, 입문 서핑 명소."
-  },
-  {
-    "id": "busan-dadaepo",
-    "name": "부산 다대포해수욕장",
-    "region": "남해",
-    "subRegion": "부산 사하",
-    "lat": 35.0482,
-    "lng": 128.9664,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 0,
-    "difficulty": "Beginner",
-    "description": "낙조가 아름다운 서핑 명소. 완만한 수심과 남서스웰에 부드러운 롱보드 파도."
-  },
-  {
-    "id": "yeosu-manseongri",
-    "name": "여수 만성리검은모래해변",
-    "region": "남해",
-    "subRegion": "전남 여수",
-    "lat": 34.775,
-    "lng": 127.7472,
-    "bottomType": "검은모래",
-    "optimalWindDir": 315,
-    "difficulty": "All",
-    "description": "국내 유일의 검은 모래 해변. 남동스웰 시 이국적인 풍경에서 서핑."
-  },
-  {
-    "id": "goheung-namyeol",
-    "name": "고흥 남열해맞이해수욕장",
-    "region": "남해",
-    "subRegion": "전남 고흥",
-    "lat": 34.5667,
-    "lng": 127.4667,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 0,
-    "difficulty": "All",
-    "description": "남해안 최고의 서핑 성지! 태평양 남스웰을 정면으로 받아 파워풀한 파도 형성."
-  },
-  {
-    "id": "wando-myeongsasimni",
-    "name": "완도 신지명사십리해수욕장",
-    "region": "남해",
-    "subRegion": "전남 완도",
-    "lat": 34.3278,
-    "lng": 126.7972,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 0,
-    "difficulty": "All",
-    "description": "친환경 블루플래그 인증 해변. 남서풍과 남스웰 시즌에 질 좋은 파도 형성."
-  },
-  {
-    "id": "haenam-songho",
-    "name": "해남 송호해수욕장",
-    "region": "남해",
-    "subRegion": "전남 해남",
-    "lat": 34.3056,
-    "lng": 126.5222,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 0,
-    "difficulty": "Beginner",
-    "description": "땅끝마을 인근 해변. 고운 모래와 완만한 수심으로 안전한 서핑."
-  },
-  {
-    "id": "jeju-jungmun",
-    "name": "제주 중문색달해변",
-    "region": "제주",
-    "subRegion": "제주 서귀포",
-    "lat": 33.2448,
-    "lng": 126.4122,
-    "bottomType": "모래/암초",
-    "optimalWindDir": 0,
-    "difficulty": "Advanced",
-    "description": "대한민국 서핑의 발상지. 여름 남스웰 시즌 국내 최고의 빅웨이브와 배럴 파도."
-  },
-  {
-    "id": "jeju-sagye",
-    "name": "제주 사계해변",
-    "region": "제주",
-    "subRegion": "제주 서귀포",
-    "lat": 33.2278,
-    "lng": 126.3111,
-    "bottomType": "모래/암초",
-    "optimalWindDir": 0,
-    "difficulty": "Intermediate",
-    "description": "산방산과 형제섬을 바라보는 절경. 남서스웰에 강력한 파도가 들어옵니다."
-  },
-  {
-    "id": "jeju-hwasun",
-    "name": "제주 화순금모래해변",
-    "region": "제주",
-    "subRegion": "제주 서귀포",
-    "lat": 33.2389,
-    "lng": 126.3361,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 0,
-    "difficulty": "All",
-    "description": "화순항 옆 검은 모래 해변. 산방산 바람을 막아주어 아늑한 서핑 가능."
-  },
-  {
-    "id": "jeju-pyoseon",
-    "name": "제주 표선해수욕장",
-    "region": "제주",
-    "subRegion": "제주 서귀포",
-    "lat": 33.325,
-    "lng": 126.8389,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 315,
-    "difficulty": "Beginner",
-    "description": "원형의 거대한 백사장. 간조 시 얕은 바다가 넓게 펼쳐져 비기너에게 안전."
-  },
-  {
-    "id": "jeju-sehwa",
-    "name": "제주 세화해수욕장",
-    "region": "제주",
-    "subRegion": "제주 제주시",
-    "lat": 33.525,
-    "lng": 126.8583,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 180,
-    "difficulty": "All",
-    "description": "코발트빛 투명한 바다. 가을/겨울 북동스웰에 깔끔한 파도 라인이 생깁니다."
-  },
-  {
-    "id": "jeju-woljeong",
-    "name": "제주 월정리해변",
-    "region": "제주",
-    "subRegion": "제주 제주시",
-    "lat": 33.5562,
-    "lng": 126.7958,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 180,
-    "difficulty": "All",
-    "description": "에메랄드빛 바다와 풍차 뷰. 북스웰 시즌에 아름다운 라인이 열리는 인기 스팟."
-  },
-  {
-    "id": "jeju-gimnyeong",
-    "name": "제주 김녕해수욕장",
-    "region": "제주",
-    "subRegion": "제주 제주시",
-    "lat": 33.5575,
-    "lng": 126.7444,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 180,
-    "difficulty": "All",
-    "description": "부드러운 백사장과 푸른 바다. 롱보더들이 즐겨 찾는 여유로운 포인트."
-  },
-  {
-    "id": "jeju-hamdeok",
-    "name": "제주 함덕해수욕장",
-    "region": "제주",
-    "subRegion": "제주 제주시",
-    "lat": 33.5433,
-    "lng": 126.6694,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 180,
-    "difficulty": "Beginner",
-    "description": "제주 북동부 대표 관광지. 겨울철 북서풍 스웰 시 서핑 세션 형성."
-  },
-  {
-    "id": "jeju-samyang",
-    "name": "제주 삼양검은모래해변",
-    "region": "제주",
-    "subRegion": "제주 제주시",
-    "lat": 33.5256,
-    "lng": 126.5861,
-    "bottomType": "검은모래",
-    "optimalWindDir": 180,
-    "difficulty": "Intermediate",
-    "description": "제주시 도심 인접 검은 모래 해변. 북스웰에 힘 있는 파도가 빠르게 일어섬."
-  },
-  {
-    "id": "jeju-ihoteu",
-    "name": "제주 이호테우해수욕장",
-    "region": "제주",
-    "subRegion": "제주 제주시",
-    "lat": 33.5008,
-    "lng": 126.4528,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 180,
-    "difficulty": "All",
-    "description": "제주공항 인근 말등대 앞 스팟. 접근성이 뛰어나며 사계절 서핑 강습 활발."
-  },
-  {
-    "id": "jeju-gwakji",
-    "name": "제주 곽지과물해수욕장",
-    "region": "제주",
-    "subRegion": "제주 제주시",
-    "lat": 33.4506,
-    "lng": 126.3106,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 180,
-    "difficulty": "All",
-    "description": "과물노천탕이 있는 넓은 해변. 북서스웰에 길고 안정적인 파도 형성."
-  },
-  {
-    "id": "jeju-hyeopjae",
-    "name": "제주 협재해수욕장",
-    "region": "제주",
-    "subRegion": "제주 제주시",
-    "lat": 33.3939,
-    "lng": 126.2397,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 135,
-    "difficulty": "Beginner",
-    "description": "비양도를 마주보는 환상적인 뷰. 파도가 비교적 잔잔해 패들과 입문 추천."
-  },
-  {
-    "id": "taean-mallipo",
-    "name": "태안 만리포해수욕장",
-    "region": "서해",
-    "subRegion": "충남 태안",
-    "lat": 36.7947,
-    "lng": 126.1432,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 90,
-    "difficulty": "All",
-    "description": "'만리포니아'로 불리는 서해 서핑의 성지. 가을/겨울 북서풍에 강력한 파도 형성."
-  },
-  {
-    "id": "taean-cheonripo",
-    "name": "태안 천리포해수욕장",
-    "region": "서해",
-    "subRegion": "충남 태안",
-    "lat": 36.8083,
-    "lng": 126.1472,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 90,
-    "difficulty": "All",
-    "description": "천리포수목원 옆 조용한 해변. 만리포가 붐빌 때 여유롭게 타기 좋은 스팟."
-  },
-  {
-    "id": "taean-sinduri",
-    "name": "태안 신두리해수욕장",
-    "region": "서해",
-    "subRegion": "충남 태안",
-    "lat": 36.8444,
-    "lng": 126.1861,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 90,
-    "difficulty": "All",
-    "description": "신두리 해안사구 앞 광활한 해변. 겨울철 북서풍에 긴 파도 라인업."
-  },
-  {
-    "id": "taean-padori",
-    "name": "태안 파도리해수욕장",
-    "region": "서해",
-    "subRegion": "충남 태안",
-    "lat": 36.7333,
-    "lng": 126.1306,
-    "bottomType": "해옥/자갈",
-    "optimalWindDir": 90,
-    "difficulty": "Intermediate",
-    "description": "해식동굴로 유명한 스팟. 해옥 자갈 바닥으로 파도 힘이 강함."
-  },
-  {
-    "id": "taean-mongsanpo",
-    "name": "태안 몽산포해수욕장",
-    "region": "서해",
-    "subRegion": "충남 태안",
-    "lat": 36.6722,
-    "lng": 126.2861,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 90,
-    "difficulty": "Beginner",
-    "description": "끝없이 펼쳐지는 갯벌과 모래사장. 만조 시 완만한 파도에서 입문 강습."
-  },
-  {
-    "id": "taean-kkotji",
-    "name": "태안 꽃지해수욕장",
-    "region": "서해",
-    "subRegion": "충남 안면도",
-    "lat": 36.5028,
-    "lng": 126.3361,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 90,
-    "difficulty": "All",
-    "description": "할미·할아비 바위 낙조 명소. 안면도 대표 해변으로 가을/겨울 서핑 가능."
-  },
-  {
-    "id": "boryeong-daecheon",
-    "name": "보령 대천해수욕장",
-    "region": "서해",
-    "subRegion": "충남 보령",
-    "lat": 36.3056,
-    "lng": 126.5167,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 90,
-    "difficulty": "All",
-    "description": "서해안 최대의 해변. 스웰이 강한 겨울철에 서해 숏보더들이 찾는 포인트."
-  },
-  {
-    "id": "boryeong-muchangpo",
-    "name": "보령 무창포해수욕장",
-    "region": "서해",
-    "subRegion": "충남 보령",
-    "lat": 36.2417,
-    "lng": 126.5333,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 90,
-    "difficulty": "All",
-    "description": "신비의 바닷길로 유명한 아늑한 해변. 만조 전후에 잔잔한 파도 형성."
-  },
-  {
-    "id": "siheung-wavepark",
-    "name": "시흥 웨이브파크",
-    "region": "서해",
-    "subRegion": "경기 시흥",
-    "lat": 37.3361,
-    "lng": 126.6917,
-    "bottomType": "인공 풀 (Cove)",
-    "optimalWindDir": 0,
-    "difficulty": "All",
-    "description": "세계 최대 규모의 인공 서핑 테마파크. 기상과 상관없이 일정한 파도 제공."
-  },
-  {
-    "id": "incheon-eurwangri",
-    "name": "인천 을왕리해수욕장",
-    "region": "서해",
-    "subRegion": "인천 중구",
-    "lat": 37.4472,
-    "lng": 126.3722,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 90,
-    "difficulty": "Beginner",
-    "description": "수도권에서 가장 가까운 해변. 겨울철 북서풍 스웰 시 서울 근교 서퍼 방문."
-  },
-  {
-    "id": "incheon-wangsan",
-    "name": "인천 왕산해수욕장",
-    "region": "서해",
-    "subRegion": "인천 중구",
-    "lat": 37.4583,
-    "lng": 126.3694,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 90,
-    "difficulty": "Beginner",
-    "description": "을왕리 바로 북측의 조용한 해변. 수도권 서퍼들의 가벼운 패들 세션 스팟."
+    "description": "간절곶 남쪽의 아담한 포구 해변. 조용히 파도를 즐길 수 있는 힐링 스팟.",
+    "group": "Z-17",
+    "zoneName": "울산",
+    "address": "울산광역시 울주군 서생면",
+    "sheetNo": 53
   },
   {
     "id": "goseong-hwajinpo",
@@ -1041,7 +857,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "호수와 바다가 맞닿은 일출명소. 북동스웰에 길고 완만한 라인 형성."
+    "description": "호수와 바다가 맞닿은 일출명소. 북동스웰에 길고 완만한 라인 형성.",
+    "group": "Z-01",
+    "zoneName": "고성 북부 (현내/죽왕)",
+    "address": "강원특별자치도 고성군 거진읍 거진리",
+    "sheetNo": 54
   },
   {
     "id": "goseong-cheonggan",
@@ -1053,7 +873,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "팔호정 전망이 아름다운 해변. 스웰 시 여유로운 롱보드 파도."
+    "description": "팔호정 전망이 아름다운 해변. 스웰 시 여유로운 롱보드 파도.",
+    "group": "Z-02",
+    "zoneName": "고성 남부 (토성)",
+    "address": "강원특별자치도 고성군 죽왕면 공현진리",
+    "sheetNo": 55
   },
   {
     "id": "goseong-jeongam",
@@ -1065,7 +889,11 @@
     "bottomType": "모래/자갈",
     "optimalWindDir": 270,
     "difficulty": "Intermediate",
-    "description": "정암수열고개 아래 조용한 해변. 스웰이 강할 때 힘 좋은 파도."
+    "description": "정암수열고개 아래 조용한 해변. 스웰이 강할 때 힘 좋은 파도.",
+    "group": "Z-02",
+    "zoneName": "고성 남부 (토성)",
+    "address": "강원특별자치도 고성군 토성면 용원로",
+    "sheetNo": 56
   },
   {
     "id": "yangyang-osan",
@@ -1077,7 +905,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "죽도와 물치 사이 한적한 로컬 스팟. 북동스웰에 고른 파도."
+    "description": "죽도와 물치 사이 한적한 로컬 스팟. 북동스웰에 고른 파도.",
+    "group": "Z-05",
+    "zoneName": "양양 중부 (손양/현북)",
+    "address": "강원특별자치도 양양군 손양면 오산리",
+    "sheetNo": 57
   },
   {
     "id": "gangneung-hyangho",
@@ -1089,7 +921,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "경포 근처 아늑한 해변. 여름 남동스웰에 좋은 파도 형성."
+    "description": "경포 근처 아늑한 해변. 여름 남동스웰에 좋은 파도 형성.",
+    "group": "Z-08",
+    "zoneName": "강릉 북부 (주문진/사천)",
+    "address": "강원특별자치도 강릉시 강동면 풍호길",
+    "sheetNo": 58
   },
   {
     "id": "gangneung-jangho",
@@ -1101,7 +937,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "물치자작도 전망이 좋은 해변. 스웰 시 조용한 세션 가능."
+    "description": "물치자작도 전망이 좋은 해변. 스웰 시 조용한 세션 가능.",
+    "group": "Z-10",
+    "zoneName": "강릉 남부 (옥계/강동)",
+    "address": "강원특별자치도 강릉시 강동면 율곡로",
+    "sheetNo": 59
   },
   {
     "id": "gangneung-gopo",
@@ -1113,7 +953,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 260,
     "difficulty": "All",
-    "description": "솔향기 바다온천 인근. 북동스웰에 완만한 롱보드 라인."
+    "description": "솔향기 바다온천 인근. 북동스웰에 완만한 롱보드 라인.",
+    "group": "Z-10",
+    "zoneName": "강릉 남부 (옥계/강동)",
+    "address": "강원특별자치도 강릉시 금진리",
+    "sheetNo": 60
   },
   {
     "id": "samcheok-sijung",
@@ -1125,7 +969,11 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "측백나무 숲이 어우러진 해변. 파도가 고르게 정렬됨."
+    "description": "측백나무 숲이 어우러진 해변. 파도가 고르게 정렬됨.",
+    "group": "Z-12",
+    "zoneName": "삼척",
+    "address": "강원특별자치도 삼척시 덕산리",
+    "sheetNo": 61
   },
   {
     "id": "samcheok-imwon",
@@ -1137,55 +985,171 @@
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 270,
     "difficulty": "All",
-    "description": "삼육명산 문배골 근처 조용한 포인트. 스웰 시 깨끗한 파도."
+    "description": "삼육명산 문배골 근처 조용한 포인트. 스웰 시 깨끗한 파도.",
+    "group": "Z-12",
+    "zoneName": "삼척",
+    "address": "강원특별자치도 삼척시 부남리",
+    "sheetNo": 62
   },
   {
-    "id": "jeju-moseulpo",
-    "name": "제주 모슬포해변",
-    "region": "제주",
-    "subRegion": "제주 서귀포",
-    "lat": 33.3092,
-    "lng": 126.4183,
+    "id": "busan-imrang",
+    "name": "부산 임랑해수욕장",
+    "region": "남해",
+    "subRegion": "부산 기장",
+    "lat": 35.3181,
+    "lng": 129.2639,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 315,
+    "difficulty": "All",
+    "description": "부산 북부 기장의 조용한 스팟. 동스웰 시 길게 이어지는 파도.",
+    "group": "Z-19",
+    "zoneName": "부산 기장 (임랑/일광)",
+    "address": "부산광역시 기장군 장안읍 임랑해안길 31",
+    "sheetNo": 63
+  },
+  {
+    "id": "busan-ilgwang",
+    "name": "부산 일광해수욕장",
+    "region": "남해",
+    "subRegion": "부산 기장",
+    "lat": 35.2639,
+    "lng": 129.2361,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 315,
+    "difficulty": "Beginner",
+    "description": "수심이 얕고 파도가 온화하여 비기너 패들링과 강습에 최적.",
+    "group": "Z-19",
+    "zoneName": "부산 기장 (임랑/일광)",
+    "address": "부산광역시 기장군 일광읍 일광해수욕장",
+    "sheetNo": 64
+  },
+  {
+    "id": "busan-songjeong",
+    "name": "부산 송정해수욕장",
+    "region": "남해",
+    "subRegion": "부산 해운대",
+    "lat": 35.1786,
+    "lng": 129.1997,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 315,
+    "difficulty": "All",
+    "description": "대한민국 남부 서핑 1번지. 사계절 내내 서핑이 가능하며 남/동스웰 모두 반응.",
+    "group": "Z-20",
+    "zoneName": "부산 송정 (핵심)",
+    "address": "부산광역시 해운대구 송정해변로",
+    "sheetNo": 65
+  },
+  {
+    "id": "busan-haeundae",
+    "name": "부산 해운대해수욕장",
+    "region": "남해",
+    "subRegion": "부산 해운대",
+    "lat": 35.1586,
+    "lng": 129.1603,
     "bottomType": "모래 (Sand)",
     "optimalWindDir": 0,
     "difficulty": "Intermediate",
-    "description": "가파도가 보이는 남부 해변. 남스웰 시즌에 파도 형성."
+    "description": "한국 최대 해변. 태풍 스웰이나 강한 남스웰 시 다이내믹한 파도 형성.",
+    "group": "Z-21",
+    "zoneName": "부산 도심 (해운대/광안)",
+    "address": "부산광역시 해운대구 해운대해변로",
+    "sheetNo": 66
   },
   {
-    "id": "jeju-handam",
-    "name": "제주 한담해변",
-    "region": "제주",
-    "subRegion": "제주 제주시",
-    "lat": 33.5042,
-    "lng": 126.4333,
+    "id": "busan-gwangalli",
+    "name": "부산 광안리해수욕장",
+    "region": "남해",
+    "subRegion": "부산 수영",
+    "lat": 35.1531,
+    "lng": 129.1186,
     "bottomType": "모래 (Sand)",
-    "optimalWindDir": 180,
-    "difficulty": "All",
-    "description": "공항 근처 접근성 좋은 해변. 북스웰 시즌 강습 활발."
-  },
-  {
-    "id": "jeju-geumneung",
-    "name": "제주 금능해변",
-    "region": "제주",
-    "subRegion": "제주 제주시",
-    "lat": 33.4344,
-    "lng": 126.2603,
-    "bottomType": "모래 (Sand)",
-    "optimalWindDir": 135,
+    "optimalWindDir": 0,
     "difficulty": "Beginner",
-    "description": "협재 옆 잔잔한 해변. 초보 패들과 물때별 스노클링 명소."
+    "description": "광안대교 뷰를 품은 도심 스팟. 패들보드(SUP)와 카약, 입문 서핑 명소.",
+    "group": "Z-21",
+    "zoneName": "부산 도심 (해운대/광안)",
+    "address": "부산광역시 수영구 광안해변로",
+    "sheetNo": 67
   },
   {
-    "id": "jeju-jebo",
-    "name": "제주 제부해수욕장",
-    "region": "제주",
-    "subRegion": "제주 제주시",
-    "lat": 33.5414,
-    "lng": 126.8786,
+    "id": "busan-dadaepo",
+    "name": "부산 다대포해수욕장",
+    "region": "남해",
+    "subRegion": "부산 사하",
+    "lat": 35.0482,
+    "lng": 128.9664,
     "bottomType": "모래 (Sand)",
-    "optimalWindDir": 180,
+    "optimalWindDir": 0,
+    "difficulty": "Beginner",
+    "description": "낙조가 아름다운 서핑 명소. 완만한 수심과 남서스웰에 부드러운 롱보드 파도.",
+    "group": "Z-22",
+    "zoneName": "부산 다대포",
+    "address": "부산광역시 사하구 다대로 지하 692",
+    "sheetNo": 68
+  },
+  {
+    "id": "yeosu-manseongri",
+    "name": "여수 만성리검은모래해변",
+    "region": "남해",
+    "subRegion": "전남 여수",
+    "lat": 34.775,
+    "lng": 127.7472,
+    "bottomType": "검은모래",
+    "optimalWindDir": 315,
     "difficulty": "All",
-    "description": "북동 끝자락 아늑한 해변. 북동스웰에 숨은 포인트."
+    "description": "국내 유일의 검은 모래 해변. 남동스웰 시 이국적인 풍경에서 서핑.",
+    "group": "Z-23",
+    "zoneName": "여수",
+    "address": "전라남도 여수시 망양로 208",
+    "sheetNo": 69
+  },
+  {
+    "id": "goheung-namyeol",
+    "name": "고흥 남열해맞이해수욕장",
+    "region": "남해",
+    "subRegion": "전남 고흥",
+    "lat": 34.5667,
+    "lng": 127.4667,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 0,
+    "difficulty": "All",
+    "description": "남해안 최고의 서핑 성지! 태평양 남스웰을 정면으로 받아 파워풀한 파도 형성.",
+    "group": "Z-24",
+    "zoneName": "고흥",
+    "address": "전라남도 고흥군 남열리",
+    "sheetNo": 70
+  },
+  {
+    "id": "wando-myeongsasimni",
+    "name": "완도 신지명사십리해수욕장",
+    "region": "남해",
+    "subRegion": "전남 완도",
+    "lat": 34.3278,
+    "lng": 126.7972,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 0,
+    "difficulty": "All",
+    "description": "친환경 블루플래그 인증 해변. 남서풍과 남스웰 시즌에 질 좋은 파도 형성.",
+    "group": "Z-25",
+    "zoneName": "완도/해남",
+    "address": "전라남도 완도군 명사십리길",
+    "sheetNo": 71
+  },
+  {
+    "id": "haenam-songho",
+    "name": "해남 송호해수욕장",
+    "region": "남해",
+    "subRegion": "전남 해남",
+    "lat": 34.3056,
+    "lng": 126.5222,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 0,
+    "difficulty": "Beginner",
+    "description": "땅끝마을 인근 해변. 고운 모래와 완만한 수심으로 안전한 서핑.",
+    "group": "Z-25",
+    "zoneName": "완도/해남",
+    "address": "전라남도 해남군 땅끝해안로 1954",
+    "sheetNo": 72
   },
   {
     "id": "geoje-heungnam",
@@ -1197,6 +1161,442 @@
     "bottomType": "모래/자갈",
     "optimalWindDir": 0,
     "difficulty": "All",
-    "description": "거제 남부 조용한 해변. 남/남동스웰에 국지적 파도 형성."
+    "description": "거제 남부 조용한 해변. 남/남동스웰에 국지적 파도 형성.",
+    "group": "Z-26",
+    "zoneName": "거제",
+    "address": "경상남도 거제시 거제면",
+    "sheetNo": 73
+  },
+  {
+    "id": "jeju-jungmun",
+    "name": "제주 중문색달해변",
+    "region": "제주",
+    "subRegion": "제주 서귀포",
+    "lat": 33.2448,
+    "lng": 126.4122,
+    "bottomType": "모래/암초",
+    "optimalWindDir": 0,
+    "difficulty": "Advanced",
+    "description": "대한민국 서핑의 발상지. 여름 남스웰 시즌 국내 최고의 빅웨이브와 배럴 파도.",
+    "group": "Z-27",
+    "zoneName": "제주 서귀포 남부 (중문)",
+    "address": "제주특별자치도 서귀포시 예래동 올레길7",
+    "sheetNo": 74
+  },
+  {
+    "id": "jeju-sagye",
+    "name": "제주 사계해변",
+    "region": "제주",
+    "subRegion": "제주 서귀포",
+    "lat": 33.2278,
+    "lng": 126.3111,
+    "bottomType": "모래/암초",
+    "optimalWindDir": 0,
+    "difficulty": "Intermediate",
+    "description": "산방산과 형제섬을 바라보는 절경. 남서스웰에 강력한 파도가 들어옵니다.",
+    "group": "Z-28",
+    "zoneName": "제주 안덕/모슬포",
+    "address": "제주특별자치도 서귀포시 안덕면 사계남로 186-8",
+    "sheetNo": 75
+  },
+  {
+    "id": "jeju-hwasun",
+    "name": "제주 화순금모래해변",
+    "region": "제주",
+    "subRegion": "제주 서귀포",
+    "lat": 33.2389,
+    "lng": 126.3361,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 0,
+    "difficulty": "All",
+    "description": "화순항 옆 검은 모래 해변. 산방산 바람을 막아주어 아늑한 서핑 가능.",
+    "group": "Z-28",
+    "zoneName": "제주 안덕/모슬포",
+    "address": "제주특별자치도 서귀포시 안덕면 화순해안로 109",
+    "sheetNo": 76
+  },
+  {
+    "id": "jeju-pyoseon",
+    "name": "제주 표선해수욕장",
+    "region": "제주",
+    "subRegion": "제주 서귀포",
+    "lat": 33.325,
+    "lng": 126.8389,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 315,
+    "difficulty": "Beginner",
+    "description": "원형의 거대한 백사장. 간조 시 얕은 바다가 넓게 펼쳐져 비기너에게 안전.",
+    "group": "Z-29",
+    "zoneName": "제주 표선",
+    "address": "제주특별자치도 서귀포시 표선면 표선리",
+    "sheetNo": 77
+  },
+  {
+    "id": "jeju-sehwa",
+    "name": "제주 세화해수욕장",
+    "region": "제주",
+    "subRegion": "제주 제주시",
+    "lat": 33.525,
+    "lng": 126.8583,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 180,
+    "difficulty": "All",
+    "description": "코발트빛 투명한 바다. 가을/겨울 북동스웰에 깔끔한 파도 라인이 생깁니다.",
+    "group": "Z-30",
+    "zoneName": "제주 구좌 (세화/월정)",
+    "address": "제주특별자치도 제주시 구좌읍 Ollegil 20",
+    "sheetNo": 78
+  },
+  {
+    "id": "jeju-woljeong",
+    "name": "제주 월정리해변",
+    "region": "제주",
+    "subRegion": "제주 제주시",
+    "lat": 33.5562,
+    "lng": 126.7958,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 180,
+    "difficulty": "All",
+    "description": "에메랄드빛 바다와 풍차 뷰. 북스웰 시즌에 아름다운 라인이 열리는 인기 스팟.",
+    "group": "Z-30",
+    "zoneName": "제주 구좌 (세화/월정)",
+    "address": "제주특별자치도 제주시 구좌읍 Ollegil 20",
+    "sheetNo": 79
+  },
+  {
+    "id": "jeju-gimnyeong",
+    "name": "제주 김녕해수욕장",
+    "region": "제주",
+    "subRegion": "제주 제주시",
+    "lat": 33.5575,
+    "lng": 126.7444,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 180,
+    "difficulty": "All",
+    "description": "부드러운 백사장과 푸른 바다. 롱보더들이 즐겨 찾는 여유로운 포인트.",
+    "group": "Z-30",
+    "zoneName": "제주 구좌 (세화/월정)",
+    "address": "제주특별자치도 제주시 구좌읍 Ollegil 20",
+    "sheetNo": 80
+  },
+  {
+    "id": "jeju-hamdeok",
+    "name": "제주 함덕해수욕장",
+    "region": "제주",
+    "subRegion": "제주 제주시",
+    "lat": 33.5433,
+    "lng": 126.6694,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 180,
+    "difficulty": "Beginner",
+    "description": "제주 북동부 대표 관광지. 겨울철 북서풍 스웰 시 서핑 세션 형성.",
+    "group": "Z-31",
+    "zoneName": "제주 조천/삼양",
+    "address": "제주특별자치도 제주시 조천읍 조함해안로",
+    "sheetNo": 81
+  },
+  {
+    "id": "jeju-samyang",
+    "name": "제주 삼양검은모래해변",
+    "region": "제주",
+    "subRegion": "제주 제주시",
+    "lat": 33.5256,
+    "lng": 126.5861,
+    "bottomType": "검은모래",
+    "optimalWindDir": 180,
+    "difficulty": "Intermediate",
+    "description": "제주시 도심 인접 검은 모래 해변. 북스웰에 힘 있는 파도가 빠르게 일어섬.",
+    "group": "Z-31",
+    "zoneName": "제주 조천/삼양",
+    "address": "제주특별자치도 제주시 삼양동 선사로8길 13-6",
+    "sheetNo": 82
+  },
+  {
+    "id": "jeju-ihoteu",
+    "name": "제주 이호테우해수욕장",
+    "region": "제주",
+    "subRegion": "제주 제주시",
+    "lat": 33.5008,
+    "lng": 126.4528,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 180,
+    "difficulty": "All",
+    "description": "제주공항 인근 말등대 앞 스팟. 접근성이 뛰어나며 사계절 서핑 강습 활발.",
+    "group": "Z-32",
+    "zoneName": "제주 도심",
+    "address": "제주특별자치도 제주시 이호동 이호해변길",
+    "sheetNo": 83
+  },
+  {
+    "id": "jeju-gwakji",
+    "name": "제주 곽지과물해수욕장",
+    "region": "제주",
+    "subRegion": "제주 제주시",
+    "lat": 33.4506,
+    "lng": 126.3106,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 180,
+    "difficulty": "All",
+    "description": "과물노천탕이 있는 넓은 해변. 북서스웰에 길고 안정적인 파도 형성.",
+    "group": "Z-33",
+    "zoneName": "제주 애월 (곽지/한담)",
+    "address": "제주특별자치도 제주시 애월읍 곽지리",
+    "sheetNo": 84
+  },
+  {
+    "id": "jeju-hyeopjae",
+    "name": "제주 협재해수욕장",
+    "region": "제주",
+    "subRegion": "제주 제주시",
+    "lat": 33.3939,
+    "lng": 126.2397,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 135,
+    "difficulty": "Beginner",
+    "description": "비양도를 마주보는 환상적인 뷰. 파도가 비교적 잔잔해 패들과 입문 추천.",
+    "group": "Z-34",
+    "zoneName": "제주 한림 (협재/금능)",
+    "address": "제주특별자치도 제주시 한림읍 올레길 14",
+    "sheetNo": 85
+  },
+  {
+    "id": "jeju-moseulpo",
+    "name": "제주 모슬포해변",
+    "region": "제주",
+    "subRegion": "제주 서귀포",
+    "lat": 33.3092,
+    "lng": 126.4183,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 0,
+    "difficulty": "Intermediate",
+    "description": "가파도가 보이는 남부 해변. 남스웰 시즌에 파도 형성.",
+    "group": "Z-28",
+    "zoneName": "제주 안덕/모슬포",
+    "address": "제주특별자치도 서귀포시 예래동 산록남로1241번길",
+    "sheetNo": 86
+  },
+  {
+    "id": "jeju-handam",
+    "name": "제주 한담해변",
+    "region": "제주",
+    "subRegion": "제주 제주시",
+    "lat": 33.5042,
+    "lng": 126.4333,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 180,
+    "difficulty": "All",
+    "description": "공항 근처 접근성 좋은 해변. 북스웰 시즌 강습 활발.",
+    "group": "Z-33",
+    "zoneName": "제주 애월 (곽지/한담)",
+    "address": "제주특별자치도 제주시 외도동 외도이동",
+    "sheetNo": 87
+  },
+  {
+    "id": "jeju-geumneung",
+    "name": "제주 금능해변",
+    "region": "제주",
+    "subRegion": "제주 제주시",
+    "lat": 33.4344,
+    "lng": 126.2603,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 135,
+    "difficulty": "Beginner",
+    "description": "협재 옆 잔잔한 해변. 초보 패들과 물때별 스노클링 명소.",
+    "group": "Z-34",
+    "zoneName": "제주 한림 (협재/금능)",
+    "address": "제주특별자치도 제주시 한림읍 한림해안로",
+    "sheetNo": 88
+  },
+  {
+    "id": "jeju-jebo",
+    "name": "제주 제부해수욕장",
+    "region": "제주",
+    "subRegion": "제주 제주시",
+    "lat": 33.5414,
+    "lng": 126.8786,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 180,
+    "difficulty": "All",
+    "description": "북동 끝자락 아늑한 해변. 북동스웰에 숨은 포인트.",
+    "group": "Z-30",
+    "zoneName": "제주 구좌 (세화/월정)",
+    "address": "제주특별자치도 제주시 구좌읍 하도리",
+    "sheetNo": 89
+  },
+  {
+    "id": "taean-mallipo",
+    "name": "태안 만리포해수욕장",
+    "region": "서해",
+    "subRegion": "충남 태안",
+    "lat": 36.7947,
+    "lng": 126.1432,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 90,
+    "difficulty": "All",
+    "description": "'만리포니아'로 불리는 서해 서핑의 성지. 가을/겨울 북서풍에 강력한 파도 형성.",
+    "group": "Z-35",
+    "zoneName": "태안 소원 (만리포/천리포)",
+    "address": "충청남도 태안군 소원면 구름다리",
+    "sheetNo": 90
+  },
+  {
+    "id": "taean-cheonripo",
+    "name": "태안 천리포해수욕장",
+    "region": "서해",
+    "subRegion": "충남 태안",
+    "lat": 36.8083,
+    "lng": 126.1472,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 90,
+    "difficulty": "All",
+    "description": "천리포수목원 옆 조용한 해변. 만리포가 붐빌 때 여유롭게 타기 좋은 스팟.",
+    "group": "Z-35",
+    "zoneName": "태안 소원 (만리포/천리포)",
+    "address": "충청남도 태안군 천리포1길",
+    "sheetNo": 91
+  },
+  {
+    "id": "taean-sinduri",
+    "name": "태안 신두리해수욕장",
+    "region": "서해",
+    "subRegion": "충남 태안",
+    "lat": 36.8444,
+    "lng": 126.1861,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 90,
+    "difficulty": "All",
+    "description": "신두리 해안사구 앞 광활한 해변. 겨울철 북서풍에 긴 파도 라인업.",
+    "group": "Z-36",
+    "zoneName": "태안 남부 (신두리/몽산포)",
+    "address": "충청남도 태안군 신두해변길",
+    "sheetNo": 92
+  },
+  {
+    "id": "taean-padori",
+    "name": "태안 파도리해수욕장",
+    "region": "서해",
+    "subRegion": "충남 태안",
+    "lat": 36.7333,
+    "lng": 126.1306,
+    "bottomType": "해옥/자갈",
+    "optimalWindDir": 90,
+    "difficulty": "Intermediate",
+    "description": "해식동굴로 유명한 스팟. 해옥 자갈 바닥으로 파도 힘이 강함.",
+    "group": "Z-35",
+    "zoneName": "태안 소원 (만리포/천리포)",
+    "address": "충청남도 태안군 파도길",
+    "sheetNo": 93
+  },
+  {
+    "id": "taean-mongsanpo",
+    "name": "태안 몽산포해수욕장",
+    "region": "서해",
+    "subRegion": "충남 태안",
+    "lat": 36.6722,
+    "lng": 126.2861,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 90,
+    "difficulty": "Beginner",
+    "description": "끝없이 펼쳐지는 갯벌과 모래사장. 만조 시 완만한 파도에서 입문 강습.",
+    "group": "Z-36",
+    "zoneName": "태안 남부 (신두리/몽산포)",
+    "address": "충청남도 태안군 남면",
+    "sheetNo": 94
+  },
+  {
+    "id": "taean-kkotji",
+    "name": "태안 꽃지해수욕장",
+    "region": "서해",
+    "subRegion": "충남 안면도",
+    "lat": 36.5028,
+    "lng": 126.3361,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 90,
+    "difficulty": "All",
+    "description": "할미·할아비 바위 낙조 명소. 안면도 대표 해변으로 가을/겨울 서핑 가능.",
+    "group": "Z-36",
+    "zoneName": "태안 남부 (신두리/몽산포)",
+    "address": "충청남도 태안군 안면읍 꽃지해안로",
+    "sheetNo": 95
+  },
+  {
+    "id": "boryeong-daecheon",
+    "name": "보령 대천해수욕장",
+    "region": "서해",
+    "subRegion": "충남 보령",
+    "lat": 36.3056,
+    "lng": 126.5167,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 90,
+    "difficulty": "All",
+    "description": "서해안 최대의 해변. 스웰이 강한 겨울철에 서해 숏보더들이 찾는 포인트.",
+    "group": "Z-37",
+    "zoneName": "보령",
+    "address": "충청남도 보령시 해수욕장4길",
+    "sheetNo": 96
+  },
+  {
+    "id": "boryeong-muchangpo",
+    "name": "보령 무창포해수욕장",
+    "region": "서해",
+    "subRegion": "충남 보령",
+    "lat": 36.2417,
+    "lng": 126.5333,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 90,
+    "difficulty": "All",
+    "description": "신비의 바닷길로 유명한 아늑한 해변. 만조 전후에 잔잔한 파도 형성.",
+    "group": "Z-37",
+    "zoneName": "보령",
+    "address": "충청남도 보령시 열린바다1길",
+    "sheetNo": 97
+  },
+  {
+    "id": "siheung-wavepark",
+    "name": "시흥 웨이브파크",
+    "region": "서해",
+    "subRegion": "경기 시흥",
+    "lat": 37.3361,
+    "lng": 126.6917,
+    "bottomType": "인공 풀 (Cove)",
+    "optimalWindDir": 0,
+    "difficulty": "All",
+    "description": "세계 최대 규모의 인공 서핑 테마파크. 기상과 상관없이 일정한 파도 제공.",
+    "group": "Z-38",
+    "zoneName": "수도권 (시흥/인천)",
+    "address": "경기도 시흥시 정왕3동 오이도로",
+    "sheetNo": 98
+  },
+  {
+    "id": "incheon-eurwangri",
+    "name": "인천 을왕리해수욕장",
+    "region": "서해",
+    "subRegion": "인천 중구",
+    "lat": 37.4472,
+    "lng": 126.3722,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 90,
+    "difficulty": "Beginner",
+    "description": "수도권에서 가장 가까운 해변. 겨울철 북서풍 스웰 시 서울 근교 서퍼 방문.",
+    "group": "Z-38",
+    "zoneName": "수도권 (시흥/인천)",
+    "address": "인천광역시 영종구 을왕로",
+    "sheetNo": 99
+  },
+  {
+    "id": "incheon-wangsan",
+    "name": "인천 왕산해수욕장",
+    "region": "서해",
+    "subRegion": "인천 중구",
+    "lat": 37.4583,
+    "lng": 126.3694,
+    "bottomType": "모래 (Sand)",
+    "optimalWindDir": 90,
+    "difficulty": "Beginner",
+    "description": "을왕리 바로 북측의 조용한 해변. 수도권 서퍼들의 가벼운 패들 세션 스팟.",
+    "group": "Z-38",
+    "zoneName": "수도권 (시흥/인천)",
+    "address": "인천광역시 영종구 용유서로423번길",
+    "sheetNo": 100
   }
 ]

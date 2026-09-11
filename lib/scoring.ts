@@ -53,13 +53,49 @@ function windSpeedFactor(windSpeed: number, dirScore: number): number {
 
 // Wave quality factor: period-to-height ratio indicates swell organization
 function swellQuality(waveHeight: number, wavePeriod: number): number {
-  if (waveHeight <= 0.05) return 0.3; // flat
+  // Tiny Hs is flat — long period alone must not look like quality swell
+  if (waveHeight <= 0.05) return 0.2;
+  if (waveHeight < 0.35) return 0.25;
+  if (waveHeight < 0.5) return 0.4;
   const ratio = wavePeriod / waveHeight;
-  // Ratio 8-15 is great (organized groundswell), <5 is messy windswell, >20 means tiny waves with long period (decent)
+  // Ratio 8-15 is great (organized groundswell), <5 is messy windswell
   if (ratio >= 8 && ratio <= 20) return 1.0;
   if (ratio < 8) return 0.5 + 0.5 * (ratio / 8);
-  // ratio > 20: still decent
-  return Math.max(0.6, 1.0 - (ratio - 20) / 40);
+  return Math.max(0.55, 1.0 - (ratio - 20) / 40);
+}
+
+/** Map / filter label for "is it worth a surf trip" — not "best for any one skill level". */
+export function classifyTripCondition(
+  scores: { beginner: number; intermediate: number; advanced: number },
+  waveHeight: number
+): { conditionLabel: string; conditionColor: string } {
+  // Open-Meteo wave_height ≈ significant wave height (Hs).
+  // Korean beach reality: <0.4m is effectively flat for a 2–3h drive.
+  if (waveHeight < 0.4) {
+    return { conditionLabel: "잠잠", conditionColor: "#94a3b8" };
+  }
+
+  // Do not let a high beginner score on small waves become 최고/훌륭.
+  const rideScore =
+    waveHeight < 0.65
+      ? Math.min(scores.beginner, 58)
+      : waveHeight < 0.9
+        ? Math.max(scores.beginner * 0.85, scores.intermediate)
+        : Math.max(scores.intermediate, scores.advanced, scores.beginner * 0.9);
+
+  if (waveHeight >= 1.0 && rideScore >= 85) {
+    return { conditionLabel: "최고", conditionColor: "#2563eb" };
+  }
+  if (waveHeight >= 0.8 && rideScore >= 70) {
+    return { conditionLabel: "훌륭", conditionColor: "#0891b2" };
+  }
+  if (waveHeight >= 0.6 && rideScore >= 55) {
+    return { conditionLabel: "좋음", conditionColor: "#059669" };
+  }
+  if (waveHeight >= 0.45 && rideScore >= 40) {
+    return { conditionLabel: "보통", conditionColor: "#f59e0b" };
+  }
+  return { conditionLabel: "잠잠", conditionColor: "#94a3b8" };
 }
 
 export function calculateSurfScores(
@@ -88,12 +124,12 @@ export function calculateSurfScores(
   else if (windSpeed <= 4 && angleDiff <= 60) windStatus = '약한 오프쇼어 (최적)';
 
   // ── Wave height scores per level (0..1) ──
-  // Beginner: optimal 0.3-0.8m, dangerous above 1.2m
-  const hBeg = plateau(waveHeight, 0.3, 0.8, 0.2, 0.3) * (waveHeight > 1.5 ? 0.2 : waveHeight > 1.2 ? 0.5 : 1.0);
-  // Intermediate: optimal 0.7-1.5m
-  const hInt = plateau(waveHeight, 0.7, 1.5, 0.35, 0.5);
-  // Advanced: optimal 1.2-3.0m, still decent above
-  const hAdv = plateau(waveHeight, 1.2, 3.0, 0.6, 1.5);
+  // Beginner: usable ~0.5–1.0m (0.3m is too small to score near-perfect)
+  const hBeg = plateau(waveHeight, 0.5, 1.0, 0.18, 0.35) * (waveHeight > 1.5 ? 0.2 : waveHeight > 1.2 ? 0.5 : 1.0);
+  // Intermediate: worth a session from ~0.9m (0.7m-class days stay mid-range)
+  const hInt = plateau(waveHeight, 0.9, 1.7, 0.28, 0.5);
+  // Advanced: optimal 1.3-3.0m
+  const hAdv = plateau(waveHeight, 1.3, 3.0, 0.5, 1.5);
 
   // ── Wave period scores per level (0..1) ──
   // Beginner: 6-10s good, short period = choppy = bad
@@ -116,17 +152,22 @@ export function calculateSurfScores(
   const calmBonus = windSpeed <= 2 ? 8 : windSpeed <= 4 ? 4 : 0;
   const stormPenalty = windSpeed > 12 ? -15 : windSpeed > 8 ? -8 : 0;
 
-  // Safety penalty for beginners in big waves
-  const beginnerSafety = waveHeight > 1.5 ? -25 : waveHeight > 1.2 ? -15 : 0;
+  // Safety penalty for beginners in big waves; flat days are not "great beginner"
+  const beginnerSafety =
+    waveHeight > 1.5 ? -25 : waveHeight > 1.2 ? -15 : waveHeight < 0.35 ? -35 : waveHeight < 0.45 ? -18 : 0;
 
   // Period bonus for advanced: very long period groundswell
   const advPeriodBonus = wavePeriod >= 14 ? 10 : wavePeriod >= 12 ? 5 : 0;
 
   const clamp = (v: number) => Math.max(5, Math.min(100, Math.round(v)));
 
+  // Small Hs must not look like a 100-point intermediate/advanced day
+  const smallWaveCut =
+    waveHeight < 0.6 ? -20 : waveHeight < 0.75 ? -12 : waveHeight < 0.9 ? -6 : 0;
+
   const beginner = clamp(bRaw + calmBonus + beginnerSafety);
-  const intermediate = clamp(iRaw + calmBonus + stormPenalty);
-  const advanced = clamp(aRaw + calmBonus + stormPenalty + advPeriodBonus);
+  const intermediate = clamp(iRaw + calmBonus + stormPenalty + smallWaveCut);
+  const advanced = clamp(aRaw + calmBonus + stormPenalty + advPeriodBonus + smallWaveCut * 1.2);
 
   // ── Summary generation ──
   const avgScore = (beginner + intermediate + advanced) / 3;

@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "sync:map": "node scripts/sync-sheet-map.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.453.0",

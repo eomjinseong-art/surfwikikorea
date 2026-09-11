@@ -1,7 +1,7 @@
 // 실시간 컨디션 배치 조회: 스팟 목록 전체의 파고/풍향을 한 번에 가져와
 // 라벨(잠잠/보통/좋음/훌륭/최고)과 핀 색상 계산에 사용한다.
 import type { MarineForecast } from "./marine";
-import { calculateSurfScores } from "./scoring";
+import { calculateSurfScores, classifyTripCondition } from "./scoring";
 
 export interface SpotConditions extends MarineForecast {
   beginner: number;
@@ -42,18 +42,6 @@ const ARTIFICIAL_FIXED: SpotConditions = {
   conditionColor: "#0891b2",
 };
 
-function classify(scores: { beginner: number; intermediate: number; advanced: number }): {
-  conditionLabel: string;
-  conditionColor: string;
-} {
-  const best = Math.max(scores.beginner, scores.intermediate, scores.advanced);
-  if (best >= 85) return { conditionLabel: "최고", conditionColor: "#2563eb" };
-  if (best >= 70) return { conditionLabel: "훌륭", conditionColor: "#0891b2" };
-  if (best >= 55) return { conditionLabel: "좋음", conditionColor: "#059669" };
-  if (best >= 40) return { conditionLabel: "보통", conditionColor: "#f59e0b" };
-  return { conditionLabel: "잠잠", conditionColor: "#94a3b8" };
-}
-
 export async function getBatchConditions(
   spots: { id: string; lat: number; lng: number; optimalWindDir: number }[]
 ): Promise<Record<string, SpotConditions>> {
@@ -81,11 +69,14 @@ export async function getBatchConditions(
       if (isArtificialWaveSpot(spot.id)) return; // 인공파도는 고정값 유지 (예보로 덮어쓰지 않음)
       const m = mArr[idx]?.current ?? {};
       const w = wArr[idx]?.current ?? {};
+      // Missing marine fields → treat as unknown/flat, never invent a "nice" 0.6m default
+      const waveHeight = typeof m.wave_height === "number" && Number.isFinite(m.wave_height) ? m.wave_height : 0;
+      const wavePeriod = typeof m.wave_period === "number" && Number.isFinite(m.wave_period) ? m.wave_period : 0;
       const forecast: MarineForecast = {
-        waveHeight: toNum(m.wave_height, 0.6),
-        wavePeriod: toNum(m.wave_period, 5.5),
-        windSpeed: toNum(w.wind_speed_10m, 8),
-        windDirection: parseWindDir(w.wind_direction_10m ?? 270),
+        waveHeight,
+        wavePeriod,
+        windSpeed: toNum(w.wind_speed_10m, 0),
+        windDirection: parseWindDir(w.wind_direction_10m ?? 0),
       };
       const scores = calculateSurfScores(
         forecast.waveHeight,
@@ -94,7 +85,7 @@ export async function getBatchConditions(
         forecast.windDirection,
         spot.optimalWindDir
       );
-      const { conditionLabel, conditionColor } = classify(scores);
+      const { conditionLabel, conditionColor } = classifyTripCondition(scores, forecast.waveHeight);
       result[spot.id] = { ...forecast, ...scores, conditionLabel, conditionColor };
     });
   } catch {

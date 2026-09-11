@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import spotsData from "@/data/spots.json";
 import accommodationsData from "@/data/accommodations.json";
+import shopsData from "@/data/shops.json";
 import Map from "@/components/Map";
 import SpotDrawer from "@/components/SpotDrawer";
 import AccommodationDrawer from "@/components/AccommodationDrawer";
@@ -12,7 +13,7 @@ import { getBatchConditionsCached, isArtificialWaveSpot } from "@/lib/batchCondi
 import { CAM_SPOT_IDS, getCamForSpot } from "@/lib/beachCams";
 import InfoAndRequestModal from "@/components/InfoAndRequestModal";
 import Link from "next/link";
-import { PlusCircle, RotateCcw, Search, Compass, Layers, ChevronRight, BedDouble, ExternalLink, Star, Video } from "lucide-react";
+import { PlusCircle, RotateCcw, Search, Compass, Layers, ChevronRight, BedDouble, ExternalLink, Star, Video, Store } from "lucide-react";
 
 const CONDITION_OPTIONS = [
   { label: "전체", value: "전체", color: "" },
@@ -34,12 +35,14 @@ export default function Home() {
   const [activeWindFilter, setActiveWindFilter] = useState("전체");
   const [activeBottomFilter, setActiveBottomFilter] = useState("전체");
   const [activeConditionFilter, setActiveConditionFilter] = useState("전체");
-  const [contentTab, setContentTab] = useState<"spots" | "stays">("spots");
+  const [contentTab, setContentTab] = useState<"spots" | "stays" | "shops">("spots");
   const [stayRegion, setStayRegion] = useState("전체");
+  const [shopRegion, setShopRegion] = useState("전체");
   const [batchConds, setBatchConds] = useState<Record<string, any>>({});
   const [favs, setFavs] = useState<string[]>([]);
   const [selectedAccommodation, setSelectedAccommodation] = useState<any>(null);
   const [showAccommodations, setShowAccommodations] = useState(false);
+  const [showShops, setShowShops] = useState(false);
   const spotListAnchorRef = useRef<HTMLDivElement>(null);
   const scrollContentRef = useRef<HTMLDivElement>(null);
   // 초기화 시 지도를 전국 뷰로 되돌리기 위한 신호 (값이 바뀌면 Map이 전국 조망으로 flyTo)
@@ -64,11 +67,13 @@ export default function Home() {
     setSelectedSpot(null);
     setSelectedAccommodation(null);
     setShowAccommodations(false);
+    setShowShops(false);
     setActiveWindFilter("전체");
     setActiveBottomFilter("전체");
     setActiveConditionFilter("전체");
     setContentTab("spots");
     setStayRegion("전체");
+    setShopRegion("전체");
     setMobileTab("map");
     setMapResetSeq((s) => s + 1); // 필터 상태와 무관하게 지도를 전국 조망으로 리셋
     // 목록 스크롤 위치까지 완전 초기화 (모바일 타이틀 클릭 = 처음 상태로)
@@ -149,58 +154,64 @@ export default function Home() {
     return order.map((region) => ({ region, items: filtered.filter((a) => a.region === region) })).filter((g) => g.items.length > 0);
   }, [stayRegion]);
 
+  const groupedShops = useMemo(() => {
+    const filtered = shopsData.filter((a) => shopRegion === "전체" || a.region === shopRegion);
+    const order = ["동해", "남해", "제주", "서해", "미분류"];
+    return order.map((region) => ({ region, items: filtered.filter((a) => a.region === region) })).filter((g) => g.items.length > 0);
+  }, [shopRegion]);
+
   const accommodationsWithCoords = useMemo(() => {
-    const spotsByRegion = spotsData.reduce((acc: Record<string, any[]>, spot: any) => {
-      if (!acc[spot.region]) acc[spot.region] = [];
-      acc[spot.region].push(spot);
-      return acc;
-    }, {} as Record<string, any[]>);
-
-    const normalize = (v: any) => String(v ?? "").toLowerCase().replace(/[^a-z0-9가-힣ㄱ-ㅎㅏ-ㅣ\s]/g, " ");
-
-    return accommodationsData.map((stay: any) => {
-      const regionSpots = spotsByRegion[stay.region] || spotsData;
-      const hay = normalize(`${stay.subRegion ?? ""} ${stay.name ?? ""} ${stay.address ?? ""}`);
-      const tokens = hay.split(/\s+/).filter((t) => t.length >= 2);
-
-      let best = regionSpots[0] ?? spotsData[0];
-      let bestScore = -1;
-
-      for (const spot of regionSpots) {
-        const text = normalize(`${spot.name} ${spot.subRegion} ${spot.description}`);
-        let score = 0;
-        for (const t of tokens) {
-          if (text.includes(t)) score += 1;
-        }
-        if (score > bestScore) {
-          bestScore = score;
-          best = spot;
-        }
-      }
-
-      return {
+    return accommodationsData
+      .map((stay: any) => ({
         ...stay,
-        lat: Number.isFinite(Number(stay.lat)) ? Number(stay.lat) : best?.lat,
-        lng: Number.isFinite(Number(stay.lng)) ? Number(stay.lng) : best?.lng,
-      };
-    });
+        kind: "stay",
+        lat: Number(stay.lat),
+        lng: Number(stay.lng),
+      }))
+      .filter((stay: any) => Number.isFinite(stay.lat) && Number.isFinite(stay.lng));
   }, []);
 
-  // 지도 "숙소 보기" 버튼 표기용: 현재 지역 필터 기준으로 마커 표시 가능한 숙소 수
+  const shopsWithCoords = useMemo(() => {
+    return shopsData
+      .map((shop: any) => ({
+        ...shop,
+        kind: "shop",
+        lat: Number(shop.lat),
+        lng: Number(shop.lng),
+      }))
+      .filter((shop: any) => Number.isFinite(shop.lat) && Number.isFinite(shop.lng));
+  }, []);
+
+  // 지도 "숙소보기(N)" / "서핑샵(N)" 표기용
   const accommodationCount = useMemo(() => {
     return accommodationsWithCoords.filter((a: any) => {
       if (activeRegion !== "전체" && a.region !== activeRegion) return false;
-      return Number.isFinite(Number(a.lat)) && Number.isFinite(Number(a.lng));
+      return true;
     }).length;
   }, [accommodationsWithCoords, activeRegion]);
+
+  const shopCount = useMemo(() => {
+    return shopsWithCoords.filter((a: any) => {
+      if (activeRegion !== "전체" && a.region !== activeRegion) return false;
+      return true;
+    }).length;
+  }, [shopsWithCoords, activeRegion]);
 
   const visibleAccommodations = useMemo(() => {
     return accommodationsWithCoords.filter((a: any) => {
       if (!showAccommodations) return false;
       if (activeRegion !== "전체" && a.region !== activeRegion) return false;
-      return Number.isFinite(Number(a.lat)) && Number.isFinite(Number(a.lng));
+      return true;
     });
   }, [accommodationsWithCoords, showAccommodations, activeRegion]);
+
+  const visibleShops = useMemo(() => {
+    return shopsWithCoords.filter((a: any) => {
+      if (!showShops) return false;
+      if (activeRegion !== "전체" && a.region !== activeRegion) return false;
+      return true;
+    });
+  }, [shopsWithCoords, showShops, activeRegion]);
 
   const hotSpots = useMemo(() => {
     return spotsData
@@ -239,29 +250,35 @@ export default function Home() {
   const handleToggleAccommodations = () => {
     setShowAccommodations((prev) => {
       const next = !prev;
-      if (!next) setSelectedAccommodation(null);
+      if (next) {
+        setContentTab("stays");
+        setSelectedSpot(null);
+      } else if (!String(selectedAccommodation?.id || "").startsWith("shop-")) {
+        setSelectedAccommodation(null);
+      }
       return next;
     });
   };
-  // 지도의 "숙소 보기" → 숙소 마커 표시 + 목록을 숙소 탭으로 전환 (모바일은 지도 유지)
-  const handleShowAccommodations = () => {
-    setShowAccommodations(true);
-    setContentTab("stays");
-    setSelectedSpot(null);
-    scrollContentRef.current?.scrollTo({ top: 0, behavior: "auto" });
-    if (typeof window !== "undefined" && window.innerWidth >= 768) {
-      setTimeout(() => {
-        spotListAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 120);
-    }
+  const handleToggleShops = () => {
+    setShowShops((prev) => {
+      const next = !prev;
+      if (next) {
+        setContentTab("shops");
+        setSelectedSpot(null);
+      } else if (String(selectedAccommodation?.id || "").startsWith("shop-")) {
+        setSelectedAccommodation(null);
+      }
+      return next;
+    });
   };
   const handleSelectAccommodation = (acc: any) => {
     setSelectedSpot(null);
-    setSelectedAccommodation(acc);
+    setSelectedAccommodation({ ...acc, kind: acc.kind || (String(acc.id || "").startsWith("shop-") ? "shop" : "stay") });
     if (typeof window !== "undefined" && window.innerWidth < 768) {
       setMobileTab("map");
     }
   };
+  const handleSelectShop = (shop: any) => handleSelectAccommodation({ ...shop, kind: "shop" });
   const handleCloseAccommodation = () => setSelectedAccommodation(null);
 
   const handleSearchInput = (v: string) => {
@@ -312,6 +329,12 @@ export default function Home() {
     if (tab === "stays" || tab === "stay" || tab === "lodging") {
       setShowAccommodations(true);
       setContentTab("stays");
+      setSelectedSpot(null);
+      if (window.innerWidth < 768) setMobileTab("list");
+    }
+    if (tab === "shops" || tab === "shop") {
+      setShowShops(true);
+      setContentTab("shops");
       setSelectedSpot(null);
       if (window.innerWidth < 768) setMobileTab("list");
     }
@@ -404,24 +427,32 @@ export default function Home() {
           </button>
         </div>
 
-        {/* 스팟 | 숙소 전환 탭 */}
+        {/* 스팟 | 숙소 | 서핑샵 전환 탭 */}
         <div className="px-4 py-3 bg-white border-b border-slate-100 shrink-0">
-          <div className="grid grid-cols-2 gap-1 bg-slate-100 p-1 rounded-2xl">
+          <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-2xl">
             <button
               onClick={() => setContentTab("spots")}
-              className={`py-2 text-xs font-extrabold rounded-xl transition flex items-center justify-center gap-1.5 ${
+              className={`py-2 text-[11px] font-extrabold rounded-xl transition flex items-center justify-center gap-1 ${
                 contentTab === "spots" ? "bg-white text-sky-600 shadow-sm" : "text-slate-500 hover:text-slate-800"
               }`}
             >
               🏄 스팟 ({spotsData.length})
             </button>
             <button
-              onClick={() => setContentTab("stays")}
-              className={`py-2 text-xs font-extrabold rounded-xl transition flex items-center justify-center gap-1.5 ${
-                contentTab === "stays" ? "bg-white text-sky-600 shadow-sm" : "text-slate-500 hover:text-slate-800"
+              onClick={() => { setContentTab("stays"); setShowAccommodations(true); }}
+              className={`py-2 text-[11px] font-extrabold rounded-xl transition flex items-center justify-center gap-1 ${
+                contentTab === "stays" ? "bg-white text-violet-600 shadow-sm" : "text-slate-500 hover:text-slate-800"
               }`}
             >
               🏨 숙소 ({accommodationsData.length})
+            </button>
+            <button
+              onClick={() => { setContentTab("shops"); setShowShops(true); }}
+              className={`py-2 text-[11px] font-extrabold rounded-xl transition flex items-center justify-center gap-1 ${
+                contentTab === "shops" ? "bg-white text-emerald-600 shadow-sm" : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              서핑샵 ({shopsData.length})
             </button>
           </div>
         </div>
@@ -658,13 +689,13 @@ export default function Home() {
             <>
               <div>
                 <label className="block text-[11px] font-extrabold text-slate-500 mb-1.5 flex items-center gap-1">
-                  <BedDouble size={12} className="text-sky-500" />
-                  <span>숙소 지역 선택</span>
+                  <BedDouble size={12} className="text-violet-500" />
+                  <span>숙소 지역 선택 · {accommodationsData.length}곳</span>
                 </label>
                 <div className="flex flex-wrap gap-1">
                   {stayRegions.map((r) => (
                     <button key={r} onClick={() => setStayRegion(r)}
-                      className={`py-1.5 px-2.5 text-[10px] font-bold rounded-xl border transition ${stayRegion === r ? "bg-sky-50 border-sky-500 text-sky-700" : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"}`}
+                      className={`py-1.5 px-2.5 text-[10px] font-bold rounded-xl border transition ${stayRegion === r ? "bg-violet-50 border-violet-500 text-violet-700" : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"}`}
                     >{r}</button>
                   ))}
                 </div>
@@ -676,57 +707,111 @@ export default function Home() {
                       <span>{regionEmoji[group.region] ?? "📍"}</span>
                       <span>{group.region}</span>
                     </span>
-                    <span className="text-[10px] font-extrabold text-sky-600">{group.items.length}개</span>
+                    <span className="text-[10px] font-extrabold text-violet-600">{group.items.length}개</span>
                   </div>
-                  {group.items.map((stay) => (
+                  {group.items.map((stay) => {
+                    const bookingUrl = stay.bookingUrl || stay.localSiteUrl || stay.couponUrl;
+                    return (
                     <div key={stay.id}
                       onClick={() => handleSelectAccommodation(stay)}
-                      className="block rounded-2xl border bg-white border-slate-200/80 hover:border-sky-300 hover:shadow-md transition-all group overflow-hidden cursor-pointer"
+                      className="block rounded-2xl border bg-white border-slate-200/80 hover:border-violet-300 hover:shadow-md transition-all group overflow-hidden cursor-pointer"
                     >
-                      {stay.image && (
-                        <div className="relative h-24 w-full overflow-hidden bg-slate-100">
-                          <img src={stay.image} alt={stay.name} className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300" loading="lazy" />
-                          <span className="absolute top-1.5 left-1.5 text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-white/90 text-slate-700 shadow-sm">쿠팡트립 예약가능</span>
-                        </div>
-                      )}
                       <div className="p-3">
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0">
                             <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                              <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-amber-100 text-amber-700">{stay.subRegion || stay.region}</span>
+                              <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-violet-100 text-violet-700">{stay.subRegion || stay.region}</span>
+                              {stay.nearSpotName && (
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-sky-50 text-sky-600">근처 {stay.nearSpotName}</span>
+                              )}
                             </div>
-                            <h3 className="text-sm font-black text-slate-900 group-hover:text-sky-600 transition truncate">{stay.name}</h3>
-                            <p className="text-[11px] text-slate-500 line-clamp-2 mt-0.5 leading-relaxed">{stay.desc}</p>
+                            <h3 className="text-sm font-black text-slate-900 group-hover:text-violet-600 transition truncate">{stay.name}</h3>
+                            <p className="text-[11px] text-slate-500 line-clamp-2 mt-0.5 leading-relaxed">{stay.desc || stay.location}</p>
                           </div>
-                          <ExternalLink size={14} className="text-slate-300 group-hover:text-sky-500 transition shrink-0 mt-1" />
+                          <ExternalLink size={14} className="text-slate-300 group-hover:text-violet-500 transition shrink-0 mt-1" />
                         </div>
                         <div className="mt-2 pt-2 border-t border-slate-100 flex items-center gap-1.5">
                           <a
-                            href={stay.couponUrl}
-                            target="_blank"
-                            rel="sponsored noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="flex-1 py-1.5 bg-sky-500 hover:bg-sky-600 text-white font-extrabold text-[11px] rounded-lg transition text-center"
-                          >쿠팡에서 예약하기</a>
-                          <a
-                            href={stay.localSiteUrl}
+                            href={bookingUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="py-1.5 px-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-[11px] rounded-lg transition"
-                          >숙소 정보</a>
+                            className="flex-1 py-1.5 bg-violet-600 hover:bg-violet-700 text-white font-extrabold text-[11px] rounded-lg transition text-center"
+                          >예약 사이트 열기</a>
                         </div>
                       </div>
                     </div>
-                  ))}
+                  );})}
                 </div>
               ))}
               {groupedStays.length === 0 && (
                 <div className="py-12 text-center text-xs text-slate-400">해당 지역에 등록된 숙소가 없습니다.</div>
               )}
               <p className="text-[10px] text-slate-400 leading-relaxed pt-2 border-t border-slate-100">
-                이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받을 수 있습니다.
+                숙소 정보는 구글 시트에서 관리되며, 예약은 각 숙소의 공식/네이버 예약 링크로 연결됩니다.
               </p>
+            </>
+          )}
+
+          {/* 서핑샵 탭 */}
+          {contentTab === "shops" && (
+            <>
+              <div>
+                <label className="block text-[11px] font-extrabold text-slate-500 mb-1.5 flex items-center gap-1">
+                  <Store size={12} className="text-emerald-500" />
+                  <span>서핑샵 지역 선택 · {shopsData.length}곳</span>
+                </label>
+                <div className="flex flex-wrap gap-1">
+                  {stayRegions.map((r) => (
+                    <button key={r} onClick={() => setShopRegion(r)}
+                      className={`py-1.5 px-2.5 text-[10px] font-bold rounded-xl border transition ${shopRegion === r ? "bg-emerald-50 border-emerald-500 text-emerald-700" : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"}`}
+                    >{r}</button>
+                  ))}
+                </div>
+              </div>
+              {groupedShops.map((group) => (
+                <div key={group.region} className="space-y-2">
+                  <div className="flex items-center justify-between py-1.5 -mx-1 px-1 border-b border-slate-100">
+                    <span className="text-xs font-black text-slate-800 flex items-center gap-1">
+                      <span>{regionEmoji[group.region] ?? "📍"}</span>
+                      <span>{group.region}</span>
+                    </span>
+                    <span className="text-[10px] font-extrabold text-emerald-600">{group.items.length}개</span>
+                  </div>
+                  {group.items.map((shop) => (
+                    <div key={shop.id}
+                      onClick={() => handleSelectShop(shop)}
+                      className="block rounded-2xl border bg-white border-slate-200/80 hover:border-emerald-300 hover:shadow-md transition-all group overflow-hidden cursor-pointer"
+                    >
+                      <div className="p-3">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                              <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700">{shop.subRegion || shop.region}</span>
+                              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">{shop.type}</span>
+                            </div>
+                            <h3 className="text-sm font-black text-slate-900 group-hover:text-emerald-600 transition truncate">{shop.name}</h3>
+                            <p className="text-[11px] text-slate-500 line-clamp-2 mt-0.5 leading-relaxed">{shop.location}{shop.nearSpotName ? ` · 근처 ${shop.nearSpotName}` : ""}</p>
+                          </div>
+                          <ExternalLink size={14} className="text-slate-300 group-hover:text-emerald-500 transition shrink-0 mt-1" />
+                        </div>
+                        <div className="mt-2 pt-2 border-t border-slate-100">
+                          <a
+                            href={shop.bookingUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="block w-full py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] rounded-lg transition text-center"
+                          >서핑샵 바로가기</a>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+              {groupedShops.length === 0 && (
+                <div className="py-12 text-center text-xs text-slate-400">해당 지역에 등록된 서핑샵이 없습니다.</div>
+              )}
             </>
           )}
         </div>
@@ -780,12 +865,16 @@ export default function Home() {
         <Map
           spots={filteredSpots}
           accommodations={visibleAccommodations}
+          shops={visibleShops}
           selectedSpot={selectedSpot}
           selectedAccommodation={selectedAccommodation}
           onSelectSpot={handleSelectSpot}
           onSelectAccommodation={handleSelectAccommodation}
-          onToggleAccommodations={handleShowAccommodations}
+          onSelectShop={handleSelectShop}
+          onToggleAccommodations={handleToggleAccommodations}
+          onToggleShops={handleToggleShops}
           showAccommodations={showAccommodations}
+          showShops={showShops}
           activeRegion={activeRegion}
           setMobileTab={setMobileTab}
           conditions={batchConds}
@@ -795,6 +884,7 @@ export default function Home() {
           onConditionFilter={handleConditionFilter}
           activeConditionFilter={activeConditionFilter}
           accommodationCount={accommodationCount}
+          shopCount={shopCount}
           onConditionListJump={handleConditionListJump}
           resetSeq={mapResetSeq}
         />
