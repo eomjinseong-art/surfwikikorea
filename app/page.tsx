@@ -12,6 +12,7 @@ import ValuePropsCard from "@/components/ValuePropsCard";
 import { getBatchConditionsCached, isArtificialWaveSpot } from "@/lib/batchConditions";
 import { CAM_SPOT_IDS, getCamForSpot } from "@/lib/beachCams";
 import InfoAndRequestModal from "@/components/InfoAndRequestModal";
+import VisitorCounter from "@/components/VisitorCounter";
 import Link from "next/link";
 import { PlusCircle, RotateCcw, Search, Compass, Layers, ChevronRight, BedDouble, ExternalLink, Star, Video, Store, Share2, Megaphone } from "lucide-react";
 
@@ -446,6 +447,7 @@ export default function Home() {
             className={`flex-1 py-1.5 text-xs font-extrabold rounded-xl transition ${mobileTab === "cams" ? "bg-red-500 text-white shadow-sm" : "bg-slate-100 text-slate-600"}`}
           >📹 실시간 ({camSpots.length})</button>
         </div>
+        <VisitorCounter variant="bar" />
       </header>
 
       {/* 1. 좌측 탐색 사이드 패널 */}
@@ -473,6 +475,9 @@ export default function Home() {
             <PlusCircle size={13} />
             <span>제보하기</span>
           </button>
+        </div>
+        <div className="hidden md:block shrink-0">
+          <VisitorCounter variant="bar" />
         </div>
 
         {/* 스팟 | 숙소 | 서핑샵 전환 탭 */}
