@@ -20,7 +20,7 @@ function localCalendarDate(): string {
 
 function loadVisitorCount(): Promise<number | null> {
   if (sharedPromise) return sharedPromise;
-  sharedPromise = (async () => {
+  const request = (async () => {
     let alreadyCountedToday = false;
     try {
       const today = localCalendarDate();
@@ -41,9 +41,13 @@ function loadVisitorCount(): Promise<number | null> {
     const data = await res.json();
     const n = parseInt(data?.value, 10);
     return Number.isFinite(n) && n > 0 ? n : null;
-  })().catch(() => null);
-
-  return sharedPromise;
+  })()
+    .catch(() => null)
+    .finally(() => {
+      if (sharedPromise === request) sharedPromise = null;
+    });
+  sharedPromise = request;
+  return request;
 }
 
 export default function VisitorCounter({
