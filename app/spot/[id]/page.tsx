@@ -12,6 +12,7 @@ import {
   Compass,
   Shield,
 } from "lucide-react";
+import { CoupangCard } from "@/components/CoupangCard";
 
 /* ── helpers ── */
 
@@ -240,6 +241,7 @@ export default async function SpotPage({
             </div>
           </article>
 
+          <CoupangCard />
           {/* ── difficulty guide ── */}
           <section className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
             <h2 className="text-sm font-black text-slate-900 mb-3 flex items-center gap-2">

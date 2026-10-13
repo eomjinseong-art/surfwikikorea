@@ -15,6 +15,7 @@ import InfoAndRequestModal from "@/components/InfoAndRequestModal";
 import VisitorCounter from "@/components/VisitorCounter";
 import Link from "next/link";
 import { PlusCircle, RotateCcw, Search, Compass, Layers, ChevronRight, BedDouble, ExternalLink, Star, Video, Store, Share2, Megaphone } from "lucide-react";
+import { CoupangCard } from "@/components/CoupangCard";
 
 const CONDITION_OPTIONS = [
   { label: "전체", value: "전체", color: "" },
@@ -999,6 +1000,7 @@ export default function Home() {
         )}
       </section>
 
+      <CoupangCard />
       {/* 모바일 하단: 광고문의 + 공유하기 (일반 브라우저는 compact, PWA만 safe-area) */}
       <div className="mobile-ad-bar md:hidden fixed inset-x-0 bottom-0 z-[680] bg-sky-600 text-white shadow-[0_-4px_16px_rgba(2,132,199,0.35)]">
         <div className="flex items-stretch h-[52px]">
