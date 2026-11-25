@@ -104,7 +104,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         {children}
-        <NadooAd />
+        <NadooAd exclude="linkprice" />
         <Analytics />
         <AnalyticsEvents />
         <Script src="https://nadoo-ads.vercel.app/ads.js" strategy="afterInteractive" />
