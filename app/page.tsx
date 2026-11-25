@@ -1,5 +1,4 @@
 "use client";
-import { NadooAd } from "@/components/NadooAd";
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import spotsData from "@/data/spots.json";
@@ -1001,7 +1000,6 @@ export default function Home() {
         )}
       </section>
 
-      <NadooAd inline />
       <CoupangCard />
       {/* 모바일 하단: 광고문의 + 공유하기 (일반 브라우저는 compact, PWA만 safe-area) */}
       <div className="mobile-ad-bar md:hidden fixed inset-x-0 bottom-0 z-[680] bg-sky-600 text-white shadow-[0_-4px_16px_rgba(2,132,199,0.35)]">
