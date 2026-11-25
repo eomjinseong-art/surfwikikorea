@@ -1,3 +1,5 @@
+import Script from "next/script";
+import { NadooAd } from "@/components/NadooAd";
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import AnalyticsEvents from "@/components/AnalyticsEvents";
@@ -101,8 +103,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         {children}
+        <NadooAd />
         <Analytics />
         <AnalyticsEvents />
+        <Script src="https://nadoo-ads.vercel.app/ads.js" strategy="afterInteractive" />
       </body>
     </html>
   );
