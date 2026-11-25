@@ -16,6 +16,7 @@ import VisitorCounter from "@/components/VisitorCounter";
 import Link from "next/link";
 import { PlusCircle, RotateCcw, Search, Compass, Layers, ChevronRight, BedDouble, ExternalLink, Star, Video, Store, Share2, Megaphone } from "lucide-react";
 import { CoupangCard } from "@/components/CoupangCard";
+import { NadooAd } from "@/components/NadooAd";
 
 const CONDITION_OPTIONS = [
   { label: "전체", value: "전체", color: "" },
@@ -521,6 +522,7 @@ export default function Home() {
         <div ref={scrollContentRef} className="flex-1 overflow-y-auto p-4 space-y-4">
           <AdSlot1 />
           <WaveParkAd />
+          <NadooAd inline types="linkprice" />
 
           {contentTab === "spots" && (
           <>

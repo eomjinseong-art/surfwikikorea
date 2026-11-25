@@ -13,6 +13,7 @@ import {
   Shield,
 } from "lucide-react";
 import { CoupangCard } from "@/components/CoupangCard";
+import { NadooAd } from "@/components/NadooAd";
 
 /* ── helpers ── */
 
@@ -241,6 +242,7 @@ export default async function SpotPage({
             </div>
           </article>
 
+          <NadooAd inline types="linkprice" />
           <CoupangCard />
           {/* ── difficulty guide ── */}
           <section className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
