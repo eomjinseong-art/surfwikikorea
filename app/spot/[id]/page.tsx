@@ -242,7 +242,7 @@ export default async function SpotPage({
             </div>
           </article>
 
-          <NadooAd inline types="linkprice" />
+          <NadooAd inline types="lodge" />
           <CoupangCard />
           {/* ── difficulty guide ── */}
           <section className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
