@@ -701,7 +701,6 @@ export default function Home() {
                 const isSelected = selectedSpot?.id === spot.id;
                 return (
                   <Fragment key={spot.id}>
-                  {spotIndex === 8 && <AdSlot1 />}
                   <div onClick={() => handleSelectSpot(spot)}
                     className={`p-3 rounded-2xl border transition-all cursor-pointer text-left group ${
                       isSelected ? "bg-sky-50/80 border-sky-500 shadow-md ring-1 ring-sky-400/40" : "bg-white border-slate-200/80 hover:border-sky-300 hover:shadow-md"
@@ -741,6 +740,7 @@ export default function Home() {
                       className="mt-1.5 inline-block text-[10px] font-bold text-sky-500 hover:text-sky-700 transition"
                     >상세 정보 →</Link>
                   </div>
+                  {spotIndex === 7 && <AdSlot1 />}
                   </Fragment>
                 );
               })
