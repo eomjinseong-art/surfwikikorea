@@ -107,6 +107,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <NadooAd exclude="linkprice" />
         <Analytics />
         <AnalyticsEvents />
+        <div className="nadoo-ad-bar" />
         <Script src="https://nadoo-ads.vercel.app/ads.js" strategy="afterInteractive" />
       </body>
     </html>
