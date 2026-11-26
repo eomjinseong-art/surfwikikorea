@@ -243,7 +243,6 @@ export default async function SpotPage({
           </article>
 
           <NadooAd inline types="lodge" />
-          <CoupangCard />
           {/* ── difficulty guide ── */}
           <section className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
             <h2 className="text-sm font-black text-slate-900 mb-3 flex items-center gap-2">
@@ -254,6 +253,8 @@ export default async function SpotPage({
               {difficultyDesc(spot.difficulty)}
             </p>
           </section>
+
+          <CoupangCard />
 
           {/* ── wind direction guide ── */}
           <section className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">

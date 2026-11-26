@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, Fragment } from "react";
 import spotsData from "@/data/spots.json";
 import accommodationsData from "@/data/accommodations.json";
 import shopsData from "@/data/shops.json";
@@ -520,9 +520,7 @@ export default function Home() {
 
         {/* 스크롤 본문 */}
         <div ref={scrollContentRef} className="flex-1 overflow-y-auto p-4 space-y-4">
-          <AdSlot1 />
-          <WaveParkAd />
-          <NadooAd inline types="linkprice" />
+          <NadooAd inline types="lodge" />
 
           {contentTab === "spots" && (
           <>
@@ -675,6 +673,8 @@ export default function Home() {
             </div>
           )}
 
+          <WaveParkAd />
+
           {/* 스팟 목록 헤더 */}
           <div ref={spotListAnchorRef} className="flex items-center justify-between pt-1">
             <span className="text-xs font-black text-slate-800">
@@ -697,10 +697,12 @@ export default function Home() {
                 <button onClick={handleResetAll} className="mt-2 px-3 py-1 bg-sky-100 text-sky-700 font-bold rounded-lg text-xs">필터 전체 초기화</button>
               </div>
             ) : (
-              filteredSpots.map((spot) => {
+              filteredSpots.map((spot, spotIndex) => {
                 const isSelected = selectedSpot?.id === spot.id;
                 return (
-                  <div key={spot.id} onClick={() => handleSelectSpot(spot)}
+                  <Fragment key={spot.id}>
+                  {spotIndex === 8 && <AdSlot1 />}
+                  <div onClick={() => handleSelectSpot(spot)}
                     className={`p-3 rounded-2xl border transition-all cursor-pointer text-left group ${
                       isSelected ? "bg-sky-50/80 border-sky-500 shadow-md ring-1 ring-sky-400/40" : "bg-white border-slate-200/80 hover:border-sky-300 hover:shadow-md"
                     }`}
@@ -739,6 +741,7 @@ export default function Home() {
                       className="mt-1.5 inline-block text-[10px] font-bold text-sky-500 hover:text-sky-700 transition"
                     >상세 정보 →</Link>
                   </div>
+                  </Fragment>
                 );
               })
             )}
